@@ -1,0 +1,96 @@
+.card-panel .card-name {
+    border-radius: 10px 10px 0 0;
+}
+
+.card-panel .card-pane {
+    border-radius: 0 0 10px 10px;
+}
+
+.card-panel .card-name {
+    height: 85px;
+}
+
+.card-state2 {
+    height: 190px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.card-name h2 {
+    color: #212529;
+}
+
+/*
+ .card-state2 {
+    text-align: left;
+} */
+
+.card-state2 p {
+    font-size: 16px;
+}
+
+.card-panel .card-pane p.link-btn {
+    padding: 14px 20px;
+    font-size: 14px !important;
+}
+
+.card-panel ::-webkit-scrollbar {
+    width: 2px;
+}
+
+.card-panel ::-webkit-scrollbar-track {
+    background: #fff0;
+}
+
+.card-panel ::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+}
+
+.bg-secondary {
+    background: #e46059 !important;
+}
+
+.card-state2 {
+    cursor: pointer;
+}
+
+.card-state2 p:hover {
+    color: #e46059 !important;
+}
+
+.title-cards-top {
+    padding: 15px 10px;
+}
+
+.max-box-center {
+    max-width: 1080px !important;
+}
+
+.card-state {
+    border: unset;
+    box-shadow: unset;
+}
+
+
+.icon-title {
+    margin-right: 5px;
+    border-radius: 100px;
+    font-size: 18px;
+    padding: 5px 6px;
+}
+
+
+
+@media (max-width:767px) {
+    .card-pane p {
+        font-size: 16px !important;
+    }
+
+    .card-name h2 {
+        font-size: 25px;
+    }
+
+    .card-pane p.link-btn.bg-accent {
+        margin-top: 12px !important;
+    }
+}

@@ -1,0 +1,48 @@
+.digital-img {
+  border: solid 3px #fff;
+  border-radius: 15px;
+}
+
+.who-we-are {
+  padding: 55px 0;
+}
+
+.who-we-are a.bg-secondary {
+  background: #E46059 !important;
+}
+
+.who-we-are {
+  background-color: #fff !important;
+}
+
+.beliefs-part {
+  padding: 50px 0;
+}
+
+.card-round {
+  border-radius: 30px;
+  border: solid #ddd 2px;
+  padding: 35px 25px;
+  transition: 0.6s;
+  margin-bottom: 25px;
+}
+
+.card-round img.round-icon-img {
+  width: 165px;
+  margin-bottom: 14px;
+}
+
+.card-round:hover {
+  transform: scale(1.1);
+}
+
+/*  */
+
+
+@media (max-width: 768px) {
+  .who-we-are .row {
+    flex-direction: column-reverse;
+  }
+
+
+}

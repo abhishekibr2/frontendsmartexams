@@ -1,0 +1,11 @@
+.custom-button {
+  color: black !important; /* Default color */
+  border: 1px solid black !important; /* Remove border */
+  background: transparent !important; /* Ensure background is transparent */
+}
+
+.custom-button:hover {
+  color: red !important; /* Change color on hover */
+  border: 1px solid red !important; /* Ensure no border on hover */
+  background: transparent !important; /* Ensure background remains transparent on hover */
+}

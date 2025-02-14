@@ -1,0 +1,119 @@
+#blog {
+  padding: 50px 0px;
+}
+
+.tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.25em 0.75em;
+  border-radius: 1em;
+  font-size: 0.75rem;
+}
+
+.tag+.tag {
+  margin-left: 0.5em;
+}
+
+.tag-blue {
+  background: #56ccf2;
+  background: linear-gradient(to bottom, #2f80ed, #56ccf2);
+  color: #fafafa;
+}
+
+.mainCard {
+  margin-bottom: 20px;
+}
+
+.card {
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card__header {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.card__image {
+  width: 100%;
+  /* Make image width 100% of the container */
+  height: 100%;
+  /* Ensure it fills the container */
+  object-fit: cover;
+  /* Ensures image covers the space without stretching */
+}
+
+.card__body {
+  padding: 16px;
+}
+
+.card__footer {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.card__footer .user {
+  display: flex;
+  align-items: center;
+}
+
+.card__footer .user__info {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 768px) {
+  .card__body .tag {
+    font-size: 12px;
+  }
+
+  .card__body .card__image {
+    height: 150px;
+    /* Adjust image height on smaller screens */
+  }
+
+  .card__header {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: 200px;
+  }
+
+
+}
+
+@media (max-width: 576px) {
+  .card__body .tag {
+    font-size: 10px;
+    /* Make tag text smaller */
+  }
+
+  .card__body .card__image {
+    height: 120px;
+    /* Smaller height for mobile screens */
+  }
+
+  .card__footer .user__info h5 {
+    font-size: 14px;
+    /* Adjust author name size */
+  }
+}
+
+#blog {
+  padding: 0px;
+}
+
+.see-more-btn {
+  margin-bottom: 20px !important;
+}

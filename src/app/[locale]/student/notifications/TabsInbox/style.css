@@ -1,0 +1,43 @@
+.tabsInbox {
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.messages {
+  border-radius: 8px;
+  border: 1px solid #cfe5ff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.messagesWhite {
+  border-radius: 8px;
+  border: 1px solid #ebf4ff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.marginLeft {
+  margin-left: 10px;
+}
+
+@media (min-width: 780px) {
+  .deleteMessagesss {
+    row-gap: 10px;
+    display: flex;
+    justify-content: end;
+    margin-top: 8px;
+    margin-bottom: 1rem;
+  }
+}
+
+
+@media (max-width: 769px) {
+  .deleteMessagesss {
+
+    display: flex;
+    justify-content: start;
+    margin-top: 8px;
+    margin-bottom: 1rem;
+  }
+}

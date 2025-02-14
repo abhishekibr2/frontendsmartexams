@@ -1,0 +1,38 @@
+.customTextArea textarea.ant-input {
+  border: none;
+}
+
+.customTextArea .ant-input-outlined:focus {
+  box-shadow: none;
+}
+
+.title {
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+body.dark-mode .title {
+  border: 1px solid #363636;
+}
+
+.replyDivBorder {
+  border: 1px solid #0070f5;
+  border-radius: 16px;
+  padding: 5px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.backArrowIcon {
+  font-size: 17px;
+  border-radius: 50%;
+  background: #ccc;
+  padding: 5px;
+}
+
+.descriptionMargin {
+  margin-left: 48px;
+}
+
+@media (max-width: 991px) {}

@@ -1,0 +1,29 @@
+.width-modal {
+  width: 60% !important;
+}
+
+@media (max-width: 991px) {
+  .width-modal {
+    width: 80% !important;
+  }
+}
+.ant-table-column-sorters:hover {
+  font-size: 12px; /* Decrease text size */
+  transition: font-size 0.3s ease; /* Add a smooth transition */
+}
+.ant-tooltip .ant-tooltip-inner {
+  padding: 6px 8px;
+  color: #fff;
+  text-align: start;
+  text-decoration: none;
+  word-wrap: break-word;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 4px;
+  box-shadow:
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  height: 31px;
+  font-size: 12px !important ;
+}

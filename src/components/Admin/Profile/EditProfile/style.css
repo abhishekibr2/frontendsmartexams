@@ -1,0 +1,59 @@
+@media (max-width:767px) {
+    .button-top button {
+        width: 100%;
+    }
+
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container {
+        display: inline-block;
+        width: 100% !important;
+        height: auto !important;
+        margin-block: 0 8px;
+        margin-inline: 0 8px;
+        vertical-align: top;
+    }
+
+}
+
+.react-tel-input .flag-dropdown.open .selected-flag {
+    background: #fff !important;
+}
+
+.react-tel-input .selected-flag:hover,
+.react-tel-input .selected-flag:focus {
+    background: #fff !important;
+}
+
+.react-tel-input .country-list .country.highlight {
+    border: 1px solid #CACACA !important;
+    background-color: #fff !important;
+}
+
+body.dark-mode .react-tel-input .flag-dropdown {
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .flag-dropdown.open .selected-flag {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list {
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list .country.highlight {
+    border: 1px solid #fff !important;
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .selected-flag:hover,
+body.dark-mode .react-tel-input .selected-flag:focus {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list .country:hover {
+    background: #2a2a2a !important;
+    border: 1px solid #fff !important;
+}

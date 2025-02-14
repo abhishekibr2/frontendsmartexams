@@ -1,0 +1,172 @@
+.contactFrom {
+  padding: 60px 0px 60px 0px;
+  background-color: #e6f0f9;
+  position: relative;
+  padding: 42px;
+}
+
+.contactFrom input[type='text'],
+.contactFrom select {
+  width: 100%;
+  /* padding: 12px 20px; */
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.contactFrom input[type='submit'] {
+  width: 100%;
+  background: linear-gradient(135.93deg, #012a59 13.41%, #012a59 90.33%);
+  color: white;
+  padding: 12px 20px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.contactFrom textarea {
+  height: 190px !important;
+}
+
+.contactFromTitles {
+  padding: 40px 20% 0px 0px;
+}
+
+.contactFromTitles svg {
+  color: #012a59;
+  font-size: 28px;
+}
+
+.contactFromTitles ul li {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.contactFrom input[type='submit']:hover {
+  background-color: #018c94;
+}
+
+@media (max-width: 767px) {
+  .favIcon span {
+    font-size: 14px !important;
+    color: #333;
+    font-weight: 500;
+    margin: 6px;
+  }
+
+  .contact-para {
+    text-align: left !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .contactFrom {
+    padding: 30px 0px;
+  }
+
+  .contactFromTitles {
+    padding: 10px 0% 0px 0px;
+  }
+
+  input[type='submit'] {
+    padding: 12px 20px;
+  }
+
+  .contactFromTitles ul li {
+    font-size: 15px;
+  }
+
+  .contactFrom {
+    margin-top: 0px;
+  }
+}
+
+.favIcon p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  margin-bottom: 14px !important;
+  word-break: break-all;
+}
+
+.favIcon span {
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+  margin: 6px;
+}
+
+.contact-para {
+  text-align: left !important;
+  font-size: 18px;
+  font-weight: 500 !important;
+}
+
+.textCenter {
+  position: relative;
+  /* Ensures the overlay text is positioned relative to this container */
+  display: inline-block;
+  width: 100%;
+  /* Ensures the wrapper spans the entire width of the parent */
+}
+
+.imageWrapper {
+  position: relative;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: auto;
+}
+
+img.shaps2 {
+  position: absolute;
+  top: 50px;
+  width: 200px;
+  right: 0px;
+}
+
+.float-bob-y {
+  animation-name: float-bob-y;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+/* Keyframe for float-bob-y */
+@keyframes float-bob-y {
+  0% {
+    transform: translateY(0);
+    /* Start position */
+  }
+
+  50% {
+    transform: translateY(-20px);
+    /* Move 20px upwards */
+  }
+
+  100% {
+    transform: translateY(0);
+    /* Return to start position */
+  }
+}
+
+@media (max-width: 1200px) {
+  img.shaps2 {
+    display: none;
+  }
+
+  .text-font-mb {
+    font-size: 20px !important;
+  }
+}

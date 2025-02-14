@@ -1,0 +1,27 @@
+.coreValues {
+    width: 100%;
+}
+
+.coreValues.mysticIndigo {
+    background: #e9e7ff;
+}
+
+.coreValues.skyRipple {
+    background: #5fd2fa14;
+}
+
+.coreValues.rosyBliss {
+    background: #fd80b312;
+}
+
+.coreValues.goldenGlow {
+    background: #ffcb3117;
+}
+
+.coreValues.tealSerenity {
+    background: #20bc8f14;
+}
+
+.coreValues.sunsetKiss {
+    background: #fd7e811c;
+}

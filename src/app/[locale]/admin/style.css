@@ -1,0 +1,158 @@
+.admin-sidebar {
+  background: #fff !important;
+}
+
+.admin-header {
+  background: #E9E8EF !important;
+  border-bottom: solid 1px #1E1E1E52 !important;
+  height: unset !important;
+}
+
+.admin-header {
+  padding: 10px 30px !important;
+}
+
+.admin-header .admin-logo {
+  width: 195px !important;
+}
+
+.admin-sidebar {
+  padding-top: 15px;
+}
+
+.admin-sidebar li {
+  width: 80% !important;
+  margin: 0 auto !important;
+}
+
+.admin-sidebar li ul {
+  padding-top: 0 !important;
+  background-color: #fff0 !important;
+}
+
+.admin-sidebar li li {
+  width: 100% !important;
+  margin: unset !important;
+}
+
+.admin-sidebar li span {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.admin-sidebar li:nth-child(1) {
+  margin-top: 20px !important;
+}
+
+ul.admin-sidebar li li:nth-child(1) {
+  margin-top: 0 !important;
+}
+
+.admin-sidebar .ant-menu-item-selected {
+  background: #e4f5fd !important;
+}
+
+.admin-sidebar .ant-menu-item-selected a span {
+  color: #04a9f5 !important;
+}
+
+.admin-sidebar li span {
+  margin-left: 5px !important;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  background: #001529;
+}
+
+.menu-toggle {
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.loginBottom {
+  position: absolute;
+  bottom: 10px;
+  left: 8px;
+  padding: 0px 40px;
+}
+
+aside#left-menubar {
+  max-width: 255px !important;
+  min-width: 255px !important;
+  width: 255px !important;
+  box-shadow: 0px 2px 2px 2px #8c52ff21;
+  border-right: solid 1px #8c52ff26;
+}
+
+:where(.css-dev-only-do-not-override-d6hfub).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
+  background-color: rgb(227 214 255) !important;
+  color: #04a9f5 !important;
+}
+
+.ant-menu-submenu-title {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+@media(min-width:1700px) {
+  .card-width-row {
+    --bs-gutter-x: 5.5rem;
+  }
+}
+
+.note-text {
+  background: #ccc;
+  width: fit-content;
+  padding: 5px 10px;
+  margin: 20px 0;
+}
+
+.mt-2 {
+  margin-top: 20px !important;
+}
+
+.mt-5 {
+  margin-top: 50px !important;
+}
+
+.mb-2 {
+  margin-bottom: 20px !important;
+}
+
+.mb-5 {
+  margin-bottom: 50px !important;
+}
+
+.grid-title {
+  background-color: #fff;
+  /* width: fit-content; */
+  padding: 10px 20px;
+}
+
+
+.admin-sidebar li ul li {
+  margin-bottom: 8px !important;
+}
+
+.admin-sidebar li {
+  margin-bottom: 8px !important;
+}
+
+tbody.ant-table-tbody td.ant-table-cell span {
+  display: flex;
+}
+
+.btn-setting {
+  display: flex;
+}
+
+td.ant-table-cell span.ant-tag.css-dev-only-do-not-override-19xw9e6 {
+  margin-bottom: 10px !important;
+  padding: 8px !important;
+}

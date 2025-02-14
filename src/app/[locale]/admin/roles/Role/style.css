@@ -1,0 +1,21 @@
+/* .headerPart {
+  display: none !important;
+}
+
+#footerPart {
+  display: none !important;
+} */
+
+.roleFiled {
+  background-color: #fff;
+  padding: 10px;
+}
+
+#permissions {
+  display: unset;
+  width: 100%;
+}
+
+label.ant-checkbox-wrapper.ant-checkbox-wrapper-in-form-item.ant-checkbox-group-item.css-dev-only-do-not-override-x62nda {
+  display: flex;
+}

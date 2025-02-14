@@ -1,0 +1,15 @@
+.right-chat .message-box {
+    max-width: 430px;
+    float: right;
+}
+
+.left-chat .message-box {
+    max-width: 430px;
+    float: left;
+}
+
+.message-box {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}

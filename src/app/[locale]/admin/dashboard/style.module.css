@@ -1,0 +1,114 @@
+.tabsInbox {
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.messages {
+  border-radius: 8px;
+  border: 1px solid #cfe5ff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.messagesWhite {
+  border-radius: 8px;
+  border: 1px solid #ebf4ff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.marginLeft {
+  margin-left: 10px;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.dashboard {
+  padding: 16px;
+  background-color: #f9f9f9;
+  /* Light background for dashboard */
+  border: 1px solid #dde3ea;
+  /* Border for the dashboard */
+  border-radius: 8px;
+  height: 100%;
+  /* Full height */
+  overflow: hidden;
+  /* Prevent overflow */
+}
+
+.notifications {
+  padding: 16px;
+  background-color: #fff;
+  /* White background for notifications */
+  border: 1px solid #dde3ea;
+  /* Border for notifications */
+  border-radius: 8px;
+  height: 100%;
+  /* Full height */
+  overflow: hidden;
+  /* Prevent overflow */
+}
+
+.notificationList {
+  max-height: calc(100vh - 150px);
+  /* Adjust max height for scrolling */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  margin-top: 16px;
+  /* Space between title and notifications */
+}
+
+.ticketItem {
+  /* padding: 12px; */
+  padding: 12px;
+  border-bottom: 1px solid #eaeaea;
+  /* Divider between notifications */
+}
+
+.ticketItem:last-child {
+  /* border-bottom: none; */
+  /* Remove divider from the last item */
+}
+
+.messages {
+  display: block !important;
+  align-items: center;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.marginTopThree {
+  margin-top: 24px;
+}
+
+.weight700 {
+  font-weight: 700;
+  /* Bold text */
+}
+
+.profileText {
+  margin-bottom: 12px;
+  /* Space between profile text and other content */
+  line-height: 1.5;
+  /* Improved line height for readability */
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    /* Stack columns on mobile */
+    height: auto;
+    /* Remove fixed height */
+  }
+
+  .dashboard,
+  .notifications {
+    margin-bottom: 16px;
+    /* Space between sections on mobile */
+  }
+}

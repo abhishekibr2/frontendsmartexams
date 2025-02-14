@@ -1,0 +1,80 @@
+/* Styling for the container */
+.col-xxl-8,
+.col-sm-7 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Title for Test Progress */
+.p-sm {
+    font-size: 16px;
+}
+
+.fw-semi-bold {
+    font-weight: 600;
+}
+
+.color-dark-gray {
+    color: #333;
+}
+
+.progress-bar-container {
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+
+.countdown-timer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.timer-text {
+    color: #555;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.countdown-display {
+    font-size: 22px;
+    font-weight: 700;
+    color: #4caf50;
+}
+
+.countdown-time {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.active-blink {
+    animation: blink 1s infinite;
+    background: green !important;
+    /* Ensure it's visually distinct */
+    color: #fff !important;
+    border: 1px solid darkgreen;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+.countdown-display {
+    font-size: unset !important;
+}

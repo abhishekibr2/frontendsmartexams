@@ -1,0 +1,25 @@
+#forums {
+  padding: 60px 0px 30px 0px;
+}
+
+.recently-asked-questions {
+  background-color: #e6f0f9;
+  padding: 60px 0px;
+}
+
+#latest-post {
+  background-color: #fff;
+  padding: 60px;
+  border-radius: 12px;
+}
+
+@media (max-width: 991px) {
+  #forums {
+    padding: 20px 15px;
+  }
+
+  #latest-post {
+    padding: 20px 15px;
+    border-radius: 0px;
+  }
+}

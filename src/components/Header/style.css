@@ -1,0 +1,82 @@
+/* Hide the arrow for the dropdown submenu */
+.ant-dropdown-menu-submenu>.ant-dropdown-menu-submenu-arrow {
+    display: none !important;
+}
+
+li.ant-dropdown-menu-submenu.ant-dropdown-menu-submenu-vertical {
+    margin-left: 0;
+    border-bottom: solid 1px #2020202b;
+}
+
+ul.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light.custom-dropdown-menu.css-dev-only-do-not-override-4wiz1w {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    min-width: 201px !important;
+    border: none;
+    border-top: solid 3px #8c52ff;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, .15);
+}
+
+ul.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light.custom-dropdown-menu.css-4wiz1w {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    min-width: 201px !important;
+    border: none !important;
+    border-top: solid 3px #8c52ff !important;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, .15);
+}
+
+li.ant-dropdown-menu-submenu.ant-dropdown-menu-submenu-vertical:hover {
+    background: #f4f4f46e !important;
+    color: #8C52FF !important;
+}
+
+span.ant-dropdown-menu-submenu-expand-icon.ant-dropdown-menu-submenu-arrow {
+    display: none !important;
+}
+
+/* Target the custom dropdown menu */
+.custom-dropdown-menu {
+    padding: unset !important;
+}
+
+a.dropdown-item-state {
+    padding: 2px 2px;
+}
+
+.custom-dropdown-menu a.dropdown-item {
+    border-radius: 0;
+    color: #202020b3 !important;
+    font-size: 12px;
+}
+
+.dropdown-item {
+    border-radius: 0;
+    color: #202020b3 !important;
+    font-size: 12px;
+    padding: 5px !important;
+}
+
+.custom-dropdown-menu a.dropdown-item:hover {
+    color: #8C52FF !important;
+}
+
+.custom-dropdown-menu-data {
+    padding: 0 !important;
+}
+
+/* 30-01-25 */
+@media (max-width:767px) {
+    .nav-link-mob-expand {
+        color: #9a9a9a !important;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .nav-link-mob-expand:hover {
+        color: #3098a0 !important;
+    }
+
+}

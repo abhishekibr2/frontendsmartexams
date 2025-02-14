@@ -1,0 +1,9 @@
+.width-modal {
+  width: 60% !important;
+}
+
+@media (max-width: 991px) {
+  .width-modal {
+    width: 80% !important;
+  }
+}

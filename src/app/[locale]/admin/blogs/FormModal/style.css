@@ -1,0 +1,16 @@
+.heightReact {
+   height: 112px;
+   margin-bottom: 50px;
+}
+
+@media(max-width:991px) {
+   .heightReact {
+      height: auto;
+      margin: 0px;
+   }
+}
+
+.ql-editor {
+   height: 200px !important;
+
+}

@@ -1,0 +1,7 @@
+.ant-switch-inner {
+    display: block;
+    margin: 0 0px 0 0px !important;
+    color: #fff;
+    font-size: 12px;
+    transition: margin 0.2s;
+}

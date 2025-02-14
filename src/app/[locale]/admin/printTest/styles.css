@@ -1,0 +1,122 @@
+/* General Table Styles */
+.table-cell {
+  padding: 5px;
+  border-bottom: 2px solid #ddd;
+  height: 40px;
+  font-size: 15px;
+}
+
+/* Main Container */
+.main-container {
+  width: 70%;
+  margin: 0 auto;
+  background-color: rgba(249, 250, 251, 1);
+}
+
+/* Row for buttons */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+/* Style for individual buttons */
+.button {
+  margin-top: 20px;
+  background-color: rgba(140, 82, 255, 1);
+  color: white;
+  padding: 10px 20px;
+  font-size: 15px;
+  margin-bottom: 2rem;
+}
+
+/* Row for the test details section */
+.test-details-row {
+  margin-top: 20px;
+  background: #ededed;
+  padding: 20px 50px;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  padding: 100px;
+}
+
+/* Modal Styles */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  border-radius: 0 0 8px 8px;
+}
+
+.custom-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 70%;
+  max-width: 900px;
+  text-align: center;
+  height: 200px;
+  border: 5px solid blue;
+  border-radius: 65 0 17px 8px;
+  border-radius: 0px 0px 31px 31px;
+}
+
+/* Modal header */
+.modal-header {
+  background-color: blue;
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h5 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.tick-icon {
+  margin-right: 10px;
+}
+
+/* Back button */
+.back-button {
+  margin-top: 20px;
+  height: 90px;
+}
+
+/* Button */
+button {
+  font-size: 16px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-test-question,
+  #print-test-question * {
+    visibility: visible;
+  }
+
+  #print-test-question {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

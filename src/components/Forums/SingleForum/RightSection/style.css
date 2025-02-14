@@ -1,0 +1,27 @@
+#rightSectionForm
+  .categoriesMenu
+  ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.css-dev-only-do-not-override-t8jlqa {
+  border: 0px;
+}
+
+#rightSectionForm .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline,
+#rightSectionForm .ant-menu-light > .ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background: transparent !important;
+}
+
+.flexBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.categoriesMenu .ant-menu-submenu-title {
+  padding: 0px 0px 0px 20px !important;
+}
+.categoriesMenu li.ant-menu-item {
+  padding: 0px 0px 0px 20px !important;
+}
+@media (max-width: 991px) {
+  .flexBar {
+    display: block;
+  }
+}

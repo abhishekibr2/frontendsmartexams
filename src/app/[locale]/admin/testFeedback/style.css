@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  justify-content: center;
+  min-height: 50vh;
+  flex-direction: column;
+  gap: 20px;
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.review {
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.like-button,
+.dislike-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+.like-button {
+  background-color: #09a6eb;
+}
+
+.dislike-button {
+  background-color: #fb3311;
+}
+
+.count-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  margin-left: 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  display: flex;
+}
+
+/* Submit button */
+.submit-button {
+  margin-top: 20px;
+}
+.ant-modal-content {
+  width: 162%;
+}
+.like-button,
+.dislike-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.like-button:hover,
+.dislike-button:hover {
+  filter: brightness(0.9);
+}

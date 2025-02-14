@@ -1,0 +1,14 @@
+.width-modal {
+    width: 60% !important;
+}
+
+@media(max-width:991px) {
+    .width-modal {
+        width: 80% !important;
+    }
+}
+
+.btn-setting .btn {
+    border: unset !important;
+    padding: 0px 6px !important;
+}

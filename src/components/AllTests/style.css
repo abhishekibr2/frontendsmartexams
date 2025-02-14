@@ -1,0 +1,13 @@
+.all-tests-card {
+  filter: drop-shadow(2px 3px 4px rgba(0, 0, 0, 0.07));
+  border-radius: 10px !important;
+}
+
+.all-tests-card .ant-card-body {
+  padding: 24px 0 !important;
+  border-radius: 0 0 4px 4px !important;
+}
+
+ul.ant-pagination.ant-table-pagination.ant-table-pagination- {
+  justify-content: end;
+}

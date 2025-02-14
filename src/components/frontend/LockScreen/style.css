@@ -1,0 +1,45 @@
+.loginFormLogin {
+    padding: 20% 25% 20% 25%;
+}
+
+.heightVh {
+    height: 100vh;
+}
+
+.loginSection {
+    position: relative;
+}
+
+.loginSection::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url(https://img.freepik.com/free-photo/security-concept-with-wooden-blocks-paper-lock-icon-blue-table-flat-lay-man-hand-pointing_176474-10447.jpg?t=st=1731413957~exp=1731417557~hmac=bf6407e455f680ed729e91a53c4e32b232058a0ec4efc8738ec5766f53259feb&w=1380);
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+}
+
+.loginFormLogin .ant-form-item {
+    margin-bottom: 14px;
+}
+
+@media (max-width: 991px) {
+    .loginFormLogin {
+        padding: 0% 6% 10% 6%;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        border-radius: 8px;
+        background-color: #fff;
+        margin: 30px 20px;
+    }
+
+    .loginSection::after {
+        height: 100vh;
+        width: 100%;
+        z-index: -1;
+    }
+}

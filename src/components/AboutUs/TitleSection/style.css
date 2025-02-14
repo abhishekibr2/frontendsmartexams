@@ -1,0 +1,71 @@
+#second-aboutUs {
+    padding: 60px 0px;
+    background-color: #e6f0f9;
+    position: relative;
+    overflow: hidden;
+}
+
+img.shaps {
+    position: absolute;
+    bottom: 0;
+    width: 200px;
+    right: 0;
+}
+
+img.shaps1 {
+    position: absolute;
+    top: 50px;
+    width: 100px;
+    left: 100px;
+}
+
+.float-bob-y {
+    animation-name: float-bob-y;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.button-top {
+    padding-top: 90px;
+}
+
+/* Keyframe for float-bob-y */
+@keyframes float-bob-y {
+    0% {
+        transform: translateY(0);
+        /* Start position */
+    }
+
+    50% {
+        transform: translateY(-20px);
+        /* Move 20px upwards */
+    }
+
+    100% {
+        transform: translateY(0);
+        /* Return to start position */
+    }
+}
+
+
+@media(max-width:1200px) {
+    img.shaps {
+        display: none;
+    }
+
+    img.shaps1 {
+        display: none;
+    }
+
+    .button-top {
+        padding-top: 50px;
+    }
+
+}
+
+@media (max-width:767px) {
+    .button-top button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,141 @@
+.signup-width {
+  max-width: 730px !important;
+}
+
+/*Login Css*/
+
+.form-fields {
+  max-width: 570px !important;
+  margin: 0 auto !important;
+}
+
+.field-panel {
+  width: 100% !important;
+  padding: 12px 20px !important;
+  border: solid 1px #2020206b !important;
+  border-radius: 10.24px !important;
+  outline: none !important;
+  color: #2020206b;
+  font-size: 16px !important;
+  box-shadow: 0 4px 3px #20202014;
+}
+
+.field-panel::placeholder {
+  color: #2020206b !important;
+  font-size: 16px !important;
+}
+
+.right-icon {
+  position: relative;
+}
+
+.right-icon i {
+  position: absolute;
+  right: 10px;
+  color: #2020206b;
+  font-size: 22px;
+  top: 13px;
+}
+
+.form-fields label {
+  width: 100%;
+  color: #202020;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.form-auto {
+  width: 80% !important;
+  margin: 0 auto !important;
+}
+
+
+
+.or {
+  font-size: 17.92px;
+  text-align: center;
+  position: relative;
+}
+
+.or:after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 42%;
+  left: 0;
+  background: #202020;
+  top: 12px;
+}
+
+.or:before {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 42%;
+  right: 0;
+  background: #202020;
+  top: 12px;
+}
+
+.btn-small {
+  font-size: 13.66px;
+  padding: 10px 9px;
+  border-radius: 4.88px;
+}
+
+.right-icon .field-panel {
+  padding-right: 45px !important;
+}
+
+/**/
+.signup-width {
+  max-width: 730px !important;
+}
+
+.form-fields input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin-right: 5px;
+  position: relative;
+  top: 3px;
+}
+
+
+
+@media (max-width:767px) {
+  .form-auto {
+    width: 90%;
+  }
+
+  .title-medium {
+    font-size: 30px;
+    line-height: 42px;
+  }
+
+  a.link-home {
+    display: block;
+    text-align: center !important;
+  }
+
+  .form-body h2.top-ultra-space {
+    margin-top: 15px !important;
+  }
+
+  a.link-home {
+    margin-top: 10px;
+  }
+
+  .bottom-large-space {
+    margin-bottom: 5px !important;
+  }
+
+  label.check-box-leabel {
+    font-size: 14px !important;
+  }
+
+}
+
+.bg-Zblack {
+  background: #202020 !important;
+}

@@ -1,0 +1,38 @@
+.footer-links li a {
+    color: #a2a2a2 !important;
+}
+
+.ft-contant {
+    color: #a2a2a2 !important;
+}
+
+ul.footer-links.contact-info a i {
+    color: #fff;
+}
+
+ul.footer-links.contact-info a:hover i {
+    color: #8C52FF;
+}
+
+@media (min-width:1600px) {
+    .ft-contant {
+        padding-right: 110px;
+    }
+
+}
+
+@media (min-width:768px) {
+    .dask-none {
+        display: none !important;
+    }
+}
+
+@media (max-width:767px) {
+    .footer-links li {
+        margin: 10px 0;
+    }
+
+    .mobile-none {
+        display: none !important;
+    }
+}

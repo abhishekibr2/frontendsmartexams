@@ -1,0 +1,5 @@
+.products-list {
+  max-height: 42vh !important;
+  overflow: auto !important;
+  scrollbar-width: thin !important;
+}

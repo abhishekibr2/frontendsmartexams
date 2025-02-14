@@ -1,0 +1,14 @@
+@media screen and (max-width: 768px) {
+    .rccs__card {
+        height: 182.873px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: all 0.4s linear;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .rccs {
+        width: 100%;
+    }
+}

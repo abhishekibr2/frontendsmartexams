@@ -1,0 +1,333 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet');
+
+.range {
+  --range-shdw: #3b82f6;
+}
+
+.checkbox:checked,
+.checkbox[checked='true'],
+.checkbox[aria-checked='true'] {
+  background-repeat: no-repeat;
+  animation: checkmark var(--animation-input, 0.2s) ease-out;
+  background-color: #3b82f6;
+  background-image: linear-gradient(-45deg, transparent 65%, #3b82f6 65.99%),
+    linear-gradient(45deg, transparent 75%, #3b82f6 75.99%), linear-gradient(-45deg, #3b82f6 40%, transparent 40.99%),
+    linear-gradient(45deg, #3b82f6 30%, white 30.99%, white 40%, transparent 40.99%),
+    linear-gradient(-45deg, white 50%, #3b82f6 50.99%);
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+/* html {
+  overflow-x: hidden;
+} */
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: inherit !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* span.ant-menu-title-content {
+  color: #fff !important;
+} */
+
+/* @media screen and (min-width: 1200px) {
+  .main-content-wrapper {
+    height: 100vh;
+  }
+} */
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.responsive-table-wrapper .ant-card {
+  margin-top: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+p {
+  margin: 0px !important;
+  font-family: 'Lato', sans-serif !important;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+li {
+  list-style: none;
+}
+
+.chat-tabs .ant-tabs-nav {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.profileImage {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table-container th {
+  background-color: #f4f4f4;
+}
+
+@media screen and (max-width: 800px) {
+
+  .table-container table,
+  .table-container thead,
+  .table-container tbody,
+  .table-container th,
+  .table-container td,
+  .table-container tr {
+    display: block;
+  }
+
+  .table-container thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-container tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .table-container td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+
+  .table-container td:before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-weight: bold;
+    content: attr(data-label);
+  }
+
+  .table-container td:last-child {
+    border-bottom: 1px solid #ddd;
+  }
+}
+
+.fontWeightEight {
+  font-weight: 700 !important;
+  font-size: 64px !important;
+}
+
+.fontWeightThree {
+  font-weight: 300 !important;
+  font-size: 64px !important;
+}
+
+@media screen and (max-width: 767px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 2) {
+
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  .headerMain .cs-message-input__content-editor {
+    padding-left: 80px;
+    font-size: 16px !important;
+  }
+}
+
+.full-viewport-height {
+  height: calc(100dvh - env(safe-area-inset-top));
+}
+
+@supports (height: 100dvh) {
+  .full-viewport-height {
+    height: calc(100dvh - env(safe-area-inset-top));
+  }
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background-color: transparent;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #6c6b6b;
+}
+
+.ant-input-affix-wrapper>input.ant-input {
+  height: 35px;
+}
+
+.ant-form-large .ant-form-item .ant-form-item-label>label {
+  height: 0px !important;
+}
+
+.ant-form-item {
+  margin-bottom: 10px !important;
+}
+
+.ant-modal-close-x {
+  display: block;
+  width: 0px !important;
+  height: 0px !important;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 0px !important;
+  text-align: center;
+  text-transform: none;
+  text-rendering: auto;
+}
+
+.ant-modal .ant-modal-close:hover {
+  background-color: transparent !important;
+}
+
+.ant-modal .ant-modal-close .ant-modal-close-x {
+  width: 22px !important;
+  height: 0px !important;
+}
+
+.ant-upload-list-item-actions {
+  inset-inline-start: unset !important;
+  /* text-align: end !important; */
+  transform: unset !important;
+}
+
+:where(.ant-upload-wrapper) .ant-upload-list-item-actions {
+  inset-inline-start: unset !important;
+  /* text-align: end !important; */
+  transform: unset !important;
+}
+
+.registerForm {
+  overflow: hidden;
+}
+
+span.ant-avatar.ant-avatar-circle.ant-avatar-icon.set-mob-icon.css-dev-only-do-not-override-1owk7v0 {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 22px;
+}
+
+@media (max-width: 767px) {
+  span.ant-avatar.ant-avatar-circle.ant-avatar-icon.set-mob-icon.css-dev-only-do-not-override-1owk7v0 {
+    width: 35px;
+    height: 35px;
+    line-height: 30px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .custom-drawer .ant-drawer-body {
+    padding: unset !important;
+  }
+
+  /* .fc-toolbar-chunk {
+    display: flex;
+  } */
+}
+
+/* Chrome, Edge, Safari */
+input:-webkit-autofill {
+  appearance: none;
+  background-color: transparent !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  color: inherit !important;
+  border: 1px solid #ccc;
+  /* Optional: Add your border style */
+}
+
+/* Firefox (limited autofill support) */
+input:-moz-autofill {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Focus state to remove autofill styling */
+input:focus:-webkit-autofill {
+  background-color: transparent !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  color: inherit !important;
+}
+
+/* Chrome, Edge, Safari - Remove autofill styling when autofill is applied */
+input:-webkit-autofill:focus {
+  background-color: #ffffff !important;
+  /* Set your desired background color */
+  color: inherit !important;
+  /* Ensure text color matches */
+  box-shadow: 0 0 0px 1000px white inset !important;
+  /* Ensure no box-shadow */
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.ant-form .ant-form-item {
+  margin-bottom: 12px !important;
+}
+
+/*  */

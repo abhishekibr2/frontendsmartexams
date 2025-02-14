@@ -1,0 +1,9 @@
+.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+:where(.css-dev-only-do-not-override-1jeax48).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+:where(.css-dev-only-do-not-override-1jeax48).ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container,
+:where(.css-dev-only-do-not-override-1jeax48).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container {
+    display: inline-block;
+    width: 120px;
+    height: 121px !important;
+    vertical-align: top;
+}

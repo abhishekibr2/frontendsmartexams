@@ -1,0 +1,83 @@
+.question-text {
+    font-size: 16px !important;
+}
+
+.ant-list-item {
+    width: 100% !important;
+}
+
+.questions-wrapper .question-list .ant-collapse-header {
+    display: none !important;
+}
+
+.filter-collapse .ant-collapse-content-box {
+    padding: 0 !important;
+}
+
+.filter-collapse .ant-collapse-header {
+    display: none !important;
+}
+
+.test-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.test-card {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.test-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-header {
+    margin-bottom: 8px;
+}
+
+.test-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.test-description {
+    font-size: 14px;
+}
+
+.test-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.test-footer .ant-btn-link {
+    font-size: 14px;
+    color: #1890ff;
+    transition: color 0.2s ease-in-out;
+}
+
+.test-footer .ant-btn-link:hover {
+    color: #40a9ff;
+}
+
+.test-footer i {
+    font-size: 16px;
+    margin-right: 8px;
+}
+
+.option-with-answer {
+    display: flex !important;
+}
+
+.option-with-answer span p {
+    margin: 0 !important;
+}
+
+.edit-test-intro-wrapper .ant-collapse-header,
+.edit-test-intro-wrapper .ant-collapse-content-box {
+    padding: 0 !important;
+}

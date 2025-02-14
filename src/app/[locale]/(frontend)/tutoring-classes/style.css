@@ -1,0 +1,165 @@
+.digital-banner {
+  padding: 55px 0;
+}
+
+.bg-secondary {
+  background: #E46059 !important;
+}
+
+.digital-img {
+  border: solid 3px #fff;
+  border-radius: 15px;
+}
+
+.classes-part {
+  padding: 50px 0;
+}
+
+.card-classes {
+  background: #fff;
+  padding: 15px;
+  border-radius: 7px;
+  box-shadow: 0 4px 22px #2020200d;
+  position: relative;
+  transition: 0.6s;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card-classes p {
+  margin: 0;
+}
+
+.bg-7ddaff {
+  background: #7ddaff;
+}
+
+.bg-8C52FF {
+  background: #8C52FF;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.syllabus-part {
+  background: #eee;
+  padding: 50px 0;
+}
+
+.title-bg {
+  padding: 15px 0;
+  background-image: linear-gradient(-90deg, #0b4f6c 0%, #4a89a3 100%);
+  color: #fff !important;
+  border-radius: 6px;
+}
+
+.choose-your h3 {
+  font-size: 25px;
+  color: #1D5C72 !important;
+}
+
+.choose-your p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.list-classes li {
+  list-style: none;
+  font-size: 16px;
+  color: #1D5C72;
+  margin-bottom: 15px;
+}
+
+.list-classes li i {
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  background: #b2eaf9;
+  text-align: center;
+  border-radius: 40px;
+  padding: 7px 0;
+}
+
+.syllabus-part .choose-your {
+  border-left: solid 5px #7ddaff;
+}
+
+.syllabus-part a i.fa-question {
+  background: #f0f0f1;
+  color: #e46059;
+  width: 25px;
+  height: 25px;
+  border-radius: 100px;
+  text-align: center;
+  padding: 5px 0;
+  margin-right: 2px;
+}
+
+.line-part {
+  border-top: solid 4px #7ddaff;
+}
+
+.title-bg-8C52FF {
+  background-color: #8C52FF;
+  padding: 15px 0;
+  color: #fff !important;
+  border-radius: 6px;
+}
+
+.theam-8C52FF {
+  border-color: #8C52FF !important;
+}
+
+.line-8c52ff {
+  border-color: #8c52ff !important;
+}
+
+.testimonial-classes {
+  padding: 50px 0;
+}
+
+.card-box {
+  border-radius: 6.49px;
+  padding: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 6px #20202014;
+}
+
+.bg-00bff5 {
+  background: #00bff5;
+}
+
+.bg-7cc576 {
+  background: #7cc576;
+}
+
+.bg-a764a9 {
+  background: #a764a9;
+}
+
+.bg-f78e55 {
+  background: #f78e55;
+}
+
+@media (max-width:767px) {
+  .classes-part {
+    padding: 25px 0;
+  }
+
+  .syllabus-part {
+    padding: 25px 0;
+  }
+
+  .testimonial-classes {
+    padding: 35px 0;
+  }
+
+  .choose-your h3 {
+    font-size: 20px;
+  }
+
+  .choose-your p {
+    font-size: 16px;
+  }
+}

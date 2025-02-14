@@ -1,0 +1,27 @@
+.tabContainer {
+    display: block;
+}
+
+.collapseContainer {
+    display: none;
+}
+
+.form-control {
+    width: 100% !important;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+    .tabContainer {
+        display: none;
+    }
+
+    .collapseContainer {
+        display: block;
+
+    }
+
+    .form-control {
+        width: 100% !important;
+    }
+}
