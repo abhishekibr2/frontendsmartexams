@@ -158,26 +158,33 @@ const SectionOne = () => {
         if (updateId) {
             formData.append('updateId', updateId);
         }
-
-
         if (fileListOne.length > 0 && fileListOne[0]?.originFileObj) {
             const fileOne = fileListOne[0].originFileObj as File;
             formData.append('IconOne', fileOne);
+        } else {
+            const file = fileListOne[0]?.name;
+            formData.append('IconOne', file as string);
         }
-
         if (fileListTwo.length > 0 && fileListTwo[0]?.originFileObj) {
             const fileTwo = fileListTwo[0].originFileObj as File;
             formData.append('IconTwo', fileTwo);
+        } else {
+            const file = fileListTwo[0]?.name;
+            formData.append('IconTwo', file as string);
         }
-
         if (fileListThree.length > 0 && fileListThree[0]?.originFileObj) {
             const fileThree = fileListThree[0].originFileObj as File;
             formData.append('IconThree', fileThree);
+        } else {
+            const file = fileListThree[0]?.name;
+            formData.append('IconThree', file as string);
         }
-
         if (fileListFour.length > 0 && fileListFour[0]?.originFileObj) {
             const fileFour = fileListFour[0].originFileObj as File;
             formData.append('IconFour', fileFour);
+        } else {
+            const file = fileListFour[0]?.name;
+            formData.append('IconFour', file as string);
         }
 
         try {

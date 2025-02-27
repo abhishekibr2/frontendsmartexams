@@ -130,7 +130,7 @@ export default function Page() {
                                 fontWeight: 'bold',
                                 marginBottom: '16px',
                             }}>
-                                ${ebookData?.price || '0.00'}
+                                ${ebookData?.discountedPrice || '0.00'}
                             </h3>
                             <p style={{
                                 fontSize: '18px',

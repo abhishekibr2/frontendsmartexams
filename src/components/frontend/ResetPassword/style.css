@@ -48,9 +48,9 @@
 }
 
 .btn-accent-form {
-    background: #8C52FF !important;
+    background: #3098a0 !important;
     color: #fff !important;
-    border: solid 1px #8c52ff !important;
+    border: solid 1px #3098a0 !important;
     border-radius: 10.24px !important;
     padding: 12px 9px !important;
     font-weight: 700 !important;
@@ -118,9 +118,9 @@ a.btn-accent-form.bg-Zblack {
 }
 
 .btn-accent-formcraete {
-    background: #8C52FF;
+    background: #3098a0;
     color: #fff;
-    border: solid 1px #8c52ff;
+    border: solid 1px #3098a0;
     border-radius: 10.24px;
     padding: 12px 9px;
     font-weight: 700;

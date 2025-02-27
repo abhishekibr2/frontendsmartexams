@@ -7,3 +7,8 @@
     height: 121px !important;
     vertical-align: top;
 }
+
+.ant-input-textarea {
+    border-radius: 0 !important;
+    color: #202020B2 !important;
+}

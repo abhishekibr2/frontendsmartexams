@@ -30,9 +30,12 @@ import { IoLockClosedOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Layout, Menu, Drawer, Image, Row, Col, Dropdown, Popover, Flex, Typography } from 'antd';
 import { getAllRoles, getUserNotification } from '@/lib/commonApi';
 import ErrorHandler from '@/lib/ErrorHandler';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { SiPayloadcms } from 'react-icons/si';
 
 const RoleLayout = ({ children }: { children: React.ReactNode }) => {
-	const { user, locale, logout } = useContext(AuthContext);
+	const { user, locale, logout, setUser } = useContext(AuthContext);
 	const [brandMenu, setBrandMenu]: any = useState([]);
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const isMobile = useMediaQuery({ query: '(max-width: 991px)' });
@@ -40,6 +43,17 @@ const RoleLayout = ({ children }: { children: React.ReactNode }) => {
 	const [notificationCount, setNotificationCount] = useState<{ unreadCount: number }>({ unreadCount: 0 });
 	const roleName = user?.roleId?.roleName;
 	const [permissions, setPermissions] = useState<Record<string, boolean>>({});
+	const router = useRouter();
+
+	function handleLockScreen(e: any) {
+		e.preventDefault();
+		setUser(undefined);
+		Cookies.remove('session_token');
+		Cookies.remove('roleName');
+		const userId = user?._id;
+		router.replace(`/${locale}/lock-screen?userId=${userId}`);
+		window.history.forward();
+	}
 
 	useEffect(() => {
 		if (user) {
@@ -262,10 +276,10 @@ const RoleLayout = ({ children }: { children: React.ReactNode }) => {
 		{
 			key: '4',
 			label: (
-				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/${roleName}/lock-screen`} className='icon-list-top-bar'>
+				<span onClick={handleLockScreen} className='icon-list-top-bar'>
 					<IoLockClosedOutline />
 					Lock Screen
-				</Link>
+				</span>
 
 			),
 		},
@@ -427,6 +441,14 @@ const RoleLayout = ({ children }: { children: React.ReactNode }) => {
 														</Link>
 													</div>
 												</Col>
+												<Col span={8}>
+													<div className='drop-list-icons'>
+														<Link href={`${locale !== 'en' ? `/${locale}` : ''}/${roleName}/cms`}>
+															<SiPayloadcms />
+															CMS
+														</Link>
+													</div>
+												</Col>
 											</Row>
 										}
 									>
@@ -480,6 +502,7 @@ const RoleLayout = ({ children }: { children: React.ReactNode }) => {
 
 							<Menu
 								className='admin-sidebar'
+								id='style-1'
 								mode="inline"
 								defaultSelectedKeys={['1']}
 								defaultOpenKeys={['sub1']}

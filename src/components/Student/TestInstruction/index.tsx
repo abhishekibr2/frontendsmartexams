@@ -1,10 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Card, Col, Row } from 'antd'
+import { Card, Col, Row, Typography } from 'antd'
 import PageTitle from '@/commonUI/PageTitle'
 import { Test } from '@/lib/types'
 import axios from 'axios'
+import './style.css'
 
 interface TestInstructionProps {
     testId: string;
@@ -51,7 +52,9 @@ export default function TestInstruction({
             <Row justify={'center'} align={'middle'} style={{ width: '100%' }}>
                 <Col xxl={15} xl={15} lg={15} md={24} sm={24} xs={24}>
                     <Card title={
-                        <PageTitle title={test?.testDisplayName || 'Instruction'} />
+                        <Typography.Title level={2} className='m-0 p-0'>
+                            Test Name: {test?.testDisplayName || 'Instruction'}
+                        </Typography.Title>
                     }>
                         <section className="dash-part bg-light-steel">
                             <div className="">
@@ -67,8 +70,8 @@ export default function TestInstruction({
                                                 name="agree"
                                                 checked={isAgreed}
                                                 onChange={() => setIsAgreed(!isAgreed)}
-                                            />
-                                            I have read all the instructions carefully and have understood them. I agree not to cheat or use unfair means in this examination. I understand that using unfair means of any sort for my own or someone elses advantage will lead to my immediate disqualification. The decision of Trinity Tuition College will be final in these matters and cannot be appealed.
+                                            /> I have read all the instructions carefully and have understood them. I agree not to cheat or use unfair means in this examination. I understand that using unfair means of any sort for my own or someone elses advantage will lead to my immediate disqualification. The decision of Trinity Tuition College will be final in these matters and cannot be appealed.
+
                                         </div>
                                     </label>
                                     <Link href={`/student/test/${testId}/start`}>

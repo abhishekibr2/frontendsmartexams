@@ -33,16 +33,17 @@ export default function PreviewQuestion({ testId }: PreviewQuestionProps) {
     const topic = searchParams.get('topic')
     const subtopic = searchParams.get('subtopic')
     const questionType = searchParams.get('questionType')
+    const limit = searchParams.get('limit')
 
     useEffect(() => {
-        if (topic && subtopic && questionType) {
-            fetchTest(topic, subtopic, questionType)
+        if (topic && subtopic && questionType && limit) {
+            fetchTest(topic, subtopic, questionType, parseInt(limit))
         }
     }, [topic, subtopic, questionType])
 
-    const fetchTest = async (topic: string, subtopic: string, questionType: string) => {
+    const fetchTest = async (topic: string, subtopic: string, questionType: string, limit: number) => {
         setLoading(true)
-        const response = await axios.get(`/student/question`, { params: { topic, subtopic, questionType, isRandom: true } })
+        const response = await axios.get(`/student/question`, { params: { topic, subtopic, questionType, limit, isRandom: true } })
         setParagraph(questionType === 'comprehension' ? response.data.questions[0].paragraph : null)
         setQuestions(questionType === 'comprehension' ? response.data.questions[0].questionId : response.data.questions)
         setInitialQuestions(questionType === 'comprehension' ? response.data.questions[0].questionId : response.data.questions)
@@ -268,24 +269,26 @@ export default function PreviewQuestion({ testId }: PreviewQuestionProps) {
                         )}
                         {!showSummary && (
                             <Space style={{ marginTop: '20px', textAlign: 'right' }}>
-                                {questions.map((_, index) => {
-                                    // @ts-ignore
-                                    const isCorrect = questionResults[questions[index]._id]
-                                    return (
-                                        <Button
-                                            key={index}
-                                            type={isCorrect === true ? 'primary' : 'default'}
-                                            style={{
-                                                backgroundColor: isCorrect ? 'green' : isCorrect === false ? 'red' : '',
-                                                color: isCorrect !== undefined ? 'white' : 'black',
-                                            }}
-                                            onClick={() => carouselRef.current.goTo(index)}
-                                            icon={isCorrect ? <FaCheckCircle /> : isCorrect === false ? <FaTimesCircle /> : null}
-                                        >
-                                            {index + 1}
-                                        </Button>
-                                    )
-                                })}
+                                <Flex wrap gap={'small'}>
+                                    {questions.map((_, index) => {
+                                        // @ts-ignore
+                                        const isCorrect = questionResults[questions[index]._id]
+                                        return (
+                                            <Button
+                                                key={index}
+                                                type={isCorrect === true ? 'primary' : 'default'}
+                                                style={{
+                                                    backgroundColor: isCorrect ? 'green' : isCorrect === false ? 'red' : '',
+                                                    color: isCorrect !== undefined ? 'white' : 'black',
+                                                }}
+                                                onClick={() => carouselRef.current.goTo(index)}
+                                                icon={isCorrect ? <FaCheckCircle /> : isCorrect === false ? <FaTimesCircle /> : null}
+                                            >
+                                                {index + 1}
+                                            </Button>
+                                        )
+                                    })}
+                                </Flex>
                             </Space>
                         )}
                     </Card>

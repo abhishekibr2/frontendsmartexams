@@ -204,3 +204,38 @@ export const getContactUsData = async (userId: string): Promise<any> => {
         req.then((res) => resolve(res.data)).catch((err) => reject(err));
     })
 }
+
+// here ebooks api
+export const getAllEBooks = async (userId: string): Promise<any> => {
+    const token = Cookies.get('session_token');
+    return new Promise((resolve, reject) => {
+        const req = axios.request({
+            url: `${baseURL}${ebook.getAllEBooks(userId)}`,
+            method: 'get',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+
+        });
+        req.then((res) => resolve(res.data)).catch((err) => reject(err));
+
+    })
+}
+
+export const getTestAttempt = async (testAttemptId: string): Promise<any> => {
+    const token = Cookies.get('session_token');
+    return new Promise((resolve, reject) => {
+        const req = axios.request({
+            url: `${baseURL}/student/testAttempt/${testAttemptId}`,
+            method: 'get',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+
+        });
+        req.then((res) => resolve(res.data)).catch((err) => reject(err));
+
+    })
+}

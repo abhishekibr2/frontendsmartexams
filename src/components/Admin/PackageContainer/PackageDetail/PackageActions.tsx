@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, Button, Select, Space, Dropdown, Menu, List, message, Row, Col, Badge, Card, Typography, Upload, UploadProps, ColorPicker, Flex, Tooltip } from "antd";
+import { Modal, Form, Input, Button, Select, Space, Dropdown, Menu, List, message, Row, Col, Badge, Card, Typography, Upload, UploadProps, ColorPicker, Flex, Tooltip, Popconfirm } from "antd";
 import { CheckOutlined, CloseOutlined, PlusOutlined, EditOutlined, DeleteOutlined, FileTextOutlined, UploadOutlined } from "@ant-design/icons";
 import { FaEdit } from "react-icons/fa";
 import { CiShare1 } from "react-icons/ci";
@@ -14,7 +14,7 @@ const { Option } = Select;
 
 interface PackageActionsProps {
     record: Package;
-    handleDelete: (id: string) => void;
+    handleDelete: (id: any) => void;
 }
 
 const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete }) => {
@@ -25,7 +25,7 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
     const [formValues, setFormValues] = useState({
         price: record.packagePrice,
         compareAtPrice: record.compareAtPrice,
-        tag: record.tag,
+        tag: record.tag || "Most Popular",
         packageColor: record.packageColor,
         features: '',
         availability: 'available',
@@ -48,9 +48,41 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
         })
     }, [record]);
 
+
+    // const showModal = () => {
+    //     console.log("Before Modal Open, Features:", features); // Check state before modal opens
+    //     setIsModalVisible(true);
+    // };
+
     const showModal = () => {
+
+        if (features.length === 0) {
+            form.setFieldsValue({
+                features: `Unlimited Test Attempts
+1 x Vocabulary Booklet
+2 x Writing Tests with feedback
+Thinking Skills Course
+Reading Course
+Detailed answer explanations
+Free Vocabulary Book
+15 Exam-Styles Test
+Reasoning Test
+Test marked with FeedBack
+Reasoning Test
+Comprehension Test`.trim() + "\n".repeat(7),
+                availability: "available",
+                tag: "Most Popular",
+            });
+        } else {
+            form.setFieldsValue({
+                availability: "available",
+                tag: "Most Popular",
+            });
+        }
+
         setIsModalVisible(true);
     };
+
 
     const handleAddFeature = async (values: { features: string; availability: "available" | "unavailable", packageColor: string, tag: string, price: string, compareAtPrice: string }) => {
         try {
@@ -59,13 +91,12 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
                 featureName: features.trim(),
                 availability,
             }));
-
             const response = await axios.put(
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/packages/add-features/${record._id}`,
                 {
                     features: featureArray,
                     packageColor: packageColor,
-                    tag,
+                    tag: tag || "Most Popular",
                     packagePrice: price,
                     compareAtPrice,
                 }
@@ -78,8 +109,15 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
             }
         } catch (error) {
             console.error("Error adding features:", error);
+            const errorMessage = error.response?.data?.message || "Failed to add features.";
+            message.error(errorMessage);
         }
     };
+
+    useEffect(() => {
+        setFeatures(record.features);
+    }, [record]);
+
 
     const handleUpdateFeature = async (values: { availability: "available" | "unavailable"; features: string, packageColor: string, tag: string }) => {
         if (!editingFeature) return;
@@ -88,7 +126,13 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
             const updatedFeature = { ...editingFeature, ...values, featureName: values.features.trim() };
             const response = await axios.put(
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/packages/update-feature/${record._id}/${editingFeature._id}`,
-                { featureId: editingFeature._id, updatedFeature, packageColor: values.packageColor, tag: values.tag }
+                {
+                    featureId: editingFeature._id,
+                    featureName: updatedFeature.featureName,
+                    availability: updatedFeature.availability,
+                    packageColor: values.packageColor,
+                    tag: values.tag
+                }
             );
 
             if (response.status === 200) {
@@ -98,6 +142,8 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
                 setFeatures(updatedFeatures);
                 setEditingFeature(null);
                 message.success(response.data.message);
+                form.setFieldsValue({ features: "" });
+
                 setTimeout(() => {
                     form.resetFields();
                 }, 500);
@@ -136,54 +182,18 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
         return `linear-gradient(to right, ${lighter}, ${darker})`;
     };
 
-    const menu = (
-        <Menu>
-            <Menu.Item key="test">
-                <Link href={`${process.env["NEXT_PUBLIC_SITE_URL"]}/admin/test/create?packageId=${record._id}`}>
-                    <Button type="default" icon={<EditOutlined />}>
-                        Test Package
-                    </Button>
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="edit">
-                <Link href={`${process.env["NEXT_PUBLIC_SITE_URL"]}/admin/add-package?id=${record._id}`}>
-                    <Button type="primary" icon={<FaEdit />}>
-                        Edit Package
-                    </Button>
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="view">
-                <Link href={`${process.env["NEXT_PUBLIC_SITE_URL"]}/admin/testsInSidepackage?packageId=${record._id}`}>
-                    <Button icon={<CiShare1 />}>
-                        View Tests
-                    </Button>
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="essay">
-                <Link href={`${process.env["NEXT_PUBLIC_SITE_URL"]}/admin/essayPackage?packageId=${record._id}`}>
-                    <Button icon={<FileTextOutlined />}>
-                        Essay Package
-                    </Button>
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="addFeature">
-                <Button type="dashed" onClick={showModal}>
-                    Add Features
-                </Button>
-            </Menu.Item>
-            <Menu.Item key="delete">
-                {/* @ts-ignore  */}
-                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete([record?._id])}>
-                    Delete Package
-                </Button>
-            </Menu.Item>
-        </Menu>
-    );
-
     const getTransparentColor = (hex: string, opacity: number = 0.4) => {
         const color = tinycolor(hex || "#EAE3F8"); // Default color fallback
         return color.setAlpha(opacity).toRgbString(); // Convert to rgba format
     };
+    useEffect(() => {
+        form.setFieldsValue({ tag: "Most Popular" });
+    }, []);
+
+
+
+
+
 
     return (
         <>
@@ -218,7 +228,15 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
 
                 <Tooltip title="Delete Package">
                     {/* @ts-ignore  */}
-                    <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete([record?._id])} />
+
+                    <Popconfirm
+                        title="Are you sure you want to delete this package?"
+                        onConfirm={() => handleDelete([record?._id])}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger icon={<DeleteOutlined />} />
+                    </Popconfirm>
                 </Tooltip>
             </Flex>
             <Modal
@@ -242,7 +260,7 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
                             form={form}
                             onFinish={editingFeature ? handleUpdateFeature : handleAddFeature}
                             layout="vertical"
-                            initialValues={formValues}
+                            // initialValues={formValues}
                             onValuesChange={handleFormChange}
                         >
                             <Row gutter={24}>
@@ -270,7 +288,7 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
                                     </Form.Item>
                                 </Col>
                                 <Col span={10}>
-                                    <Form.Item label='Tag' name={'tag'}>
+                                    <Form.Item label='Tag' name={'tag'} >
                                         <Input placeholder="Popular" />
                                     </Form.Item>
                                 </Col>
@@ -336,7 +354,7 @@ const PackageActions: React.FC<PackageActionsProps> = ({ record, handleDelete })
                         <div style={{
                             maxWidth: 300
                         }}>
-                            <Badge.Ribbon text={formValues.tag || 'Popular'} color={formValues.packageColor || 'purple'} >
+                            <Badge.Ribbon text={formValues.tag || 'Most Popular'} color={formValues.packageColor || 'purple'} >
                                 <Card
                                     className="package-price-card"
                                     style={{

@@ -276,7 +276,8 @@ export default function Page({ data }: any) {
                                             <CountUp
                                                 start={0}
                                                 end={Number(core.countOne) || 1500}
-                                                duration={4}
+                                                delay={3}
+                                                duration={20}
                                                 separator=","
                                             />
                                         </h3>
@@ -290,7 +291,8 @@ export default function Page({ data }: any) {
                                             <CountUp
                                                 start={0}
                                                 end={Number(core.countTwo) || 30000}
-                                                duration={4}
+                                                delay={3}
+                                                duration={20}
                                                 separator=","
                                             />
                                         </h3>
@@ -304,7 +306,8 @@ export default function Page({ data }: any) {
                                             <CountUp
                                                 start={0}
                                                 end={Number(core.countThree) || 50000}
-                                                duration={4}
+                                                delay={3}
+                                                duration={20}
                                                 separator=","
                                             />
                                         </h3>
@@ -318,7 +321,8 @@ export default function Page({ data }: any) {
                                             <CountUp
                                                 start={0}
                                                 end={Number(core.countFour) || 60}
-                                                duration={4}
+                                                delay={3}
+                                                duration={20}
                                                 separator=","
                                             />
                                         </h3>

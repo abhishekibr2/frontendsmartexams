@@ -4,11 +4,7 @@ import Checkout from '@/components/frontend/Checkout';
 export default function Page() {
     return (
         <>
-
             <Checkout />
-
         </>
-
-
     )
 }

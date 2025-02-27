@@ -39,6 +39,7 @@ export default function middleware(request: NextRequest) {
 		}
 	}
 
+
 	return intlResponse || NextResponse.next();
 }
 

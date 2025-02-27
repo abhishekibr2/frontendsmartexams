@@ -126,7 +126,7 @@ function SingleEbook({ ebookData, randomBooks }: singleEbook) {
                                 fontWeight: 'bold',
                                 marginBottom: '16px',
                             }}>
-                                ${ebookData?.price || '0.00'}
+                                ${ebookData?.discountedPrice || '0.00'}
                             </h3>
                             <p style={{
                                 fontSize: '18px',

@@ -31,7 +31,7 @@ export default function PracticeArea() {
     return (
         <section className="dash-part bg-light-steel ">
             <div className="spac-dash">
-                <h2 className="top-title mb-3">
+                <h2 className="top-title pb-3">
                     Practice Area
                 </h2>
                 <Card
@@ -47,7 +47,7 @@ export default function PracticeArea() {
                                         <Card
                                             title={
                                                 <p className="color-dark-gray p-lg fw-medium text-left mt-2">
-                                                    {packageItem.packageId.packageName}
+                                                    {packageItem?.packageId?.packageName}
                                                 </p>
                                             }
                                             style={{
@@ -58,7 +58,7 @@ export default function PracticeArea() {
                                             }}
                                         >
                                             <Row gutter={[16, 16]}>
-                                                {packageItem.packageId.tests.map((test: any) => (
+                                                {packageItem?.packageId?.tests.map((test: any) => (
                                                     <Col
                                                         xxl={6}
                                                         xl={8}
@@ -86,12 +86,12 @@ export default function PracticeArea() {
                                                         >
                                                             <div>
                                                                 <p><strong>Subject:</strong> {test.subject?.subjectName || 'N/A'}</p>
-                                                                <p><strong>Description:</strong> {test.testDescription || ''}</p>
-                                                                {/* <p><strong>Duration:</strong> {test.duration || 'N/A'}</p>
-                                                                <p><strong>Status:</strong> {test.status || 'N/A'}</p> */}
+                                                                <p><strong>Exam Type:</strong> {test.examType.examType || ''}</p>
+                                                                <p><strong>Duration:</strong> {test.duration || 'N/A'}</p>
+                                                                <p><strong>Status:</strong> {test.status || 'N/A'}</p>
                                                             </div>
                                                             <div style={{ marginTop: 'auto', textAlign: 'center' }}>
-                                                                <Link href={`/student/practice-area/list`}>
+                                                                <Link href={`/student/practice-area/filter?grade=${test.grade._id}`}>
                                                                     <Button
                                                                         type="primary"
                                                                         block

@@ -1068,16 +1068,19 @@ export const GetAllPackage = async (): Promise<any> => {
 	});
 };
 
-export const GetAllPackageEssay = async (): Promise<any> => {
+export const GetAllPackageEssay = async (data: { userId: string, packageId: string }): Promise<any> => {
 	const token = Cookies.get('session_token');
 	return new Promise((resolve, reject) => {
 		const req = axios.request({
 			url: `${baseURL}${packageEssay.getAllEssay}`,
-			method: 'get',
+			method: 'post',
 			headers: {
 				Accept: 'application/json',
 				Authorization: `Bearer ${token}`
 			},
+			data: {
+				...data
+			}
 		});
 		req.then((res) => resolve(res.data)).catch((err) => reject(err));
 	});

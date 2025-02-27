@@ -236,6 +236,9 @@ const TutoringClass = ({ activeKey }: props) => {
         if (fileList && fileList.length > 0 && fileList[0]?.originFileObj) {
             const file = fileList[0].originFileObj as File;
             formData.append('image', file);
+        } else {
+            const file = fileList[0]?.name;
+            formData.append('image', file as string);
         }
 
         if (updateId) {
@@ -295,7 +298,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     { required: true, message: 'Please enter a description!' },
                                 ]}
                             >
-                                <TextArea
+                                <Input.TextArea
                                     placeholder="Enter Description"
                                     rows={5}
                                     showCount
@@ -420,7 +423,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Reading Upper Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name='readingUpperLevelDesc' label='Upper Level Description '>
-                                    <textarea placeholder='Enter Reading Upper Level Description' rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder='Enter Reading Upper Level Description' rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingEnglishOne' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -434,7 +437,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Reading Lower Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name='readingLowerLevelDesc' label='Upper Lower Level Description '>
-                                    <textarea placeholder='Enter Reading Lower Level Description' rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder='Enter Reading Lower Level Description' rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingEnglishThree' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -448,7 +451,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Writing Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name='WritingDesc' label='Upper Writing Level Description '>
-                                    <textarea placeholder='Enter Writing Level Description' rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder='Enter Writing Level Description' rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingEnglishFive' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -462,7 +465,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name='verbalLevelDesc' label='Upper Verbal Level Description '>
-                                    <textarea placeholder='Enter Verbal Level Description' rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder='Enter Verbal Level Description' rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingEnglishSeven' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -476,7 +479,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="titleyrFiveSixDesc" label="Upper Verbal Level Math Description">
-                                    <textarea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingOneYrFiveSix' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -490,7 +493,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="titleyrSixSevenDesc" label="Upper Verbal Level Math Description">
-                                    <textarea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingOneYrSixSeven' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -511,7 +514,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Reading Upper Level Math" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="readingUpperLevelDescMath" label="Upper Level Math Description">
-                                    <textarea placeholder="Enter Reading Upper Level Math Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Reading Upper Level Math Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathOne' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -525,7 +528,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Reading Lower Math Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="readingLowerLevelDescMath" label="Enter Lower Level Math Description">
-                                    <textarea placeholder="Enter Reading Lower Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Reading Lower Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathThree' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -539,7 +542,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Writing Math Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="writingLevelDescMath" label="Upper Writing Level Math Description">
-                                    <textarea placeholder="Enter Writing Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Writing Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathFive' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -553,7 +556,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="verbalLevelDescMath" label="Upper Verbal Level Math Description">
-                                    <textarea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathSeven' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -569,7 +572,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="titleYrMathFiveSixDesc" label="Upper Verbal Level Math Description">
-                                    <textarea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathOneYrFiveSix' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />
@@ -583,7 +586,7 @@ const TutoringClass = ({ activeKey }: props) => {
                                     <Input placeholder="Enter Verbal Level" maxLength={50} />
                                 </Form.Item>
                                 <Form.Item name="titleYrMathSixSevenDesc" label="Upper Verbal Level Math Description">
-                                    <textarea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
+                                    <Input.TextArea placeholder="Enter Verbal Math Level Description" rows={4} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item name='subHeadingMathOneYrSixSeven' label='Sub Heading One'>
                                     <Input placeholder='Sub Heading One' />

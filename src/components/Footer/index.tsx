@@ -135,8 +135,8 @@ export default function Footer() {
                                         ))}
                                     </ul>
                                 </div>
-                                <div className="col-sm-5 col-6">
-                                    <h4 className="p-lg fw-medium color-light">Exams Info</h4>
+                                <div className="col-sm-3 col-6">
+                                    {/* <h4 className="p-lg fw-medium color-light">Exams Info</h4>
                                     <ul className="footer-links ">
                                         {stateMenu.slice(0, 6).map((item: any) => (
                                             <li key={item._id}>
@@ -145,7 +145,7 @@ export default function Footer() {
                                                 </Link>
                                             </li>
                                         ))}
-                                    </ul>
+                                    </ul> */}
                                 </div>
 
                                 <div className="col-sm-7 ">
@@ -162,6 +162,14 @@ export default function Footer() {
                                             <li>
                                                 <a href="mailto:admin@gmail.com">
                                                     <i className="fa-regular fa-envelope" /> Email: {brandMenu.email}
+                                                </a>
+                                            </li>
+                                        )}
+
+                                        {brandMenu?.address && (
+                                            <li>
+                                                <a href="#">
+                                                    <i className="fa-solid fa-location-dot" /> Address: {brandMenu.address}
                                                 </a>
                                             </li>
                                         )}

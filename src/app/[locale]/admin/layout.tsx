@@ -7,7 +7,7 @@ import { PiExam } from 'react-icons/pi';
 import { MdSubject } from 'react-icons/md';
 import { GrUpgrade } from 'react-icons/gr';
 import { TfiWrite } from "react-icons/tfi";
-import { FiPackage } from 'react-icons/fi';
+import { FiLock, FiPackage } from 'react-icons/fi';
 import { SlSupport } from 'react-icons/sl';
 import { RiUser3Line } from 'react-icons/ri';
 import { SiPayloadcms } from "react-icons/si";
@@ -31,14 +31,26 @@ import { IoLockClosedOutline, IoSettingsOutline } from 'react-icons/io5';
 import { Layout, Menu, Drawer, Image, Row, Col, Dropdown, Popover, Flex, Typography } from 'antd';
 import { getUserNotification } from '@/lib/commonApi';
 import ErrorHandler from '@/lib/ErrorHandler';
-
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-	const { user, locale, logout } = useContext(AuthContext);
+	const { user, locale, logout, setUser } = useContext(AuthContext);
 	const [brandMenu, setBrandMenu]: any = useState([]);
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const isMobile = useMediaQuery({ query: '(max-width: 991px)' });
 	const [notification, setNotification] = useState<any[]>([]);
 	const [notificationCount, setNotificationCount] = useState<{ unreadCount: number }>({ unreadCount: 0 });
+	const router = useRouter();
+
+	function handleLockScreen(e: any) {
+		e.preventDefault();
+		setUser(undefined);
+		Cookies.remove('session_token');
+		Cookies.remove('roleName');
+		const userId = user?._id;
+		router.replace(`/${locale}/lock-screen?userId=${userId}`);
+		window.history.forward();
+	}
 
 	const fetchBrandMenuItems = async () => {
 		try {
@@ -281,6 +293,25 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 						</Link>
 					)
 				},
+				{
+					label: 'Report Bugs',
+					key: 'report-bugs',
+					icon: (
+						<Link href={`${locale !== 'en' ? `/${locale}` : ''}/admin/question/report-bugs`}>
+							<div className="icon-card-dash dash-icon-g" style={{
+								background: 'linear-gradient(83.31deg, #0aabc7 21.22%, #8ae9ff 88.54%)', width: '20px', height: '20px', display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								borderRadius: '50%',
+							}} >
+								<i className="fa-regular fa-circle-question" style={{
+									fontSize: '10px',
+								}}></i>
+							</div>
+						</Link>
+					)
+				},
+
 
 			]
 		},
@@ -422,10 +453,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 		{
 			key: '4',
 			label: (
-				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/admin/lock-screen`} className='icon-list-top-bar'>
+				<span onClick={handleLockScreen} className='icon-list-top-bar'>
 					<IoLockClosedOutline />
 					Lock Screen
-				</Link>
+				</span>
 
 			),
 		},
@@ -615,8 +646,14 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 													</Link>
 												</div>
 											</Col>
-
-
+											<Col span={8}>
+												<div className='drop-list-icons'>
+													<Link href={`${locale !== 'en' ? `/${locale}` : ''}/admin/cms`}>
+														<SiPayloadcms />
+														CMS
+													</Link>
+												</div>
+											</Col>
 										</Row>}><HiOutlineSquares2X2 />
 								</Popover>
 							</Col>
@@ -671,6 +708,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 								style={{ height: '100%', borderRight: 0, marginBottom: '15px' }}
 								items={items}
 								onClick={handleClick}
+								id='style-1'
 							/>
 							<div className='loginBottom loginBottomList'>
 								<Popover placement="bottomLeft" className='sidebar-popover' content={
@@ -693,11 +731,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 										</Col>
 										<Col span={12}>
 											<div className='drop-list-icons'>
-												<Link href={`${locale !== 'en' ? `/${locale}` : ''}/admin/cms`}>
-													<SiPayloadcms />
-													CMS
-												</Link>
-
+												<a href="#" onClick={handleLockScreen} >
+													<FiLock />
+													Lock Screen
+												</a>
 											</div>
 										</Col>
 										<Col span={12}>

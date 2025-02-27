@@ -7,7 +7,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import AddQuestionInTestModal from '../AddQuestionInTestModal';
 import { QuestionAndComprehension, Test } from '@/lib/types';
 import dateFormat from "dateformat";
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import AuthContext from '@/contexts/AuthContext';
 
 interface ButtonGroupProps {
@@ -40,6 +40,8 @@ export default function ButtonGroup({
     const [addedIds, setAddedIds] = useState<string[]>(existingQuestionIds)
     const [loading, setLoading] = useState(false)
     const searchParams = useSearchParams()
+    const pathname = usePathname();
+    console.log('pathname: ', pathname)
     const page = searchParams.get('page')
     const roleName = user?.roleId?.roleName;
     const handleUsedIn = async (questionId: string) => {
@@ -243,11 +245,13 @@ export default function ButtonGroup({
                                 Used In
                             </Button>
                             {
-                                !testId &&
-                                <Button size="large" onClick={() => { setQuestion(item); setOpen(true) }}>
-                                    Add Question to Test
-                                </Button>
+                                testId && !pathname.includes('/reorder') && (
+                                    <Button size="large" onClick={() => { setQuestion(item); setOpen(true); }}>
+                                        Add Question to Test
+                                    </Button>
+                                )
                             }
+
                         </React.Fragment>
                     }
                 </Flex>

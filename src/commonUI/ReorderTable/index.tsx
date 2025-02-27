@@ -18,6 +18,8 @@ interface ReorderTableProps<T> {
     data: T[];
     columns: TableColumnsType<T>;
     onChange?: any;
+    reload?: boolean;
+    loading?: boolean;
 }
 
 interface RowContextProps {
@@ -75,7 +77,7 @@ const Row: React.FC<RowProps> = (props) => {
     );
 };
 
-const ReorderTable = <T extends { key: string }>({ data, columns, onChange }: ReorderTableProps<T>) => {
+const ReorderTable = <T extends { key: string }>({ data, columns, onChange, reload, loading }: ReorderTableProps<T>) => {
     const [dataSource, setDataSource] = React.useState<T[]>(data);
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
@@ -91,7 +93,7 @@ const ReorderTable = <T extends { key: string }>({ data, columns, onChange }: Re
 
     useEffect(() => {
         setDataSource(data)
-    }, [])
+    }, [data])
     const draggableColumns: TableColumnsType<T> = [
         {
             key: 'sort',
@@ -116,6 +118,7 @@ const ReorderTable = <T extends { key: string }>({ data, columns, onChange }: Re
                     dataSource={dataSource}
                     pagination={false}
                     showHeader={false}
+                    loading={loading}
                 />
             </SortableContext>
         </DndContext>

@@ -27,7 +27,7 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 try {
-    const envPath = path.resolve(__dirname, './.env');
+    const envPath = path.resolve(__dirname, '../.env');
     const envConfig = dotenv.config({ path: envPath });
     dotenvExpand.expand(envConfig);
 } catch (error) {

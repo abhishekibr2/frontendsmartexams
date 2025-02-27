@@ -28,6 +28,7 @@ export default function UserAvatarForHeader() {
       router.replace(`/${locale}/lock-screen?userId=${userId}`);
       window.history.forward();
    }
+
    function handleDashboard(e: any) {
       e.preventDefault();
    }

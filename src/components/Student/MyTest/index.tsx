@@ -5,6 +5,8 @@ import { Button } from 'antd'
 import { Package } from '@/lib/types'
 import axios from 'axios'
 import AuthContext from '@/contexts/AuthContext'
+import TestTable from './TestTable'
+import FreeTestTable from './FreeTestTable'
 
 export default function MyTest() {
     const { user } = useContext(AuthContext)
@@ -29,7 +31,7 @@ export default function MyTest() {
             const res = await axios.get('/student/package/allPackages', {
                 params: { userId: user?._id },
             });
-
+            console.log(res.data.data, 'res.data.data')
             setBuyPackages(res.data.data)
         } catch (error) {
             // eslint-disable-next-line no-console
@@ -41,7 +43,7 @@ export default function MyTest() {
         <section className="dash-part bg-light-steel ">
             <div className="spac-dash">
                 <h2 className="top-title mb-3">
-                    My Test
+                    My Tests
                 </h2>
                 <div className="card-dash">
                     <p className="color-dark-gray p-xl fw-medium mb-2">
@@ -93,46 +95,7 @@ export default function MyTest() {
                                                         </div>
                                                         <div className="accordion-body">
                                                             <div className="accordion accordion-part" id="accordionExample">
-                                                                <table className="rwd-table text-center SubmittedTable shadow-sm">
-                                                                    <tbody className="table-dash-student">
-                                                                        <tr>
-                                                                            <th className="width-100-dask">ID</th>
-                                                                            <th>Subject</th>
-                                                                            <th>Test Name</th>
-                                                                            <th>Questions</th>
-                                                                            <th>Time</th>
-                                                                            <th>Status</th>
-                                                                            <th className="action-width">Action</th>
-                                                                        </tr>
-                                                                        {packageData?.packageId.tests?.length > 0 ? (
-                                                                            packageData.packageId.tests.map((test: any, index: number) => {
-                                                                                return (
-                                                                                    test && (
-                                                                                        <tr key={test._id || index}>
-                                                                                            <td data-th="#">{index + 1 || 'N/A'}</td>
-                                                                                            <td data-th="Subject">{test.subject?.subjectName || 'N/A'}</td>
-                                                                                            <td data-th="Test Name">{test?.testDisplayName || 'N/A'}</td>
-                                                                                            <td data-th="Questions">{test.questions?.length || 0}</td>
-                                                                                            <td data-th="Time">{test?.duration || 'N/A'}</td>
-                                                                                            <td data-th="Status">{test?.status || 'N/A'}</td>
-                                                                                            <td data-th="Action">
-                                                                                                <Link href={`/student/test/${test._id}`}>
-                                                                                                    <Button>
-                                                                                                        <i className="fa-solid fa-arrow-right" />
-                                                                                                    </Button>
-                                                                                                </Link>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    )
-                                                                                );
-                                                                            })
-                                                                        ) : (
-                                                                            <tr>
-                                                                                <td colSpan={7}>No tests available</td>
-                                                                            </tr>
-                                                                        )}
-                                                                    </tbody>
-                                                                </table>
+                                                                <TestTable packageData={packageData} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -171,44 +134,7 @@ export default function MyTest() {
                                     >
                                         <div className="accordion-body">
                                             <div className="accordion accordion-part" id="accordionExample">
-                                                <table className="rwd-table text-center SubmittedTable shadow-sm">
-                                                    <tbody className="table-dash-student">
-                                                        <tr>
-                                                            <th className="width-100-dask">ID</th>
-                                                            <th>Subject</th>
-                                                            <th>Test Name</th>
-                                                            <th>Questions</th>
-                                                            <th>Time</th>
-                                                            <th>Status</th>
-                                                            <th className="action-width">Action</th>
-                                                        </tr>
-                                                        {item.tests?.length > 0 ? (
-                                                            item.tests.map((test: any, index: number) => (
-                                                                test && (
-                                                                    <tr key={test._id}>
-                                                                        <td data-th="#">{index + 1}</td>
-                                                                        <td data-th="Subject">{test.subject?.subjectName || 'N/A'}</td>
-                                                                        <td data-th="Test Name">{test.testDisplayName || 'N/A'}</td>
-                                                                        <td data-th="Questions">{test.questions?.length || 0}</td>
-                                                                        <td data-th="Time">{test.duration || 'N/A'}</td>
-                                                                        <td data-th="Status">{test.status || 'N/A'}</td>
-                                                                        <td data-th="Action">
-                                                                            <Link href={`/student/test/${test._id}`}>
-                                                                                <Button>
-                                                                                    <i className="fa-solid fa-arrow-right" />
-                                                                                </Button>
-                                                                            </Link>
-                                                                        </td>
-                                                                    </tr>
-                                                                )
-                                                            ))
-                                                        ) : (
-                                                            <tr>
-                                                                <td colSpan={7}>No tests available</td>
-                                                            </tr>
-                                                        )}
-                                                    </tbody>
-                                                </table>
+                                                <FreeTestTable packageData={item} />
                                             </div>
                                         </div>
                                     </div>

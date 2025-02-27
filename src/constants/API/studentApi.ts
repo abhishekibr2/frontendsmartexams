@@ -4,6 +4,8 @@ export const student = {
         getSingleEbook: (slug: string) => `/student/ebooks/single/${slug}`,
         getAllStatesForFilter: `/student/ebooks/getAllStatesForFilter`,
         getAllExamTypeForFilter: `/student/ebooks/getAllExamTypeForFilter`,
+        getAllEBooks: (userId: string) => `/student/ebooks/getAllEBooks/${userId}`,
+
     },
     cart: {
         getStudentCartDetails: (userId: string) => `/student/cart/${userId}`,

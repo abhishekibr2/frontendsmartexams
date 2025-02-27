@@ -8,7 +8,7 @@ const handler = NextAuth({
             authorization: {
                 params: {
                     scope: 'openid email profile',
-                    redirect_uri: 'http://localhost:5000/api/auth/callback/google',
+                    redirect_uri: 'https://smartexams.com.au/api/auth/callback/google',
                 },
             },
         }),

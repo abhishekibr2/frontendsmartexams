@@ -1,306 +1,136 @@
 'use client';
-import React, { useContext, useState } from 'react';
-import { LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect, useState } from 'react';
 import './style.css';
 import AuthContext from '@/contexts/AuthContext';
-import { AddFeedQuestionFeedBack } from '@/lib/adminApi';
-import { message, Modal } from 'antd';
+import ResponsiveTable from '@/commonUI/ResponsiveTable';
+import { Image, Skeleton, Typography, Select } from 'antd';
+import ErrorHandler from '@/lib/ErrorHandler';
+import { getAllTestFeedback } from '@/lib/adminApi';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 export default function Page() {
-	const [showFeedback, setShowFeedback] = useState(false);
 	const { user } = useContext(AuthContext);
-	const userId = user?._id;
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [comment, setComment] = useState('');
+	const [feedbackData, setFeedbackData] = useState<any[]>([]);
+	const [allTest, setAllTest] = useState<any[]>([]);
+	const [servicesId, setServicesId] = useState<string[]>([]);
+	const [selectedTest, setSelectedTest] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
 
-	const [questionFeedback, setQuestionFeedback] = useState<{
-		like: boolean | null;
-		dislike: boolean | null;
-	}>({
-		like: null,
-		dislike: null
-	});
-
-	const [difficultyFeedback, setDifficultyFeedback] = useState<{
-		like: boolean | null;
-		dislike: boolean | null;
-	}>({
-		like: null,
-		dislike: null
-	});
-
-	const [technicalFeedback, setTechnicalFeedback] = useState<{
-		like: boolean | null;
-		dislike: boolean | null;
-	}>({
-		like: null,
-		dislike: null
-	});
-
-	const handleFeedbackClick = () => {
-		setShowFeedback(!showFeedback);
-		setIsModalOpen(true);
-	};
-
-	const handleLikeDislike = (section: string, type: 'like' | 'dislike') => {
-		let newState;
-
-		if (section === 'question') {
-			newState = { ...questionFeedback };
-			if (type === 'like') {
-				newState.like = newState.like ? null : true;
-				newState.dislike = null;
-			} else if (type === 'dislike') {
-				newState.dislike = newState.dislike ? null : true;
-				newState.like = null;
-			}
-			setQuestionFeedback(newState);
-		} else if (section === 'difficulty') {
-			newState = { ...difficultyFeedback };
-			if (type === 'like') {
-				newState.like = newState.like ? null : true;
-				newState.dislike = null;
-			} else if (type === 'dislike') {
-				newState.dislike = newState.dislike ? null : true;
-				newState.like = null;
-			}
-			setDifficultyFeedback(newState);
-		} else if (section === 'technical') {
-			newState = { ...technicalFeedback };
-			if (type === 'like') {
-				newState.like = newState.like ? null : true;
-				newState.dislike = null;
-			} else if (type === 'dislike') {
-				newState.dislike = newState.dislike ? null : true;
-				newState.like = null;
-			}
-			setTechnicalFeedback(newState);
-		}
-	};
-
-	const handleCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setComment(event.target.value);
-	};
-
-	const validateFeedback = () => {
-		if (!questionFeedback.like && !questionFeedback.dislike) {
-			message.error('Please select "Like" or "Dislike" for Question Level.');
-			return false;
-		}
-		if (!difficultyFeedback.like && !difficultyFeedback.dislike) {
-			message.error('Please select "Like" or "Dislike" for Difficulty Level.');
-			return false;
-		}
-		if (!technicalFeedback.like && !technicalFeedback.dislike) {
-			message.error('Please select "Like" or "Dislike" for Technical Level.');
-			return false;
-		}
-		if (!comment.trim()) {
-			message.error('Please write a comment before submitting!');
-			return false;
-		}
-		return true;
-	};
-
-	const responseSubmission = async () => {
-		if (!validateFeedback()) return;
-
-		const feedbackData = {
-			userId,
-			questionFeedback,
-			difficultyFeedback,
-			technicalFeedback,
-			comment,
-			questionId: '6751a5f3823f2dd9f1d718d5'
-		};
-
+	const fetchFeedback = async () => {
 		try {
-			const response = await AddFeedQuestionFeedBack(feedbackData);
-			if (response) {
-				message.success('Feedback submitted successfully!');
-				setIsModalOpen(false);
-				setShowFeedback(false);
-
-				setQuestionFeedback({ like: null, dislike: null });
-				setDifficultyFeedback({ like: null, dislike: null });
-				setTechnicalFeedback({ like: null, dislike: null });
-				setComment('');
-			} else {
-				message.error('Failed to submit feedback. Please try again.');
+			const res = await getAllTestFeedback({ testId: selectedTest as string });
+			if (res.success) {
+				const formattedData = res.data.testFeedbacks.map((feedback: any) => ({
+					key: feedback._id,
+					studentName: `${feedback.userId?.name || ''} ${feedback.userId?.lastName || ''}`,
+					email: feedback.userId?.email || 'N/A',
+					testName: feedback.testId?.testDisplayName || feedback.testId?.testName || 'N/A',
+					difficultyFeedback: feedback.difficultyFeedback?.like ? '👍 (Liked) ' : feedback.difficultyFeedback?.dislike ? '👎 (Disliked)' : 'N/A',
+					questionFeedback: feedback.questionFeedback?.like ? '👍 (Liked)' : feedback.questionFeedback?.dislike ? '👎 (Disliked)' : 'N/A',
+					technicalFeedback: feedback.technicalFeedback?.like ? '👍 (Liked)' : feedback.technicalFeedback?.dislike ? '👎 (Disliked)' : 'N/A',
+					comment: feedback.comment || 'N/A',
+					createdAt: dayjs(feedback.createdAt).format('DD/MM/YYYY'),
+				}));
+				setFeedbackData(formattedData);
+				setAllTest(res.data.allTest);
+				setLoading(false);
 			}
 		} catch (error) {
-			console.error('Error submitting feedback:', error);
-			message.error('An error occurred while submitting feedback.');
+			setLoading(false);
+			ErrorHandler.showNotification(error);
 		}
 	};
 
-	const showModal = () => {
-		setIsModalOpen(true);
+	useEffect(() => {
+		fetchFeedback();
+	}, [selectedTest]);
+
+	const columns = [
+		{
+			title: 'Student Name',
+			dataIndex: 'studentName',
+			key: 'studentName',
+			sorter: (a: any, b: any) => a.studentName.localeCompare(b.studentName),
+		},
+		{
+			title: 'Test Name',
+			dataIndex: 'testName',
+			key: 'testName',
+		},
+		{
+			title: 'Difficulty Feedback',
+			dataIndex: 'difficultyFeedback',
+			key: 'difficultyFeedback',
+		},
+		{
+			title: 'Question Feedback',
+			dataIndex: 'questionFeedback',
+			key: 'questionFeedback',
+		},
+		{
+			title: 'Technical Feedback',
+			dataIndex: 'technicalFeedback',
+			key: 'technicalFeedback',
+		},
+		{
+			title: 'Comment',
+			dataIndex: 'comment',
+			key: 'comment',
+		},
+		{
+			title: 'Submitted At',
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+		},
+	];
+
+	const GetSelectedId = (data: []) => {
+		setServicesId(data);
 	};
 
-	const handleCancel = () => {
-		setIsModalOpen(false);
-		setQuestionFeedback({ like: null, dislike: null });
-		setDifficultyFeedback({ like: null, dislike: null });
-		setTechnicalFeedback({ like: null, dislike: null });
-		setComment('');
-	};
 	return (
 		<>
-			<div className="submit-button">
-				<button
-					onClick={handleFeedbackClick}
-					style={{ padding: '10px 20px', backgroundColor: '#4CAF50', color: 'black' }}
-				>
-					Question Feedback
-				</button>
-			</div>
-			<Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null}>
-				<div className="container">
-					<h1 className="review">
-						Test Name: GR8 Reading <span style={{ background: '#d1d111', padding: '10px' }}>Feedback</span>
-					</h1>
-
-					<div className="section-heading">
-						<h1 className="review">Question Level</h1>
-						<div className="button-container">
-							<div
-								className="like-button"
-								onClick={() => handleLikeDislike('question', 'like')}
-								style={{
-									backgroundColor: questionFeedback.like ? '#4CAF50' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<LikeOutlined />
-								<span>Like</span>
-							</div>
-							<div
-								className="dislike-button"
-								onClick={() => handleLikeDislike('question', 'dislike')}
-								style={{
-									backgroundColor: questionFeedback.dislike ? '#FF6347' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<DislikeOutlined style={{ fontSize: '18px' }} />
-								<span>Dislike</span>
+			{loading ?
+				<Skeleton active={loading} loading={loading} />
+				:
+				<>
+					<div className="row align-items-center">
+						<div className="col-md-10">
+							<div style={{ display: 'flex', alignItems: 'center' }}>
+								<Link href={`/admin/dashboard`}>
+									<ArrowLeftOutlined style={{ fontSize: '20px', cursor: 'pointer', marginRight: '10px' }} />
+								</Link>
+								<Typography.Title level={3} className='mb-0 top-title' style={{ marginBottom: 0 }}>
+									Test Feedback List
+								</Typography.Title>
 							</div>
 						</div>
-						<div className="count-display">
-							{questionFeedback.like && <h1 className="review">1 Like Dislike 0</h1>}
-							{questionFeedback.dislike && <h1 className="review">1 Dislike Like 0</h1>}
-							{!questionFeedback.like && !questionFeedback.dislike && (
-								<h1 className="review">0 Like 0 Dislike</h1>
-							)}
+						<div className="col-md-2">
+							<Select
+								allowClear
+								className='w-100'
+								showSearch
+								placeholder="Filter by Test Name"
+								optionFilterProp="children"
+								onChange={(value) => {
+									setSelectedTest(value)
+								}}
+								options={allTest.map((test) => {
+									return {
+										label: test.testName,
+										value: test._id,
+									};
+								})}
+								value={selectedTest}
+							/>
 						</div>
 					</div>
-
-					<div className="section-heading">
-						<h1 className="review">Difficulty Level</h1>
-						<div className="button-container">
-							<div
-								className="like-button"
-								onClick={() => handleLikeDislike('difficulty', 'like')}
-								style={{
-									backgroundColor: difficultyFeedback.like ? '#4CAF50' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<LikeOutlined style={{ fontSize: '18px' }} />
-								<span>Like</span>
-							</div>
-							<div
-								className="dislike-button"
-								onClick={() => handleLikeDislike('difficulty', 'dislike')}
-								style={{
-									backgroundColor: difficultyFeedback.dislike ? '#FF6347' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<DislikeOutlined style={{ fontSize: '18px' }} />
-								<span>Dislike</span>
-							</div>
-						</div>
-						<div className="count-display">
-							{difficultyFeedback.like && <h1 className="review">1 Like Dislike 0</h1>}
-							{difficultyFeedback.dislike && <h1 className="review">1 Dislike Like 0</h1>}
-							{!difficultyFeedback.like && !difficultyFeedback.dislike && (
-								<h1 className="review">0 Like 0 Dislike</h1>
-							)}
-						</div>
-					</div>
-
-					<div className="section-heading">
-						<h1 className="review">Technical Level</h1>
-						<div className="button-container">
-							<div
-								className="like-button"
-								onClick={() => handleLikeDislike('technical', 'like')}
-								style={{
-									backgroundColor: technicalFeedback.like ? '#4CAF50' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<LikeOutlined style={{ fontSize: '18px' }} />
-								<span>Like</span>
-							</div>
-							<div
-								className="dislike-button"
-								onClick={() => handleLikeDislike('technical', 'dislike')}
-								style={{
-									backgroundColor: technicalFeedback.dislike ? '#FF6347' : '#f0f0f0',
-									color: 'black'
-								}}
-							>
-								<DislikeOutlined style={{ fontSize: '18px' }} />
-								<span>Dislike</span>
-							</div>
-						</div>
-						<div className="count-display">
-							{technicalFeedback.like && <h1 className="review">1 Like Dislike 0</h1>}
-							{technicalFeedback.dislike && <h1 className="review">1 Dislike Like 0</h1>}
-							{!technicalFeedback.like && !technicalFeedback.dislike && (
-								<h1 className="review">0 Like 0 Dislike</h1>
-							)}
-						</div>
-					</div>
-
-					<div>
-						<h1 className="review" style={{ textAlign: 'start' }}>
-							Comment
-						</h1>
-						<textarea
-							rows={6}
-							placeholder="Write your comment here..."
-							style={{ background: '#f5f5f5', marginTop: '5px' }}
-							value={comment}
-							onChange={handleCommentChange}
-							maxLength={200}
-							required
-						/>
-					</div>
-
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'flex-start',
-							marginTop: '20px'
-						}}
-					>
-						<button
-							onClick={responseSubmission}
-							style={{
-								padding: '10px 20px',
-								backgroundColor: '#4CAF50',
-								color: 'white'
-							}}
-						>
-							Submit Feedback
-						</button>
-					</div>
-				</div>
-			</Modal>
+					<ResponsiveTable columns={columns} data={feedbackData} GetSelectedId={GetSelectedId} />
+				</>
+			}
 		</>
 	);
 }

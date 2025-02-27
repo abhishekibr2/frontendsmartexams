@@ -24,6 +24,8 @@ interface TestContextType {
     setIsFlagged: React.Dispatch<React.SetStateAction<boolean>>;
     isComprehension: boolean;
     setIsComprehension: React.Dispatch<React.SetStateAction<boolean>>;
+    isReview: boolean;
+    setIsReview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TestContext = createContext<TestContextType | null>(null);
@@ -38,6 +40,7 @@ export const TestProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [questionAttempts, setQuestionAttempts] = useState()
     const [isFlagged, setIsFlagged] = useState(false)
     const [isComprehension, setIsComprehension] = useState(false)
+    const [isReview, setIsReview] = useState(false)
     const [form] = Form.useForm()
     const carouselRef = useRef<any>(null);
 
@@ -64,6 +67,8 @@ export const TestProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setIsFlagged,
                 isComprehension,
                 setIsComprehension,
+                isReview,
+                setIsReview
             }}
         >
             {children}
