@@ -49,14 +49,6 @@ ul.admin-sidebar li li:nth-child(1) {
   margin-top: 0 !important;
 }
 
-.admin-sidebar .ant-menu-item-selected {
-  background: #e4f5fd !important;
-}
-
-.admin-sidebar .ant-menu-item-selected a span {
-  color: #04a9f5 !important;
-}
-
 .admin-sidebar li span {
   margin-left: 5px !important;
 }
@@ -155,4 +147,45 @@ tbody.ant-table-tbody td.ant-table-cell span {
 td.ant-table-cell span.ant-tag.css-dev-only-do-not-override-19xw9e6 {
   margin-bottom: 10px !important;
   padding: 8px !important;
+}
+
+/* 11-02-25  */
+.ant-table-content {
+  overflow-x: auto !important;
+  width: 100% !important;
+  overflow: hidden;
+}
+
+@media(max-width:767px) {
+  .select-mobile-100 .ant-space {
+    width: 100%;
+  }
+
+  .select-mobile-100 .ant-space-item {
+    width: 100% !important;
+  }
+
+  .select-mobile-100 .ant-select {
+    width: 100% !important;
+  }
+
+  .table-responsive-part th {
+    min-width: 110px;
+    font-size: 14px;
+  }
+
+  .select-mobile-left span {
+    text-align: left;
+  }
+
+  .m-center {
+    text-align: center;
+  }
+
+  .title-m-sm {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+
+
 }

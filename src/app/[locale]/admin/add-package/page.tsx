@@ -24,6 +24,7 @@ import { handleFileCompression } from '@/lib/commonServices';
 import RichText from '@/commonUI/RichText';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDataContext } from '@/contexts/DataContext';
+import { ignore } from 'antd/es/theme/useToken';
 
 export default function Page() {
 	const [form] = Form.useForm();
@@ -115,7 +116,6 @@ export default function Page() {
 
 	const getEditableData = async () => {
 		try {
-
 			const res = await getSinglePackageInfo(paramId as string);
 			if (res.status === true) {
 				setPackageData(res.data);
@@ -123,6 +123,7 @@ export default function Page() {
 				handleStateChange(res.data.state?._id);
 				setDescription(res.data.packageDescription);
 				setExamTypeId(res.data.examType?._id);
+				setHasEssay(res.data.hasEssay);
 				form.setFieldsValue({
 					packageName: res.data.packageName,
 					packageDescription: res.data.packageDescription,
@@ -137,7 +138,7 @@ export default function Page() {
 					numSubjects: res.data.numSubjects,
 					subjectsInPackage: res.data.subjectsInPackage?.map((subject: Subject) => subject._id),
 					testType: res.data.testType,
-					qualityChecked: res.data.qualityChecked,
+					qualityChecked: res.data.qualityChecked ? 'yes' : 'no',
 					numTests: res.data.numTests,
 					isFree: res.data.isFree,
 					isActive: res.data.isActive,
@@ -293,13 +294,18 @@ export default function Page() {
 		setFileList([]);
 	};
 
+
 	const handlePackageFree = (value: string) => {
 		if (value === 'yes') {
 			form.setFieldsValue({ packagePrice: '0' });
 			form.setFieldsValue({ packageDiscount: '0' });
+			// @ts-ignore
+			form.setFieldsValue({ packageDuration: duration.find((dur: any) => dur?.DurationTime === "Lifetime")?._id });
+
 			setIsFree(true); // Set isFree to true
 		} else {
 			setIsFree(false); // Set isFree to false
+			form.setFieldsValue({ packageDuration: undefined });
 		}
 	};
 
@@ -600,8 +606,39 @@ export default function Page() {
 								</Form.Item>
 							</Col>
 
+							<Col md={6} sm={24}>
+								<Form.Item label="Quality Checked" name="qualityChecked" rules={[{ required: true, message: 'Please Select Quality Checked ' }]}>
+									<Select placeholder="Please Select Quality Checked">
+										<Option value="yes">Yes</Option>
+										<Option value="no">No</Option>
+									</Select>
+								</Form.Item>
+							</Col>
 
 
+							<Col md={6} sm={24}>
+								<Form.Item
+									label="Package Type"
+									name="packageType"
+									rules={[{ required: true, message: 'Select Package Type ' }]}
+								>
+									<Select placeholder="Please Select Package Type">
+										{packageType.map((data: any) => (
+											<Option key={data._id} value={data._id}>
+												{data.selectedPackage}
+											</Option>
+										))}
+									</Select>
+								</Form.Item>
+							</Col>
+							<Col md={6} sm={24}>
+								<Form.Item label="Has Essay in Package?" name="hasEssay" rules={[{ required: true, message: 'Please Select Has Essay in Package' }]}>
+									<Select placeholder="Select Has Essay in Package" onChange={handleHasEssayChange}>
+										<Option value="yes">YES</Option>
+										<Option value="no">NO</Option>
+									</Select>
+								</Form.Item>
+							</Col>
 							<Col md={6} sm={12}>
 								<Form.Item
 									label="Number of Essays Per Month"
@@ -633,21 +670,6 @@ export default function Page() {
 											e.target.value = value;
 										}}
 									/>
-								</Form.Item>
-							</Col>
-							<Col md={6} sm={24}>
-								<Form.Item
-									label="Package Type"
-									name="packageType"
-									rules={[{ required: true, message: 'Select Package Type ' }]}
-								>
-									<Select placeholder="Please Select Package Type">
-										{packageType.map((data: any) => (
-											<Option key={data._id} value={data._id}>
-												{data.selectedPackage}
-											</Option>
-										))}
-									</Select>
 								</Form.Item>
 							</Col>
 							<Col md={6} sm={24}>
@@ -691,22 +713,6 @@ export default function Page() {
 									/>
 								</Form.Item>
 
-							</Col>
-							<Col md={6} sm={24}>
-								<Form.Item label="Quality Checked" name="qualityChecked" rules={[{ required: true, message: 'Please Select Quality Checked ' }]}>
-									<Select placeholder="Please Select Quality Checked">
-										<Option value="yes">Yes</Option>
-										<Option value="no">No</Option>
-									</Select>
-								</Form.Item>
-							</Col>
-							<Col md={6} sm={24}>
-								<Form.Item label="Has Essay in Package?" name="hasEssay" rules={[{ required: true, message: 'Please Select Has Essay in Package' }]}>
-									<Select placeholder="Select Has Essay in Package" onChange={handleHasEssayChange}>
-										<Option value="yes">YES</Option>
-										<Option value="no">NO</Option>
-									</Select>
-								</Form.Item>
 							</Col>
 							<Col md={6} sm={24}>
 								<Form.Item

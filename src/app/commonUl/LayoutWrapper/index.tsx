@@ -1,3 +1,4 @@
+'use client'
 import { Layout, theme } from 'antd';
 import React from 'react'
 

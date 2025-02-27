@@ -8,7 +8,6 @@ import { IoLockClosedOutline, IoSettingsOutline } from 'react-icons/io5';
 import AuthContext from '@/contexts/AuthContext';
 import { FiLock } from 'react-icons/fi';
 import { CiUser } from 'react-icons/ci';
-import { getBrandDetails } from '@/lib/frontendApi';
 import { MenuOutlined } from '@ant-design/icons';
 import './style.css';
 import { HiShoppingCart } from 'react-icons/hi2';
@@ -32,10 +31,12 @@ import Notifications from '@/components/notification/Notifications';
 import { getUserNotification } from '@/lib/commonApi';
 import { usePathname } from 'next/navigation';
 import { PiBrainLight } from 'react-icons/pi';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 
 const StudentLayout = ({ children }: { children: React.ReactNode }) => {
-	const { user, locale, logout } = useContext(AuthContext);
+	const { user, locale, logout, setUser } = useContext(AuthContext);
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const isMobile = useMediaQuery({ query: '(max-width: 991px)' });
 	const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 	const pathname = usePathname()
 	const hideHeaderAndSider = pathname.includes('/student/test/');
 	const totalCount = useAppSelector((state) => state.userCartReducer.totalCount);
+	const router = useRouter();
 
 	const fetchCartDetails = async () => {
 		try {
@@ -88,6 +90,15 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 		fetchAllNotifications();
 	}
 
+	function handleLockScreen(e: any) {
+		e.preventDefault();
+		setUser(undefined);
+		Cookies.remove('session_token');
+		Cookies.remove('roleName');
+		const userId = user?._id;
+		router.replace(`/${locale}/lock-screen?userId=${userId}`);
+		window.history.forward();
+	}
 
 	const items: MenuProps['items'] = [
 		{
@@ -96,6 +107,15 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 			icon: (
 				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/student/dashboard`}>
 					<MdDashboard />
+				</Link>
+			)
+		},
+		{
+			label: 'Practice Area',
+			key: 'practice',
+			icon: (
+				<Link href={'/student/practice-area'}>
+					<PiBrainLight />
 				</Link>
 			)
 		},
@@ -173,17 +193,7 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 					<MdOutlineContactPage />
 				</Link>
 			)
-		},
-		{
-			label: 'Practice Area',
-			key: 'practice',
-			icon: (
-				<Link href={'/student/practice-area'}>
-					<PiBrainLight />
-				</Link>
-			)
 		}
-
 	];
 
 	const settingItems: MenuProps['items'] = [
@@ -196,35 +206,27 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 				</Link>
 			),
 		},
+
 		{
 			key: '2',
 			label: (
-				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/student/my-profile`} className='icon-list-top-bar'>
-					<IoSettingsOutline />
-					Settings
-				</Link>
-			),
-		},
-		{
-			key: '3',
-			label: (
-				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/student/contactUs`} className='icon-list-top-bar'>
+				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/student/contact-us`} className='icon-list-top-bar'>
 					<SlSupport />
 					Support
 				</Link>
 			),
 		},
 		{
-			key: '4',
+			key: '3',
 			label: (
-				<Link href={`${locale !== 'en' ? `/${locale}` : ''}/student/change-password`} className='icon-list-top-bar'>
+				<span onClick={handleLockScreen} className='icon-list-top-bar'>
 					<IoLockClosedOutline />
 					Lock Screen
-				</Link>
+				</span>
 			),
 		},
 		{
-			key: '5',
+			key: '4',
 			label: (
 				<Link href='/login' onClick={() => logout()} className='icon-list-top-bar'>
 					<AiOutlineLogout />
@@ -329,33 +331,31 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 										style={{ height: '100%', borderRight: 0, marginBottom: '15px' }}
 										items={items}
 										onClick={handleClick}
+										id='style-1'
 									/>
 									<div className='loginBottom loginBottomList'>
 										<Popover placement="bottomLeft" className='sidebar-popover' content={
 											<Row className='left-menu-drop'>
 												<Col span={12}>
 													<div className='drop-list-icons'>
-														<a href="#">
+														<a href="/student/my-profile">
 															<AiOutlineUser />
-
 															My Account
 														</a>
 													</div>
 												</Col>
-												<Col span={12}>
+												{/* <Col span={12}>
 													<div className='drop-list-icons'>
 														<a href="#">
 															<IoSettingsOutline />
-
 															Settings
 														</a>
 													</div>
-												</Col>
+												</Col> */}
 												<Col span={12}>
 													<div className='drop-list-icons'>
-														<a href="#">
+														<a href="#" onClick={handleLockScreen}>
 															<FiLock />
-
 															Lock Screen
 														</a>
 													</div>
@@ -389,14 +389,14 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 														style={{ width: 45, height: 45, objectFit: 'cover', borderRadius: '30px' }}
 													/>
 												)}
-
-												< div className='name-list'>
-													<Typography.Title level={5}>
+												{/* < div className='name-list'> */}
+												< div >
+													<Typography.Title level={5} style={{ marginTop: '5px' }}>
 														{user?.name}
 													</Typography.Title>
-													<Typography.Text type="secondary">
+													{/* <Typography.Text type="secondary">
 														{user?.email}
-													</Typography.Text>
+													</Typography.Text> */}
 												</div>
 											</Flex>
 										</Popover>
@@ -404,7 +404,7 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 								</Sider>
 							))}
 					<Layout className={!hideHeaderAndSider ? 'responsive-layout' : ''}>
-						<div className='right-bar'>
+						<div className='right-bar' style={{ backgroundColor: '#f4f7fa' }}>
 							{children}
 						</div>
 					</Layout>
@@ -415,3 +415,4 @@ const StudentLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default StudentLayout;
+

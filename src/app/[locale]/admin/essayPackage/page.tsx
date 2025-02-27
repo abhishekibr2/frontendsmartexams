@@ -39,6 +39,17 @@ export default function Subjects() {
         }
     }
 
+    const refetchData = async (idValue: string) => {
+        try {
+            const res = await getAllPackageEssay({ packageId: idValue, orderBy });
+            if (res.status === true) {
+                dispatch(setPackageEssay(res.data));
+            }
+        } catch (error) {
+            ErrorHandler.showNotification(error);
+        }
+    }
+
     useEffect(() => {
         if (user) {
             fetchData();
@@ -100,7 +111,7 @@ export default function Subjects() {
             </Row>
             <div className='mt-3'></div>
             <FormModal onEdit={handleUpdateSubjects} selectedRecord={selectedRecord}
-                setSelectedRecord={setSelectedRecord} packageName={packageName} packageId={packageId} packageEssay={packageEssay} />
+                setSelectedRecord={setSelectedRecord} packageName={packageName} packageId={packageId} packageEssay={packageEssay} onSelectPackage={(idValue: string) => refetchData(idValue)} />
 
             <div className='mt-3'></div>
             <TableData

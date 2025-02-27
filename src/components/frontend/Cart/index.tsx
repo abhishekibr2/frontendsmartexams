@@ -254,7 +254,7 @@ const Cart = () => {
                                                     <div className="bg-soft-lavender card-table mt-2 text-center">
                                                         <div className="close-icon bg-purple">
                                                             <i className="fa-solid fa-xmark"
-                                                                onClick={() => removeItem(item.packageId._id, 'package')}
+                                                                onClick={() => removeItem(item.packageId?._id, 'package')}
                                                             ></i>
                                                         </div>
                                                         <h4 className="p-md color-dark-gray mb-2 mt-2">
@@ -269,10 +269,10 @@ const Cart = () => {
                                                     <p className="color-dark-gray p-md opacity-7 mb-0 ">{item.packageId ? item.packageId.packageName : ''}</p>
                                                 </td>
                                                 <td data-label="TYPE"><p className="color-dark-gray p-md opacity-7 mb-0">Package</p></td>
-                                                <td data-label="PRICE"><p className="color-dark-gray p-md opacity-7 mb-0">${item.packageId.packagePrice}</p></td>
+                                                <td data-label="PRICE"><p className="color-dark-gray p-md opacity-7 mb-0">${item.packageId?.packagePrice}</p></td>
                                                 {/* <td className='d-none d-sm-block d-xl-block' data-label="DISCOUNT"><p className="color-dark-gray p-md opacity-7 mb-0">{item.packageId.packageDiscount}%</p></td> */}
                                                 <td data-label="QUANTITY" className="xs-height-sm">
-                                                    {showPopconfirm && itemToRemove?.packageId?._id === item.packageId._id && (
+                                                    {showPopconfirm && itemToRemove?.packageId?._id === item.packageId?._id && (
                                                         <Popconfirm
                                                             title={
                                                                 <span>
@@ -292,7 +292,7 @@ const Cart = () => {
                                                         <span className="up" onClick={() => increaseCount(item as any, 'package')}>+</span>
                                                     </div>
                                                 </td>
-                                                <td data-label="SUBTOTAL"><p className="color-dark-gray p-md mb-0 ">${(Number(item.packageId.packagePrice) * Number(item.quantity))}</p></td>
+                                                <td data-label="SUBTOTAL"><p className="color-dark-gray p-md mb-0 ">${(Number(item.packageId?.packagePrice) * Number(item.quantity))}</p></td>
                                             </tr>
                                         ))
                                     }

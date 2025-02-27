@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import HomePageContent from '@/components/Admin/CMS/HomePageContent';
 import WhyChooseUsContentPage from '@/components/Admin/CMS/WhyChooseUsContentPage';
 import TutoringClass from '@/components/Admin/CMS/TutoringClasses';
+import AboutPageContent from '@/components/Admin/CMS/AboutPageContent';
 
 const { Panel } = Collapse;
 
@@ -20,6 +21,7 @@ export default function Page() {
         { label: 'Home Page', key: 'home-page', component: <HomePageContent activeKey={key} /> },
         { label: 'Why Choose Us', key: 'WhyChooseUs', component: <WhyChooseUsContentPage activeKey={key} /> },
         { label: 'Tutoring Classes', key: 'TutoringClasses', component: <TutoringClass activeKey={key} /> },
+        { label: 'About Us Page', key: 'AboutUs', component: <AboutPageContent activeKey={key} /> },
 
     ].map((item) => ({
         label: item.label,
@@ -32,7 +34,6 @@ export default function Page() {
         setActiveKey(activeKey as string);
     };
 
-    console.log('Form Field')
 
     return (
         <>

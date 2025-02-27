@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Button, Carousel } from 'antd';
 import { Question, QuestionAndComprehension } from '@/lib/types';
 import TestQuestionItem from '../TestQuestionItem';
@@ -21,8 +21,9 @@ export default function ComprehensionTestQuestionItem({
     getOptionLabel,
     testAttempt,
 }: ComprehensionTestQuestionItemProps) {
-    const { isFlagged, setIsFlagged, currentIndex, questions } = useTestContext()
+    const { isFlagged, setIsFlagged, currentIndex, questions, setCurrentIndex } = useTestContext()
     const innerCarouselRef = useRef<any>(null);
+
     return (
         <React.Fragment>
             <Carousel
@@ -30,6 +31,10 @@ export default function ComprehensionTestQuestionItem({
                 infinite={false}
                 ref={innerCarouselRef}
                 fade={true}
+                afterChange={(current: number) => {
+                    setCurrentIndex(currentIndex + current)
+                }}
+                autoplaySpeed={500}
             >
                 {question?.questionId?.map(
                     (innerQuestion: Question, innerIndex: number) => (
@@ -90,8 +95,8 @@ export default function ComprehensionTestQuestionItem({
                             color: '#fff'
                         }}
                         htmlType='button'
-                        onClick={() => innerCarouselRef.current.next()}
-                    // onClick={() => goToQuestionAttempt()}
+                        // onClick={() => innerCarouselRef.current.next()}
+                        onClick={() => form.submit()}
                     >
                         Next
                     </Button>

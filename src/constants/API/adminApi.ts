@@ -88,6 +88,7 @@ export const ADMIN = {
         assignPackage: '/admin/packages/AssignPackage',
         test: '/admin/packages/tests',
         getSinglePackageInfo: (packageId: string) => `/admin/packages/getSinglePackageInfo/${packageId}`,
+        GetAllPackagesForEssay: `/admin/packages/package-for-essay`,
     },
     AddFeedBack: {
         feedBack: '/admin/feedback/addFeedback',
@@ -137,7 +138,6 @@ export const ADMIN = {
         getTestById: '/admin/test/getTestById',
 
     },
-
     addFaqs: {
         addFaq: '/admin/faq/addQuestion',
         getFaqs: '/admin/faq/getFaqs',
@@ -145,11 +145,13 @@ export const ADMIN = {
     },
     questionsAdmin: {
         getAll: `/admin/questionFeedback/getAllQuestionReport`,
-
+        getAllQuestionReportsBugs: `/admin/questionFeedback/report-bugs`,
     },
     homeBanner: {
         addHomePage: '/admin/homepageContent/addHomePageContent',
         getHomePage: '/admin/homepageContent/getHomePageContent',
+        deleteImage: '/admin/homepageContent/delete-banner',
+
     },
     allOrders: {
         getAllEbookOrders: '/admin/all-orders/getAllEbookOrders',
@@ -189,8 +191,13 @@ export const ADMIN = {
         addPrivacyPolicy: '/admin/privacyPolicy/addPrivacyPolicy',
         getPrivacyPolicy: '/admin/privacyPolicy'
 
+    },
+    about: {
+        getAboutPage: '/admin/aboutpageContent/getAboutPageContent',
+    },
+    testFeedback: {
+        getAllTestFeedback: `/admin/test/getAllTestFeedback`
     }
-
 
 }
 

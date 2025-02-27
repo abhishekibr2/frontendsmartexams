@@ -9,7 +9,7 @@ import './style.css'
 export default function ViewMessages({ id }: any) {
     const { user } = useContext(AuthContext);
     const [newMessage, setNewMessage] = useState('');
-    const [allMessages, setAllMessages] = useState<ContactUs>();
+    const [allMessages, setAllMessages]: any = useState<ContactUs>();
 
     const fetchMessages = async () => {
         try {
@@ -21,7 +21,7 @@ export default function ViewMessages({ id }: any) {
             ErrorHandler.showNotification(error);
         }
     }
-
+    console.log(allMessages, 'allMessages')
     useEffect(() => {
         if (user) fetchMessages();
     }, [user]);
@@ -53,7 +53,8 @@ export default function ViewMessages({ id }: any) {
                                 <div className="user-card align">
                                     <div className="user-img">
                                         <Image
-                                            src={allMessages?.messages?.[0]?.senderId?.image ? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/userImage/original/${allMessages?.messages?.[0]?.senderId?.image}` : '/images/smart/user.png'}
+                                            // src={allMessages?.messages?.[0]?.senderId?.image ? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/userImage/original/${allMessages?.messages?.[0]?.senderId?.image}` : '/images/smart/user.png'}
+                                            src={allMessages?.createdBy?.image ? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/userImage/original/${allMessages?.createdBy?.image}` : '/images/smart/user.png'}
                                             className="rounded-circle"
                                             height={50}
                                             width={50}
@@ -61,15 +62,19 @@ export default function ViewMessages({ id }: any) {
                                     </div>
                                     <div className="user-name">
                                         <h5 className="color-dark-gray opacity-7 p-sm bottom-no-space">
-                                            {allMessages?.messages?.[0]?.senderId?.name || "No Name Available"}
+                                            {/* {allMessages?.messages?.[0]?.senderId?.name || "No Name Available"} */}
+                                            {allMessages?.createdBy?.name || "No Name Available"}
                                         </h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="chat-container mt-3 mb-3" style={{ height: '-webkit-fill-available' }}>
+                        <div className="chat-container mt-3 mb-3 chat-height"
+                            style={{ height: '-webkit-fill-available' }}
+
+                        >
                             {allMessages &&
-                                allMessages.messages.map((message: any, index) => {
+                                allMessages.messages.map((message: any, index: any) => {
                                     return (
                                         <div className={`${message?.senderId._id === user?._id ? 'right-chat' : 'left-chat'}`} key={index}>
                                             <div className="d-flex align-items-start  contant-mg-chat">

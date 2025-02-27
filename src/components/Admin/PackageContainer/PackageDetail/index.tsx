@@ -74,13 +74,6 @@ export default function PackageListing() {
 		}
 	};
 
-	// const packages = async (values: any = null) => {
-	// 	const response = await GetAllPackages(undefined, orderBy, values, pageSize);
-	// 	if (response) {
-	// 		setPackages(response.data);
-	// 		setTotalPakages(response.totalPackage)
-	// 	}
-	// };
 	const packages = async (values: any = null) => {
 		const response = await GetAllPackages(undefined, orderBy, values, pageSize);
 		if (response) {
@@ -291,25 +284,18 @@ export default function PackageListing() {
 		{
 			title: 'Tests',
 			dataIndex: 'numTests',
+			width: '10%',
 			key: 'numTests',
 			render: (_: any, record: Package) => {
 				const allTestsAdded = record.tests.length === record.numTests;
 				return (
-					<Tooltip
-						title={allTestsAdded ? 'All tests are added' : 'Click to add tests'}
-					>
-						<Button
-							type='link'
-							style={{
-								color: allTestsAdded ? '#52c41a' : '#1890ff',
-								fontWeight: 'bold',
-								padding: 0,
-								textDecoration: 'underline',
-							}}
-						>
+					<>
+						<span style={{
+							padding: 0,
+						}}>
 							{record.tests.length} / {record.numTests} {allTestsAdded ? 'Tests Added' : 'Test(s) Remaining'}
-						</Button>
-					</Tooltip>
+						</span>
+					</>
 				);
 			},
 		},

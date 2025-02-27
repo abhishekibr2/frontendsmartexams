@@ -49,14 +49,6 @@ ul.admin-sidebar li li:nth-child(1) {
     margin-top: 0 !important;
 }
 
-.admin-sidebar .ant-menu-item-selected {
-    background: #E3D6FF !important;
-}
-
-.admin-sidebar .ant-menu-item-selected a span {
-    color: #04a9f5 !important;
-}
-
 .admin-sidebar li span {
     margin-left: 5px !important;
 }

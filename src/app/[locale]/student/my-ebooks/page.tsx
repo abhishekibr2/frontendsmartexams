@@ -1,14 +1,16 @@
 'use client';
-import { getAllExamType, getAllFreeEBooks, getAllStates } from '@/lib/adminApi';
+import { getAllExamType, getAllStates } from '@/lib/commonApi';
 import { useAppSelector } from '@/redux/hooks';
 import { setExamType } from '@/redux/reducers/examReducer';
 import { setServices } from '@/redux/reducers/serviceReducer';
 import { RootState } from '@/redux/store';
-import { Col, Row, Select, Image, Button, Table } from 'antd';
-import React, { useEffect, useState } from 'react'
+import { Col, Row, Select, Button, Table } from 'antd';
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import ErrorHandler from '@/lib/ErrorHandler';
 import { DownloadOutlined } from '@ant-design/icons';
+import AuthContext from '@/contexts/AuthContext';
+import { getAllEBooks } from '@/lib/studentApi';
 const { Option } = Select;
 
 interface StateType {
@@ -30,28 +32,27 @@ function Page() {
     const [data, setData] = useState([]);
     const [stateFilter, setStateFilter] = useState<string | null>(null);
     const [examFilter, setExamFilter] = useState<string | null>(null);
-
+    const { user } = useContext(AuthContext);
     const stateList = useAppSelector((state: RootState) => state.serviceReducer.services);
     const examList = useAppSelector((state: RootState) => state.examTypeReducer.examTypes);
     const dispatch = useDispatch();
 
-    // Fetch data and update Redux store
     useEffect(() => {
-        fetchData();
+        if (user) {
+            fetchData();
+        }
     }, []);
 
     const fetchData = async () => {
         try {
-            const res = await getAllFreeEBooks();
+            const res = await getAllEBooks(user?._id as string);
             setData(res.eBooks);
-
             const state = await getAllStates();
             if (state?.data) {
                 const filteredServices = state.data.filter((service: any) =>
                     res.eBooks.some((ebook: EbookType) => ebook.stateId._id === service._id)
                 );
                 dispatch(setServices(filteredServices));
-
                 const examType = await getAllExamType();
                 if (examType?.data) {
                     const filteredExamTypes = examType.data.filter((exam: any) =>
@@ -155,52 +156,56 @@ function Page() {
     return (
         <div>
             <section className="dash-part bg-light-steel">
-                <h2 className="top-title">My ebooks</h2>
-                <div className="card-dash mt-3">
-                    <Row gutter={16} className="mb-3">
-                        <Col lg={5} md={7} sm={12} xs={24} >
-                            <p className="p-sm color-dark-gray p-xs fw-medium mb-1">State</p>
-                            <Select
-                                className="select-list-2 p-relative w-100 mb-3"
-                                placeholder="Select State"
-                                value={stateFilter || undefined}
-                                onChange={handleStateFilterChange}
-                                allowClear
-                            >
-                                {stateList?.map((item: any) => (
-                                    <Option value={item._id} key={item._id}>
-                                        {item.title}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Col>
+                <Row gutter={16} >
+                    <Col lg={14} md={7} sm={24} xs={24} >
+                        <h2 className="top-title">My ebooks</h2>
 
-                        <Col lg={5} md={7} sm={12} xs={24}>
-                            <p className="p-sm color-dark-gray p-xs fw-medium mb-1">Exam Type</p>
-                            <Select
-                                placeholder="Select Exam Type"
-                                className="select-list-2 p-relative w-100"
-                                value={examFilter || undefined}
-                                onChange={handleExamFilterChange}
-                                allowClear
-                                disabled={!stateFilter}
-                            >
-                                {examList?.map((item: any) => (
-                                    <Option value={item._id} key={item._id}>
-                                        {item.examType}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Col>
-                    </Row>
-                    <Table
-                        columns={columns}
-                        dataSource={dataSource}
-                        pagination={{ pageSize: 10 }}
-                        bordered
-                        style={{ marginTop: '20px' }}
-                    />
-                </div >
+                    </Col>
+                    <Col lg={5} md={7} sm={24} xs={24} >
+                        {/* <p className="p-sm color-dark-gray p-xs fw-medium mb-1">State</p> */}
+                        <Select
+                            className="select-list-2 p-relative w-100 mb-3"
+                            placeholder="Select State"
+                            value={stateFilter || undefined}
+                            onChange={handleStateFilterChange}
+                            allowClear
+                        >
+                            {stateList?.map((item: any) => (
+                                <Option value={item._id} key={item._id}>
+                                    {item.title}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Col>
+
+                    <Col lg={5} md={7} sm={24} xs={24}>
+                        {/* <p className="p-sm color-dark-gray p-xs fw-medium mb-1">Exam Type</p> */}
+                        <Select
+                            placeholder="Select Exam Type"
+                            className="select-list-2 p-relative w-100"
+                            value={examFilter || undefined}
+                            onChange={handleExamFilterChange}
+                            allowClear
+                            disabled={!stateFilter}
+                        >
+                            {examList?.map((item: any) => (
+                                <Option value={item._id} key={item._id}>
+                                    {item.examType}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Col>
+                </Row>
+                {/* <div className="card-dash"> */}
+
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    pagination={{ pageSize: 10 }}
+                    bordered
+                    style={{ marginTop: '5px' }}
+                />
+                {/* </div > */}
             </section >
         </div >
     );

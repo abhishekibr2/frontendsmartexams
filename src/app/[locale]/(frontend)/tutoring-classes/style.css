@@ -34,8 +34,8 @@
   background: #7ddaff;
 }
 
-.bg-8C52FF {
-  background: #8C52FF;
+.bg-009ede {
+  background: #009ede;
 }
 
 .text-center {
@@ -82,7 +82,9 @@
 }
 
 .syllabus-part .choose-your {
-  border-left: solid 5px #7ddaff;
+  border: solid 1px #f7941d;
+  border-left: solid 7px #f7941d;
+  margin-top: 30px !important;
 }
 
 .syllabus-part a i.fa-question {
@@ -100,19 +102,19 @@
   border-top: solid 4px #7ddaff;
 }
 
-.title-bg-8C52FF {
-  background-color: #8C52FF;
+.title-bg-009ede {
+  background-color: #009ede;
   padding: 15px 0;
   color: #fff !important;
   border-radius: 6px;
 }
 
-.theam-8C52FF {
-  border-color: #8C52FF !important;
+.theam-009ede {
+  border-color: #009ede !important;
 }
 
-.line-8c52ff {
-  border-color: #8c52ff !important;
+.line-009ede {
+  border-color: #009ede !important;
 }
 
 .testimonial-classes {
@@ -140,6 +142,97 @@
 
 .bg-f78e55 {
   background: #f78e55;
+}
+
+.choose-your {
+  margin: 0 auto;
+}
+
+.link-btn-classes {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 40px;
+  background: #f7941d;
+  padding: 15px 20px;
+  color: #fff;
+  font-size: 1.4em;
+  text-transform: uppercase;
+}
+
+.link-btn-classes svg {
+  font-size: 30px;
+  margin: -3px 0 0 8px;
+}
+
+.link-btn.bg-secondary.bg-16bcc0 {
+  background: #10bbbf !important;
+}
+
+.link-btn.bg-secondary.bg-16bcc0 i {
+  color: #10bbbf;
+}
+
+.link-btn-classes .bg-16bcc0 {}
+
+.choose-your {
+  box-shadow: 0 10px 10px #2020200d !important;
+  border-radius: 8px !important;
+}
+
+.contact-modal .ant-modal-content {
+  background-color: #0d1d35 !important;
+  /* Dark Blue Background */
+  color: #ffffff !important;
+  /* White Text */
+  border-radius: 10px;
+}
+
+.contact-modal .ant-modal-header {
+  background-color: #0d1d35 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #1b2a41;
+}
+
+.contact-modal .ant-modal-title {
+  color: #ffffff !important;
+}
+
+.contact-modal .ant-modal-close-x {
+  color: #ffffff !important;
+}
+
+.contact-text {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.contact-details p {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  color: #ffffff !important;
+}
+
+.contact-details strong {
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+
+@media (max-width:1399px) {
+  .choose-your {
+    max-width: 1120px;
+  }
+
+}
+
+@media (min-width:1400px) {
+  .choose-your {
+    max-width: 1290px;
+  }
 }
 
 @media (max-width:767px) {

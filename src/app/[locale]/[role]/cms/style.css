@@ -1,0 +1,31 @@
+/* Mobile-only styles */
+@media (max-width: 768px) {
+
+    /* Show the Accordion (Collapse) on mobile */
+    .mobile-view {
+        display: block;
+    }
+
+    .desktop-view {
+        display: none;
+        /* Hide Tabs on mobile */
+    }
+}
+
+/* For larger screens (desktops), hide the Accordion */
+@media (min-width: 769px) {
+    .mobile-view {
+        display: none;
+        /* Hide Accordion on desktop */
+    }
+
+    .desktop-view {
+        display: block;
+        /* Show Tabs on desktop */
+    }
+}
+
+/* Additional styles for the Accordion (Collapse) */
+.ant-collapse-header {
+    font-weight: bold;
+}

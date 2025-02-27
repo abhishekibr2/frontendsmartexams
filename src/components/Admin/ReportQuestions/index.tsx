@@ -80,12 +80,12 @@ export default function QuestionBank() {
         <div className="p-8">
             <Row justify="space-between" align="middle" className="mb-4">
                 {/* First Row */}
-                <Col span={18}>
-                    <Title level={4} className="top-title">
+                <Col span={18} sm={18} md={18} xl={18} xs={24}>
+                    <Title level={4} className="top-title mb-3 title-m-sm">
                         Question Bank Analysis Report (Multiple Choice, Multiple Response & True False)
                     </Title>
                 </Col>
-                <Col span={6} style={{ textAlign: "right" }}>
+                <Col span={6} sm={6} md={6} xl={6} xs={24} className='select-mobile-100 select-mobile-left mb-3' style={{ textAlign: "right" }}>
                     <Select
                         defaultValue="all"
                         style={{ width: 200 }}
@@ -116,7 +116,7 @@ export default function QuestionBank() {
             </Flex>
 
 
-            <div className="p-8">
+            <div className="p-8 mt-3">
                 {/* Multiple Choice Table */}
                 {questionType === 'all' || questionType === 'multipleChoice' ? (
                     <Row className="mb-8">

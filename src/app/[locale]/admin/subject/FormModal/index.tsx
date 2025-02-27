@@ -92,7 +92,6 @@ export default function FormModal(props: ServiceModalProps) {
 								placeholder="Subject title"
 								type="text"
 								onChange={handleNameChange}
-								style={{ textTransform: 'capitalize' }}
 								maxLength={30}
 								onKeyPress={(e) => {
 									const charCode = typeof e.which === 'number' ? e.which : e.keyCode;

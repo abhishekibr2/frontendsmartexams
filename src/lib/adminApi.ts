@@ -6,7 +6,7 @@ import Email from 'next-auth/providers/email';
 
 const baseURL = API_BASE_URL;
 const { AddFeedBack, blog, profile, author, setting, user, dashboard, role, contactUs, eBook, documentation, testimonial, state, subject, examType, grade, complexity, testConducted,
-	packageEssay, packages, testAdmin, addFaqs, questionsAdmin, allOrders, homeBanner, duration, email, termsAndCondition, packageType, whyChooseUs, tutorialClass, privacyPolicy } = ADMIN;
+	packageEssay, packages, testAdmin, addFaqs, questionsAdmin, testFeedback, allOrders, homeBanner, duration, email, termsAndCondition, packageType, whyChooseUs, tutorialClass, privacyPolicy, about } = ADMIN;
 export const getAllBlogs = async (searchTerm: string = ''): Promise<any> => {
 	const token = Cookies.get('session_token');
 	return new Promise((resolve, reject) => {
@@ -1258,6 +1258,20 @@ export const GetAllPackages = async (id?: string, orderBy: string = 'newest', va
 	});
 };
 
+export const GetAllPackagesForEssay = async (): Promise<any> => {
+	const token = Cookies.get('session_token');
+	return new Promise((resolve, reject) => {
+		const req = axios.request({
+			url: `${baseURL}${packages.GetAllPackagesForEssay}`,
+			method: 'get',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`
+			},
+		});
+		req.then((res) => resolve(res.data)).catch((err) => reject(err));
+	});
+};
 
 export const AssignPackage = async (data: any): Promise<any> => {
 	const token = Cookies.get('session_token');
@@ -2045,6 +2059,89 @@ export const sendEmail = async (data: any): Promise<any> => {
 			}
 		});
 
+		req.then((res) => resolve(res.data)).catch((err) => reject(err));
+	});
+};
+
+
+
+export const addFrontendAboutPageContent = async (formData: any): Promise<any> => {
+	console.log(formData, 'formData')
+	const token = Cookies.get('session_token');
+	try {
+		const res = await axios.post('/admin/aboutpageContent/addFrontendAboutPageContent', formData, {
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'multipart/form-data',
+				'Authorization': `Bearer ${token}`,
+			},
+		});
+
+		return res.data;
+	} catch (err) {
+		throw err;
+	}
+};
+
+export const getAboutPageContent = async (): Promise<any> => {
+	const token = Cookies.get('session_token');
+	return new Promise((resolve, reject) => {
+		const req = axios.request({
+			url: `${baseURL}${about.getAboutPage}`,
+			method: 'get',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`
+			}
+		});
+		req.then((res) => resolve(res.data)).catch((err) => reject(err));
+	});
+};
+
+export const getAllTestFeedback = async (data: { testId: string }): Promise<any> => {
+	const token = Cookies.get('session_token');
+	return new Promise((resolve, reject) => {
+		const req = axios.request({
+			url: `${baseURL}${testFeedback.getAllTestFeedback}`,
+			method: 'post',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`
+			},
+			data
+		});
+		req.then((res) => resolve(res.data)).catch((err) => reject(err));
+	});
+};
+
+export const getAllQuestionReportsBugs = async (data: { testId: string }): Promise<any> => {
+	const token = Cookies.get('session_token');
+	return new Promise((resolve, reject) => {
+		const req = axios.request({
+			url: `${baseURL}${questionsAdmin.getAllQuestionReportsBugs}`,
+			method: 'post',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`
+			},
+			data
+		});
+		req.then((res) => resolve(res.data)).catch((err) => reject(err));
+	});
+};
+
+export const deleteHomeBannerSaleImage = async (data: any): Promise<any> => {
+	const token = Cookies.get('session_token');
+	return new Promise((resolve, reject) => {
+		const req = axios.request({
+			url: `${baseURL}${homeBanner.deleteImage}`,
+			method: 'post',
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token} `
+			},
+			data
+		});
 		req.then((res) => resolve(res.data)).catch((err) => reject(err));
 	});
 };

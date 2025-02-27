@@ -1,0 +1,83 @@
+@media (min-width: 768px) {
+
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container {
+        display: inline-block;
+        width: 102px;
+        height: 102px;
+        margin-block: 0 8px;
+        margin-inline: 0 8px;
+        vertical-align: top;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container {
+        display: inline-block;
+        width: 100% !important;
+        height: 100% !important;
+        margin-block: 0 8px;
+        margin-inline: 0 8px;
+        vertical-align: top;
+    }
+}
+
+.react-tel-input .flag-dropdown.open .selected-flag {
+    background: #fff !important;
+}
+
+.react-tel-input .selected-flag:hover,
+.react-tel-input .selected-flag:focus {
+    background: #fff !important;
+}
+
+.react-tel-input .country-list .country.highlight {
+    border: 1px solid #CACACA !important;
+    background-color: #fff !important;
+}
+
+body.dark-mode .react-tel-input .flag-dropdown {
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .flag-dropdown.open .selected-flag {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list {
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list .country.highlight {
+    border: 1px solid #fff !important;
+    background-color: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .selected-flag:hover,
+body.dark-mode .react-tel-input .selected-flag:focus {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .react-tel-input .country-list .country:hover {
+    background: #2a2a2a !important;
+    border: 1px solid #fff !important;
+}
+
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
+:where(.css-dev-only-do-not-override-1jeax48).ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+    width: 110px;
+    height: 134px !important;
+    text-align: center;
+    vertical-align: top;
+    background-color: rgba(0, 0, 0, 0.02);
+    border: 1px dashed #d9d9d9;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
