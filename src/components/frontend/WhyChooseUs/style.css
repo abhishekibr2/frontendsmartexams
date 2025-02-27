@@ -56,7 +56,7 @@ a {
 }
 
 .p-lg {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .p-md {
@@ -201,7 +201,7 @@ a {
 
 /*background color*/
 .bg-pastel-blue {
-  background-color: #d9f5ff;
+  background-color: #202020;
 }
 
 .bg-light-blue {
@@ -221,7 +221,7 @@ a {
 }
 
 .bg-light-white {
-  background-color: #f6f5f9 !important;
+  background-color: #ffffff !important;
 }
 
 .bg-light-gray {
@@ -1185,7 +1185,7 @@ img.vert-move {
 .btn-primary {
   background: #09a6eb;
   color: #fff;
-  font-size: 18px;
+  font-size: 15px;
   width: 100%;
   border: solid 1px #09a6eb;
   font-weight: 500;
@@ -1317,9 +1317,9 @@ img.vert-move {
 }
 
 .btn-accent-form {
-  background: #8c52ff;
+  background: #3098a0;
   color: #fff;
-  border: solid 1px #8c52ff;
+  border: solid 1px #3098a0;
   border-radius: 10.24px;
   padding: 12px 9px;
   font-weight: 700;

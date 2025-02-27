@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Form, Select, Input, Button, message } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { useTestContext } from "@/contexts/TestContext";
 
 const { Option } = Select;
 
@@ -20,6 +21,10 @@ const ReportProblemModal: React.FC<ReportProblemModalProps> = ({
 }) => {
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
+    const {
+        testAttempt,
+        currentIndex
+    } = useTestContext()
 
     const handleSubmit = async (values: any) => {
         setLoading(true);
@@ -29,6 +34,7 @@ const ReportProblemModal: React.FC<ReportProblemModalProps> = ({
                 userId,
                 issueType: values.issueType,
                 description: values.description,
+                questionId: testAttempt.test.questionIds[currentIndex]
             });
 
             message.success("Your report has been submitted successfully!");

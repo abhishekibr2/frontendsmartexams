@@ -3,16 +3,19 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type testType = {
     testid: string;
     duplicateTestId: string;
+    selectedQuestionId: string;
 };
 
 type TestState = {
     tests: testType[];
     duplicateTestId: string[];
+    selectedQuestionId: string;
 };
 
 const initialState: TestState = {
     tests: [],
-    duplicateTestId: []
+    duplicateTestId: [],
+    selectedQuestionId: ''
 };
 
 export const testSlice = createSlice({
@@ -24,9 +27,12 @@ export const testSlice = createSlice({
         },
         setDuplicateTestId(state, action: PayloadAction<string[]>) {
             state.duplicateTestId = action.payload;
+        },
+        setSelectedQuestionId(state, action: PayloadAction<string>) {
+            state.selectedQuestionId = action.payload;
         }
     }
 });
 
-export const { setTest, setDuplicateTestId } = testSlice.actions;
+export const { setTest, setDuplicateTestId, setSelectedQuestionId } = testSlice.actions;
 export default testSlice.reducer;

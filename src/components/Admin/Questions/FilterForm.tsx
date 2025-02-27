@@ -160,11 +160,33 @@ const FilterQuestion = ({ filterForm, reload, setReload, takeBulkOwnership, adde
                                                 placeholder="Topic"
                                                 optionFilterProp="label"
                                                 onSearch={(value) => onSearch(value, 'topic')}
-                                                onChange={(value) => onSearch(value, 'topic')}
+                                                onChange={(value) => {
+                                                    onSearch(value, 'topic');
+                                                    filterForm.setFieldsValue({ subTopic: undefined });
+                                                }}
                                                 options={topics.map((topic: string) => ({
                                                     label: topic,
                                                     value: topic,
                                                 }))}
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col lg={6} md={6} sm={24} xs={24}>
+                                        <Form.Item name="subTopic" label="Sub Topic">
+                                            <Select
+                                                showSearch
+                                                allowClear
+                                                placeholder="Select sub topic"
+                                                optionFilterProp="label"
+                                                notFoundContent={filterForm.getFieldValue('topic') ? null : 'Please select a topic first'}
+                                                options={
+                                                    filterForm.getFieldValue('topic')
+                                                        ? subTopics.map((subTopic) => ({
+                                                            label: subTopic,
+                                                            value: subTopic,
+                                                        }))
+                                                        : []
+                                                }
                                             />
                                         </Form.Item>
                                     </Col>
@@ -193,20 +215,6 @@ const FilterQuestion = ({ filterForm, reload, setReload, takeBulkOwnership, adde
                                             </Form.Item>
                                         </Col>
                                     )}
-                                    <Col lg={6} md={6} sm={24} xs={24}>
-                                        <Form.Item name="subTopic" label="Sub Topic">
-                                            <Select
-                                                showSearch
-                                                allowClear
-                                                placeholder="Search SubTopic"
-                                                optionFilterProp="label"
-                                                options={subTopics.map((subTopic) => ({
-                                                    label: subTopic,
-                                                    value: subTopic,
-                                                }))}
-                                            />
-                                        </Form.Item>
-                                    </Col>
                                     <Col lg={6} md={6} sm={24} xs={24}>
                                         <Form.Item name="addedFrom" label="Question Added From">
                                             <DatePicker mode="date" className="w-100" />

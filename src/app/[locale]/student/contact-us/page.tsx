@@ -30,6 +30,7 @@ export default function Page() {
         if (user) fetchMessages();
     }, [user]);
 
+
     const handleMessageSend = async () => {
         try {
             const res = await submitContactUsMessage({
@@ -69,7 +70,9 @@ export default function Page() {
                                 </div>
                             </div>
                         </div>
-                        <div className="chat-container mt-3 mb-3" style={{ height: '-webkit-fill-available' }}>
+                        <div className="chat-container mt-3 mb-3 chat-height"
+                            style={{ height: '-webkit-fill-available' }}
+                        >
                             {allMessages &&
                                 allMessages.messages.map((message: any, index) => {
                                     return (
@@ -92,7 +95,7 @@ export default function Page() {
                                                     <div
                                                         className="message-box p-sm"
                                                         style={{
-                                                            color: '#fff'
+                                                            color: '#535F74'
                                                         }}>
                                                         {message.message}
                                                     </div>

@@ -338,7 +338,7 @@ const Checkout = () => {
                                                 type="text"
                                                 className="field-panel"
                                                 name="streetAddress2"
-                                                value={formValues.country}
+                                                value={formValues.streetAddress2}
                                                 onChange={handleChange}
                                                 placeholder="Apartment, suite, unit, etc. (optional)"
                                             />
@@ -359,10 +359,10 @@ const Checkout = () => {
                                                     cartItem?.cart.package.map((item: any, index) => (
                                                         <div className="row border-bottom mt-2 mb-1" key={index}>
                                                             <div className="col-9">
-                                                                <span className="p-md fw-regular color-dark-gray opacity-6">{item.packageId.packageName} <CloseOutlined style={{ fontSize: '12px' }} /> {item.quantity} </span>
+                                                                <span className="p-md fw-regular color-dark-gray opacity-6">{item.packageId?.packageName} <CloseOutlined style={{ fontSize: '12px' }} /> {item.quantity} </span>
                                                             </div>
                                                             <div className="col-3 text-end">
-                                                                <span className="p-md fw-light color-dark-gray opacity-6">${Number(item.packageId.packageDiscountPrice) > 0 ? item.packageId.packageDiscountPrice : item.packageId.packagePrice}</span>
+                                                                <span className="p-md fw-light color-dark-gray opacity-6">${Number(item.packageId?.packageDiscountPrice) > 0 ? item.packageId?.packageDiscountPrice : item.packageId?.packagePrice}</span>
                                                             </div>
                                                         </div>
                                                     ))}

@@ -5,13 +5,23 @@ import React, { useEffect, useState } from 'react'
 // @ts-ignore
 import { useRouter } from 'nextjs-toploader/app';
 import './style.css'
+import { useSearchParams } from 'next/navigation';
 
 export default function QuestionListByTopic() {
     const [question, setQuestion] = useState<any[]>([])
     const router = useRouter();
+    const searchParams = useSearchParams()
+    const grade = searchParams.get('grade')
+    const complexity = searchParams.get('complexity')
+    const limit = searchParams.get('limit')
 
     const fetchData = async () => {
-        const response = await axios.get('/student/question/list/group')
+        const response = await axios.get('/student/question/list/group', {
+            params: {
+                grade,
+                complexity
+            }
+        })
         const { data, comprehension } = await response.data
         setQuestion([...data, ...comprehension])
     }
@@ -21,7 +31,7 @@ export default function QuestionListByTopic() {
     }, [])
 
     const handleSubTopicClick = (subTopic: string, topic: string, questionType: string) => {
-        router.push(`/student/practice-area/question?topic=${topic}&subtopic=${subTopic}&questionType=${questionType}`)
+        router.push(`/student/practice-area/question?topic=${topic}&subtopic=${subTopic}&questionType=${questionType}&limit=${limit}`)
     }
 
     return (

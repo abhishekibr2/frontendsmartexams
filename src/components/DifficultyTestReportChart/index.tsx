@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Pie } from '@ant-design/plots';
 import { Typography } from 'antd';
 
@@ -13,8 +13,19 @@ const DifficultyTestReportChart = ({
     correctAnswer = 0,
     incorrectAnswer = 0,
     unanswered = 0,
-    title = 'Hard'
+    title = 'Hard',
 }: DifficultyTestReportChartProps) => {
+    // Check if all values are zero
+    const isEmpty = correctAnswer === 0 && incorrectAnswer === 0 && unanswered === 0;
+
+    if (isEmpty) {
+        return (
+            <div style={{ textAlign: 'center', padding: '20px', fontSize: '16px', fontWeight: 'bold', color: '#aaa' }}>
+                No Data Available
+            </div>
+        );
+    }
+
     const config = {
         data: [
             { type: 'Correct', value: correctAnswer },
@@ -27,16 +38,10 @@ const DifficultyTestReportChart = ({
         innerRadius: 0.6,
         label: {
             text: 'value',
-            style: {
-                fontWeight: 'bold',
-            },
+            style: { fontWeight: 'bold' },
         },
         legend: {
-            color: {
-                title: false,
-                position: 'right',
-                rowPadding: 5,
-            },
+            color: { title: false, position: 'right', rowPadding: 5 },
         },
         annotations: [
             {
@@ -44,22 +49,17 @@ const DifficultyTestReportChart = ({
                 content: title,
                 text: title,
                 style: {
-                    text: 'AntV\nCharts',
                     x: '50%',
                     y: '50%',
                     textAlign: 'center',
                     fontSize: 40,
-                    fontStyle: 'bold',
+                    fontWeight: 'bold',
                 },
             },
         ],
     };
-    return (
-        <React.Fragment>
-            {/* @ts-ignore */}
-            <Pie {...config} />
-        </React.Fragment>
-    );
+    // @ts-ignore
+    return <Pie {...config} />;
 };
 
 export default DifficultyTestReportChart;

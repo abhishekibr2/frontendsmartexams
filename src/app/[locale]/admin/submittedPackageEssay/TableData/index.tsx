@@ -85,14 +85,14 @@ export default function AllEssaySubmitListing({ packages }: any) {
 					</Col>
 				</Row>
 
-				<div className="desktop-view card-dash shadow-none top-medium-space">
+				<div className="desktop-view card-dash shadow-none top-medium-space table-responsive-part">
 					<Table
 						className="text-center SubmittedTable shadow-sm w-100"
 						columns={columns.map((col) => ({
 							...col,
 							align: 'center',
 						}))}
-						dataSource={packages.map((item: PackageEssaySubmit, index: PackageEssaySubmit) => ({
+						dataSource={packages?.map((item: PackageEssaySubmit, index: PackageEssaySubmit) => ({
 							...item,
 							index,
 						}))}
@@ -101,4 +101,4 @@ export default function AllEssaySubmitListing({ packages }: any) {
 			</div>
 		</>
 	);
-};
+}

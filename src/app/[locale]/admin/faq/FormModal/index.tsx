@@ -20,12 +20,14 @@ interface FAQFormProps {
 	handleEdit?: any;
 	onClose: () => void;
 	getFaqHandler: () => void;
+	faqId: string;
+	setFaqId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function FAQForm({ handleEdit, onClose, getFaqHandler }: FAQFormProps) {
+export default function FAQForm({ handleEdit, onClose, getFaqHandler, faqId, setFaqId }: FAQFormProps) {
 	const { user } = useContext(AuthContext);
 	const [form] = Form.useForm();
-	const [faqId, setFaqId] = useState<string>('');
+	// const [faqId, setFaqId] = useState<string>('');
 	const [answerText, setAnswerText] = useState<string>('');
 	const [state, setState] = useState<State[]>([]);
 	const [filteredExamTypes, setFilteredExamTypes] = useState<ExamType[]>([]);
@@ -75,10 +77,12 @@ export default function FAQForm({ handleEdit, onClose, getFaqHandler }: FAQFormP
 			const data = {
 				questions: values.questions,
 				pages: values.pages,
-				stateId: values.state,
-				examTypeId: values.examType,
+				// stateId: values.state,
+				// examTypeId: values.examType,
+				stateId: values.pages === 'Home' ? null : values.state,
+				examTypeId: values.pages === 'Home' ? null : values.examType,
 				answer: values.answer,
-				updateId: faqId,
+				updateId: faqId || '',
 				orderBy: values.numberOrder
 			};
 
@@ -88,6 +92,7 @@ export default function FAQForm({ handleEdit, onClose, getFaqHandler }: FAQFormP
 				onClose();
 				getFaqHandler();
 				form.resetFields();
+				setFaqId('');
 				setAnswerText('');
 			} else {
 				console.error('Failed to add question');
@@ -106,6 +111,12 @@ export default function FAQForm({ handleEdit, onClose, getFaqHandler }: FAQFormP
 
 	const handlePageName = async (values: any) => {
 		setPage(values)
+		if (values === 'Home') {
+			form.setFieldsValue({
+				state: null,
+				examType: null,
+			});
+		}
 	}
 
 	return (

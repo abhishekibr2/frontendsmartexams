@@ -95,6 +95,7 @@ export default function BookListStudent() {
                 purchaseType,
                 user?._id as string,
             );
+            console.log(res.data, 'here ebooks data')
             if (res.status) {
                 setAllEbooks(res.data);
             }

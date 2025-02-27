@@ -577,10 +577,10 @@ export default function AllTests() {
 						</Card>
 						: ''}
 					<Row style={{ alignItems: 'center' }}>
-						<Col span={5} style={{ textAlign: 'left' }}>
+						<Col span={5} xs={24} style={{ textAlign: 'left' }}>
 							<h6>Total Tests: {totalTest}</h6>
 						</Col>
-						<Col span={19} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10 }}>
+						<Col span={19} xs={24} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10 }}>
 							<Pagination
 								current={currentPage}
 								pageSize={pageSize}

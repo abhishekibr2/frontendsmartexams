@@ -1,7 +1,7 @@
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
-import { Badge, Button, Card, Divider, Flex, message, Modal, Popconfirm, Progress, Typography } from 'antd';
+import { Badge, Button, Card, Col, Divider, Flex, message, Modal, Popconfirm, Progress, Row, Tooltip, Typography } from 'antd';
 import { useTestContext } from '@/contexts/TestContext';
 import './style.css'
 // @ts-ignore
@@ -10,18 +10,25 @@ import MyTimer from '@/commonUI/MyTimer';
 import Stopwatch from '@/commonUI/Stopwatch';
 import AuthContext from '@/contexts/AuthContext';
 import ReportProblemModal from './ReportProblemModal';
+import { QuestionAndComprehension } from '@/lib/types';
+import { FaCheck } from 'react-icons/fa';
+import { RxCross2 } from "react-icons/rx";
+import { PiFlagPennantFill } from 'react-icons/pi';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import useRestrictAndForceFullscreen from '@/lib/useDisableContextMenu';
 
 interface QuestionAttemptLayoutProps {
     children: React.ReactNode;
     params: any;
     testAttemptId: string;
+    response: any;
 }
 
 export default function QuestionAttemptLayout({
     children,
-    params,
-    testAttemptId
+    testAttemptId,
+    response
 }: QuestionAttemptLayoutProps) {
     const { user } = useContext(AuthContext)
     const [progressPercentage, setProgressPercentage] = useState<number>(0)
@@ -32,8 +39,11 @@ export default function QuestionAttemptLayout({
     const [countdown, setCountdown] = useState(10);
     const [showExit, setShowExit] = useState(false)
     const [initialized, setInitialized] = useState(false)
+    const searchParams = useSearchParams()
+    const questionId = searchParams.get('questionId');
+    const review = searchParams.get('review')
     const router = useRouter()
-    // useRestrictAndForceFullscreen('attempt-test-wrapper');
+    useRestrictAndForceFullscreen('attempt-test-wrapper');
     const roleName = user?.roleId?.roleName;
     const {
         carouselRef,
@@ -49,21 +59,33 @@ export default function QuestionAttemptLayout({
         setTotalQuestion,
         form,
         setQuestionAttempts,
-        questionAttempts
+        questionAttempts,
+        isReview,
+        setIsReview
     } = useTestContext()
 
-    const fetchTestAttempt = async () => {
-        const response = await axios.get(`/student/testAttempt/${testAttemptId}`);
-        const data = response.data.testAttempt;
-        if (data.isCompleted) {
+    const fetchTestAttempt = async (response: any) => {
+        const data = response.testAttempt;
+        if (data.isCompleted && !questionId && !review) {
             message.info('The test has already been completed.');
             router.push('/student/test');
         }
-        const answers = response.data.questionAttempts;
+
+        if (questionId && review) {
+            setIsReview(true)
+        }
+
+        const answers = response.questionAttempts;
         setQuestionAttempts(answers)
-        setCurrentIndex(answers.length - 1)
+        if (questionId) {
+            setCurrentIndex(answers.findIndex((qa: any) => qa.questionId._id.toString() === questionId) + 1)
+        } else {
+            // setCurrentIndex(answers.length - 1)
+        }
         setTestAttempt(data);
-        setQuestions([...data.test.questions, ...data.test.comprehensions]);
+        setQuestions([
+            ...data.test.questions
+        ]);
         setTotalQuestion(data.test.questionOrder.length);
         const durationInSeconds = data.duration * 60;
         setTimeRemaining(durationInSeconds * 1000);
@@ -77,7 +99,7 @@ export default function QuestionAttemptLayout({
                 try {
                     setLoading(true);
                     await Promise.all([
-                        fetchTestAttempt()
+                        fetchTestAttempt(response)
                     ]);
                 } catch (error) {
                     console.error("Error fetching data:", error);
@@ -91,11 +113,19 @@ export default function QuestionAttemptLayout({
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [setQuestions, setTestAttempt, setTotalQuestion, testAttemptId])
+    }, [setQuestions, setTestAttempt, setTotalQuestion, testAttemptId, response])
 
     const goToQuestionAttempt = async (targetQuestionId: string | null = null, index: number | null = null) => {
         const questionId = questions[currentIndex]?._id;
         const answerId = form.getFieldValue([questionId, 'answerId'])
+
+        const questionAttempt = questionAttempts.find((item: any) => item.questionId._id === targetQuestionId)
+
+        if (questionAttempt) {
+            carouselRef.current.goTo(index)
+            setCurrentIndex(index || currentIndex + 1);
+            return
+        }
 
         const response = await axios.post(`/student/testAttempt/answer`, {
             questionId: targetQuestionId || questionId,
@@ -130,7 +160,7 @@ export default function QuestionAttemptLayout({
     useEffect(() => {
         if (testAttempt) {
             setLoading(true)
-            setProgressPercentage((currentIndex / testAttempt.test?.questionOrder.length || 0) * 100)
+            setProgressPercentage((currentIndex / testAttempt.test?.questions.length || 0) * 100)
             setLoading(false)
         }
     }, [currentIndex, testAttempt]);
@@ -157,7 +187,12 @@ export default function QuestionAttemptLayout({
     const confirmSubmit = async () => {
         try {
             form.submit()
-            await axios.get(`/student/testAttempt/complete/${testAttemptId}`)
+            await axios.get(`/student/testAttempt/complete/${testAttemptId}`, {
+                params: {
+                    status: 'completed',
+                    isCompleted: true
+                }
+            })
             message.success('Test submitted successfully!');
             if (user?.roleId.roleName === 'student') {
                 router.push(`/student/test-report/${testAttemptId}`);
@@ -169,17 +204,18 @@ export default function QuestionAttemptLayout({
         }
     };
 
-    const getOrdinalSuffix = (number: number) => {
+    const getOrdinalSuffix = (num: any) => {
+        if (!num) return "";
         const suffixes = ["th", "st", "nd", "rd"];
-        const value = number % 100;
-        // @ts-ignore
-        return number + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+        const v = num % 100;
+        return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
     };
 
     const handleExit = async () => {
         await axios.get(`/student/testAttempt/complete/${testAttemptId}`, {
             params: {
-                status: 'exited'
+                status: 'exited',
+                isCompleted: false
             }
         })
         message.success('Test submitted successfully!');
@@ -190,7 +226,7 @@ export default function QuestionAttemptLayout({
         }
     }
     return (
-        <Badge.Ribbon text={getOrdinalSuffix(testAttempt?.attempt) + " " + 'Attempt'}>
+        <Badge.Ribbon text={loading ? 'Loading...' : getOrdinalSuffix(testAttempt?.attempt) + " " + 'Attempt'}>
             <Card
                 loading={loading}
                 className="dash-part"
@@ -221,55 +257,48 @@ export default function QuestionAttemptLayout({
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xxl-3 col-sm-3">
+                        <div className="col-xxl-4 col-sm-4">
                             <div className='d-flex'>
                                 <Typography.Title level={5}>Test Progress :</Typography.Title>
                                 <Progress percent={Math.round(progressPercentage)} size="small" />
                             </div>
                         </div>
-                        <div className="col-xxl-1 col-sm-1">
-                            {/* <Popconfirm
-                                title={`Are you sure you want to exit? ${questionAttempts && testAttempt && questionAttempts.length < testAttempt.test.questionOrder.length
-                                    ? 'You have not completed all the questions.'
-                                    : ''
-                                    }`}
-                                // onConfirm={handleExit}
-                                okText="Yes, exit"
-                                cancelText="No, stay"
-                            > */}
-                            <Button
-                                type="primary"
-                                danger
-                                size="large"
-                                style={{
-                                    background: '#ff4d4f',
-                                    color: '#fff',
-                                }}
-                                onClick={handleExit}
-                            >
-                                Exit Test
-                            </Button>
-                            {/* </Popconfirm> */}
-                        </div>
                     </div>
 
                     <div className="card-dash top-extra-space">
                         <Flex justify='space-between' align='center'>
-                            <p className="p-lg color-dark-gray m-0 fw-semi-bold">Question No: {currentIndex + 1} of {testAttempt?.test?.questionOrder.length || 0}</p>
+                            <p className="p-lg color-dark-gray m-0 fw-semi-bold">Question No: {currentIndex + 1} of {questions.length || 0}</p>
+                            {isReview &&
+                                <Link href={`/student/test-report/${testAttemptId}/answer`}>
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        size="large"
+                                        style={{
+                                            background: '#ff4d4f',
+                                            color: '#fff',
+                                        }}
+                                    >
+                                        Back
+                                    </Button>
+                                </Link>
+                            }
                         </Flex>
                         <Divider />
                         <div className="row justify-content-between">
                             <div className="col-lg-12 col-md-12">
                                 <div className="questionAnswer">
-                                    <div className="row">
-                                        <div className="col-sm-10">
+                                    <Row gutter={24}>
+                                        <Col xxl={20} xl={20} lg={16} md={14} sm={24} xs={24}>
                                             {children}
-                                        </div>
-                                        <div
-                                            className="col-sm-2"
-                                            style={{
-                                                borderLeft: '1px solid'
-                                            }}>
+                                        </Col>
+                                        <Col
+                                            xxl={4}
+                                            xl={4}
+                                            lg={8}
+                                            md={8}
+                                            sm={24}
+                                            xs={24}>
                                             <Flex vertical className="iconListQuestionAnswer" gap={'small'}>
                                                 <li>
                                                     <i className="fa-solid fa-check" />
@@ -294,178 +323,238 @@ export default function QuestionAttemptLayout({
                                             </Flex>
                                             <div className="list-number mt-4">
                                                 <Flex wrap gap={'small'}>
-                                                    {questions && questionAttempts && testAttempt && testAttempt.test?.questionOrder.map((questionId: string, index: number) => {
-                                                        const questionActive = questionAttempts && questionAttempts?.find((item: any) => item.questionId == questionId);
+                                                    {questions && questionAttempts && testAttempt && testAttempt.test?.questions.map((questionId: QuestionAndComprehension, index: number) => {
+                                                        const questionActive = questionAttempts?.find((item: any) => item?.questionId?._id == questionId._id);
                                                         let isFlagged = questionActive?.isFlagged;
                                                         let backgroundColor = '';
-                                                        let iconClass = '';
                                                         let borderColor = '';
                                                         let color = '#fff';
+                                                        let icon = null;
+                                                        let status = 'Unanswered'
+
+                                                        if (!questionActive) {
+                                                            backgroundColor = '#e87c75';
+                                                            status = 'Unanswered'
+                                                        }
+
+                                                        if (questionAttempts.length < currentIndex && currentIndex > index && !questionActive) {
+                                                            backgroundColor = '#b81736';
+                                                            icon = <i className="fa-solid fa-maximize" />;
+                                                            status = 'Not Visited'
+                                                        }
 
                                                         if (questionActive) {
                                                             switch (questionActive.status) {
                                                                 case 'answered':
-                                                                    backgroundColor = isFlagged ? '#A0D368' : '#19E8B2';
-                                                                    iconClass = 'fa-check';
+                                                                    if (isFlagged) {
+                                                                        backgroundColor = '#9171c9';
+                                                                        icon = <i className="fa-solid fa-comments" />
+                                                                        status = 'Answered & Flagged'
+                                                                    } else {
+                                                                        icon = <FaCheck />
+                                                                        backgroundColor = '#19E8B2';
+                                                                        status = 'Answered'
+                                                                    }
                                                                     break;
                                                                 case 'unanswered':
-                                                                    backgroundColor = isFlagged ? '#9171C9' : '#E87C75';
-                                                                    iconClass = 'fa-xmark';
+                                                                    if (isFlagged) {
+                                                                        icon = <i className="fa-solid fa-message" />
+                                                                        backgroundColor = '#a0d368';
+                                                                        status = 'Unanswered & Flagged'
+                                                                    } else {
+                                                                        icon = <RxCross2 />
+                                                                        backgroundColor = '#e87c75';
+                                                                        status = 'Unanswered'
+                                                                    }
                                                                     break;
                                                                 case 'incomplete':
                                                                     backgroundColor = 'rgb(9, 166, 235)';
-                                                                    iconClass = 'fa-hourglass-half';
+                                                                    status = 'Incomplete'
                                                                     break;
                                                                 case 'notVisited':
                                                                     backgroundColor = '#B81736';
-                                                                    iconClass = 'fa-circle';
+                                                                    icon = <i className="fa-solid fa-maximize" />
+                                                                    status = 'Not Visited'
                                                                     break;
                                                                 default:
                                                                     backgroundColor = '';
-                                                                    iconClass = '';
-                                                            }
-                                                        } else {
-                                                            if (index < questionAttempts.length) {
-                                                                backgroundColor = '#B81736';
-                                                                iconClass = 'fa-circle';
-                                                            } else {
-                                                                backgroundColor = '#fff';
-                                                                iconClass = 'fa-circle';
-                                                                borderColor = '#000';
-                                                                color = '#000';
                                                             }
                                                         }
 
+                                                        const isActive = index === currentIndex;
+                                                        const activeStyles = isActive ? { border: '2px solid rgb(9, 166, 235)', fontWeight: 'bold' } : {};
+
                                                         return (
-                                                            <div key={questionId}>
-                                                                <Button
-                                                                    shape="circle"
-                                                                    type="link"
-                                                                    // onClick={() => carouselRef.current.goTo(index)}
-                                                                    onClick={() => goToQuestionAttempt(questionId, index)}
-                                                                    style={{
-                                                                        background: backgroundColor,
-                                                                        color: color,
-                                                                        border: `1px solid ${borderColor || '#fff'}`,
-                                                                        transition: 'all 0.3s ease',
-                                                                    }}
-                                                                >
-                                                                    <span>{index + 1}</span>
-                                                                </Button>
+                                                            <div key={index}>
+                                                                <Tooltip title={status}>
+                                                                    <Button
+                                                                        // disabled={isReview}
+                                                                        shape="circle"
+                                                                        type="link"
+                                                                        // onClick={() => goToQuestionAttempt(questionId._id, index)}
+                                                                        onClick={() => carouselRef.current.goTo(index)}
+                                                                        style={{
+                                                                            background: backgroundColor,
+                                                                            color: color,
+                                                                            border: `1px solid ${borderColor || '#fff'}`,
+                                                                            transition: 'all 0.3s ease',
+                                                                            ...activeStyles,
+                                                                        }}
+                                                                    >
+                                                                        <Flex vertical>
+                                                                            <span>{index + 1}</span>
+                                                                            {isFlagged && <PiFlagPennantFill style={{ marginLeft: '5px', color: 'red' }} />}
+                                                                        </Flex>
+                                                                    </Button>
+                                                                </Tooltip>
                                                             </div>
                                                         );
                                                     })}
                                                 </Flex>
                                             </div>
-                                            <div style={{ width: '100%' }} className="text-end float-end mt-4">
-                                                <Popconfirm
-                                                    title={`${questionAttempts && testAttempt && questionAttempts.length < testAttempt.test.questionOrder.length
-                                                        ? 'You have not completed all the questions.'
-                                                        : ''
-                                                        } Are you sure you want to submit?`}
-                                                    onConfirm={confirmSubmit}
-                                                    okText="Yes, submit"
-                                                    cancelText="No, go back"
-                                                >
-                                                    <Button
-                                                        size='large'
-                                                        style={{
-                                                            background: '#09a6eb',
-                                                            color: '#fff'
-                                                        }}>
-                                                        Submit Test
-                                                    </Button>
-                                                </Popconfirm>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12">
-                                <Flex justify='space-between' align='center' className='mt-4'>
-                                    {!isComprehension &&
-                                        <div className="d-flex gap-2 align-items-center">
-                                            <div className="text-center bottom-large-space">
-                                                <Button shape='circle'
-                                                    size='large'
-                                                    color='default'
-                                                    onClick={() => {
-                                                        setIsFlagged(!isFlagged);
-                                                        form.setFieldsValue({
-                                                            isFlagged: !isFlagged
-                                                        });
-                                                    }}
-                                                    style={{
-                                                        background: isFlagged ? 'green' : '',
-                                                        cursor: "pointer",
-                                                        color: isFlagged ? '#fff' : ''
-                                                    }}>
-                                                    <i className="fa-solid fa-flag" />
-                                                </Button>
-                                            </div>
-                                            <div style={{ width: 150 }} className="text-center bottom-large-space">
-                                                <Button
-                                                    disabled={currentIndex === 0}
-                                                    className="btn-primary btn-spac"
-                                                    style={{
-                                                        background: '#09a6eb',
-                                                        color: '#fff'
-                                                    }}
-                                                    htmlType='button'
-                                                    onClick={() => carouselRef.current.prev()}
-                                                    size='large'
-                                                >
-                                                    Previous
-                                                </Button>
-                                            </div>
-                                            <div style={{ width: 150 }} className="text-center bottom-large-space">
-                                                <Button className="btn-primary btn-spac clear-btn" onClick={() => form.resetFields()} size='large'>
-                                                    <i className="fa-solid fa-eraser" /> Clear
-                                                </Button>
-                                            </div>
-                                            <div style={{ width: 150 }} className="text-center bottom-large-space">
-                                                {currentIndex === questions.length - 1 ?
+                                            {!isReview &&
+                                                <div style={{ width: '100%' }} className="text-end float-end mt-4">
                                                     <Popconfirm
-                                                        title={`Are you sure you want to submit?`}
+                                                        title={`${questionAttempts && testAttempt && questionAttempts.length < testAttempt.test.questionOrder.length
+                                                            ? 'You have not completed all the questions.'
+                                                            : ''
+                                                            } Are you sure you want to submit?`}
                                                         onConfirm={confirmSubmit}
                                                         okText="Yes, submit"
                                                         cancelText="No, go back"
                                                     >
                                                         <Button
+                                                            disabled={isReview}
                                                             size='large'
                                                             style={{
                                                                 background: '#09a6eb',
                                                                 color: '#fff'
-                                                            }}
-                                                        >
+                                                            }}>
                                                             Submit Test
                                                         </Button>
                                                     </Popconfirm>
-                                                    :
+                                                </div>
+                                            }
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </div>
+                            {!isReview &&
+                                <div className="col-lg-12 col-md-12">
+                                    <Flex justify='space-between' align='center' className='mt-4'>
+                                        {!isComprehension &&
+                                            <div className="d-flex gap-2 align-items-center">
+                                                <div className="text-center bottom-large-space">
                                                     <Button
+                                                        disabled={isReview}
+                                                        shape='circle'
+                                                        size='large'
+                                                        color='default'
+                                                        onClick={() => {
+                                                            setIsFlagged(!isFlagged);
+                                                            form.setFieldsValue({
+                                                                isFlagged: !isFlagged
+                                                            });
+                                                        }}
+                                                        style={{
+                                                            background: isFlagged ? 'green' : 'rgb(204 204 204 / 25%)',
+                                                            cursor: "pointer",
+                                                            color: isFlagged ? '#fff' : '#ccc'
+                                                        }}>
+                                                        <i className="fa-solid fa-flag" />
+                                                    </Button>
+                                                </div>
+                                                <div style={{ width: 150 }} className="text-center bottom-large-space">
+                                                    <Button
+                                                        disabled={currentIndex === 0 || isReview}
                                                         className="btn-primary btn-spac"
-                                                        disabled={currentIndex === questions.length}
                                                         style={{
                                                             background: '#09a6eb',
                                                             color: '#fff'
                                                         }}
                                                         htmlType='button'
-                                                        onClick={() => form.submit()}
+                                                        onClick={() => carouselRef.current.prev()}
                                                         size='large'
                                                     >
-                                                        Next
+                                                        Previous
                                                     </Button>
-                                                }
+                                                </div>
+                                                <div style={{ width: 150 }} className="text-center bottom-large-space">
+                                                    <Button disabled={isReview} className="btn-primary btn-spac clear-btn" onClick={() => form.resetFields()} size='large'>
+                                                        <i className="fa-solid fa-eraser" /> Clear
+                                                    </Button>
+                                                </div>
+                                                <div style={{ width: 150 }} className="text-center bottom-large-space">
+                                                    {currentIndex === questions.length - 1 ?
+                                                        <Popconfirm
+                                                            title={`Are you sure you want to submit?`}
+                                                            onConfirm={confirmSubmit}
+                                                            okText="Yes, submit"
+                                                            cancelText="No, go back"
+                                                        >
+                                                            <Button
+                                                                disabled={isReview}
+                                                                size='large'
+                                                                style={{
+                                                                    background: '#09a6eb',
+                                                                    color: '#fff'
+                                                                }}
+                                                            >
+                                                                Submit Test
+                                                            </Button>
+                                                        </Popconfirm>
+                                                        :
+                                                        <Button
+
+                                                            className="btn-primary btn-spac"
+                                                            disabled={currentIndex === questions.length || isReview}
+                                                            style={{
+                                                                background: '#09a6eb',
+                                                                color: '#fff'
+                                                            }}
+                                                            htmlType='button'
+                                                            onClick={() => form.submit()}
+                                                            size='large'
+                                                        >
+                                                            Next
+                                                        </Button>
+                                                    }
+                                                </div>
                                             </div>
-                                        </div>
-                                    }
-                                    <Button size='large'>
-                                        <Typography.Text type='secondary' onClick={() => setModalVisible(true)}>
-                                            Report a Problem
-                                        </Typography.Text>
-                                    </Button>
-                                </Flex>
-                            </div>
+                                        }
+                                        <Flex gap={'small'}>
+                                            <Button size='large'>
+                                                <Typography.Text type='secondary' onClick={() => setModalVisible(true)}>
+                                                    Report a Problem
+                                                </Typography.Text>
+                                            </Button>
+                                            <Popconfirm
+                                                title={`Are you sure you want to exit? ${questionAttempts && testAttempt && questionAttempts.length < testAttempt.test.questionOrder.length
+                                                    ? 'You have not completed all the questions.'
+                                                    : ''
+                                                    }`}
+                                                onConfirm={handleExit}
+                                                okText="Yes, exit"
+                                                cancelText="No, stay"
+                                            >
+                                                <Button
+                                                    disabled={isReview}
+                                                    type="primary"
+                                                    danger
+                                                    size="large"
+                                                    style={{
+                                                        background: '#ff4d4f',
+                                                        color: '#fff',
+                                                    }}
+                                                // onClick={handleExit}
+                                                >
+                                                    Exit Test
+                                                </Button>
+                                            </Popconfirm>
+                                        </Flex>
+                                    </Flex>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -488,6 +577,7 @@ export default function QuestionAttemptLayout({
                         You will be redirected to the results page in <b>{countdown} seconds</b>.
                     </p>
                     <Button
+                        disabled={isReview}
                         type="primary"
                         size="large"
                         onClick={() => router.push(`/student/testAttempt/${testAttemptId}/result`)}

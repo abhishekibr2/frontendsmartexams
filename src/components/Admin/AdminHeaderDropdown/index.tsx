@@ -22,20 +22,25 @@ export default function AdminHeaderDropdown() {
             label: (
                 <>
                     <FaUser style={{ marginRight: '10px', marginLeft: '6px', color: '#2C2C2C' }} />
-                    <Link href={`/admin/profile`} >{user?.name}</Link>
+                    {/* <Link href={`/admin/profile`} >{user?.name}</Link> */}
+                    <Link href={`/${user?.roleId?.roleName === 'admin' ? 'admin' : user?.roleId?.roleName}/profile`}>
+                        {user?.name}
+                    </Link>
+
                 </>),
             key: '0',
         },
         {
             label: (
                 <>
-                    <Link href={pathname.includes(rolePath) ? '/' : destination} passHref>
-                        <span>
-                            <MdSpaceDashboard style={{ marginRight: '10px', marginLeft: '6px', color: '#2C2C2C' }} />
-                            {pathname.includes(rolePath) ? 'Home' : isAdmin ? 'Dashboard' : 'Dashboard'}
-                        </span>
-                    </Link>
-
+                    {user?.roleId?.roleName === 'admin' ?
+                        <Link href={pathname.includes(rolePath) ? '/' : destination} passHref>
+                            <span>
+                                <MdSpaceDashboard style={{ marginRight: '10px', marginLeft: '6px', color: '#2C2C2C' }} />
+                                {pathname.includes(rolePath) ? 'Home' : isAdmin ? 'Dashboard' : 'Dashboard'}
+                            </span>
+                        </Link>
+                        : null}
                 </>
             ),
             key: '1',

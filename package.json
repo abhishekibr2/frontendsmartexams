@@ -16,6 +16,7 @@
 		"cypress:open": "cypress open"
 	},
 	"dependencies": {
+		"@amcharts/amcharts5": "^5.11.0",
 		"@ant-design/charts": "^2.2.6",
 		"@ant-design/icons": "^5.5.1",
 		"@ant-design/nextjs-registry": "^1.0.0",
@@ -122,6 +123,7 @@
 		"react-virtuoso": "^4.12.3",
 		"reactstrap": "^9.2.3",
 		"read-excel-file": "^5.8.6",
+		"recharts": "^2.15.1",
 		"redux-persist": "^6.0.0",
 		"rrule": "^2.8.1",
 		"sass": "^1.80.3",

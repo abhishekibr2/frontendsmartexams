@@ -39,7 +39,6 @@ const ContactUs = () => {
     const getContactsHandler = async () => {
         try {
             const response = await getAllContactUs();
-            console.log(response, 'here response data ?????')
             setContactUsData(response.data);
         } catch (error) {
             console.error('Error fetching contact us data:', error);
@@ -200,7 +199,7 @@ const ContactUs = () => {
 
                 </Col>
             </Row>
-            <h6 style={{ textAlign: 'end' }}>Count:{contactUsData.length}</h6>
+            {/* <h6 style={{ textAlign: 'end' }}>Count:{contactUsData.length}</h6> */}
 
             <Table
                 dataSource={contactUsData}
