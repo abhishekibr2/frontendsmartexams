@@ -59,7 +59,7 @@ a {
 }
 
 .p-lg {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .p-md {
@@ -202,7 +202,7 @@ a {
 
 /*background color*/
 .bg-pastel-blue {
-    background-color: #D9F5FF;
+    background-color: #202020;
 }
 
 .bg-light-blue {
@@ -222,7 +222,7 @@ a {
 }
 
 .bg-light-white {
-    background-color: #f6f5f9 !important;
+    background-color: #ffffff !important;
 }
 
 .bg-light-gray {
@@ -274,7 +274,7 @@ a {
 }
 
 .bg-Zblack {
-    background: #d9f5ff !important;
+    background: #202020 !important;
 }
 
 .bg-deep-blue {
@@ -1134,7 +1134,7 @@ img.vert-move {
     }
 
     .btn-primary.p-md {
-        font-size: 18px;
+        font-size: 15px;
         line-height: 1.4;
     }
 
@@ -1477,7 +1477,7 @@ img.vert-move {
 .btn-primary {
     background: #09A6EB;
     color: #fff;
-    font-size: 18px;
+    font-size: 15px;
     width: 100%;
     border: solid 1px #09A6EB;
     font-weight: 500;
@@ -1612,9 +1612,9 @@ img.vert-move {
 }
 
 .btn-accent-form {
-    background: #8C52FF;
+    background: #3098a0;
     color: #fff;
-    border: solid 1px #8c52ff;
+    border: solid 1px #3098a0;
     border-radius: 10.24px;
     padding: 12px 9px;
     font-weight: 700;

@@ -16,10 +16,12 @@ export default function ReorderQuestion({ testId }: ReorderProps) {
     const [questions, setQuestions] = useState<QuestionAndComprehension[]>([]);
     const [test, setTest] = useState<Test>()
     const [reload, setReload] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const getTestQuestions = async (id: string = testId) => {
             try {
+                setLoading(true)
                 const response = await axios.get(`/admin/test/${id}/questions`);
                 const test = response.data.data
                 const normalizedData = test.questions.map((item: any) => ({
@@ -28,77 +30,88 @@ export default function ReorderQuestion({ testId }: ReorderProps) {
                 }));
                 setTest(test)
                 setQuestions(normalizedData);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching test questions:', error);
+                setLoading(false);
             }
         };
 
         if (testId) {
             getTestQuestions(testId);
         }
-    }, [testId]);
+    }, [testId, reload]);
 
-    const tableData = questions.map((item, index: number) => ({
-        key: item._id,
-        question: (
-            <Card
-                style={{ width: '100%' }}
-                title={
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span>
-                            Question {index + 1} of {questions.length}
-                        </span>
-                        <Flex justify='space-between' gap={'large'}>
-                            <Typography.Text type='secondary'>
-                                Date added: {dateFormat(item.createdAt, "ddd, dS mmm, yyyy")}
-                            </Typography.Text>
-                            <Typography.Text type='secondary' className='m-0'>
-                                Topic: {item.topic}
-                            </Typography.Text>
-                            <Typography.Text type='secondary'>
-                                Sub topic: {item.subTopic}
-                            </Typography.Text>
-                            <Flex
-                                justify='flex-end'
-                                vertical
-                                style={{
-                                    textAlign: 'right'
-                                }}>
-                                <Typography.Paragraph
-                                    type="secondary"
-                                    copyable={{ text: item._id }}
-                                    className='m-0'
-                                >
-                                    {
-                                        item.questionType === 'comprehension'
-                                            ? 'Comprehension'
-                                            : 'Question'}{' '}
-                                    ID: {item._id.slice(18, 24)
-                                    }
-                                </Typography.Paragraph>
+    let preIndex = 0;
+
+    const tableData = questions.map((item, idx: number) => {
+        let index = idx;
+        if (item.questionType === 'comprehension') {
+            preIndex += item.questionId.length - 1;
+        }
+        return ({
+            key: item._id,
+            question: (
+                <Card
+                    style={{ width: '100%' }}
+                    title={
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>
+                                {item.questionType === 'comprehension' ? `Comprehension (Question ${index + 1} to ${index + item.questionId.length})` : `Question ${index + 1 + preIndex} of ${test?.totalAddedQuestion}`}
+                            </span>
+                            <Flex justify='space-between' gap={'large'}>
+                                <Typography.Text type='secondary'>
+                                    Date added: {dateFormat(item.createdAt, "ddd, dS mmm, yyyy")}
+                                </Typography.Text>
+                                <Typography.Text type='secondary' className='m-0'>
+                                    Topic: {item.topic}
+                                </Typography.Text>
+                                <Typography.Text type='secondary'>
+                                    Sub topic: {item.subTopic}
+                                </Typography.Text>
+                                <Flex
+                                    justify='flex-end'
+                                    vertical
+                                    style={{
+                                        textAlign: 'right'
+                                    }}>
+                                    <Typography.Paragraph
+                                        type="secondary"
+                                        copyable={{ text: item._id }}
+                                        className='m-0'
+                                    >
+                                        {
+                                            item.questionType === 'comprehension'
+                                                ? 'Comprehension'
+                                                : 'Question'}{' '}
+                                        ID: {item._id.slice(18, 24)
+                                        }
+                                    </Typography.Paragraph>
+                                </Flex>
                             </Flex>
-                        </Flex>
-                    </div>
-                }
-            >
-                {item.questionType === 'comprehension' ? (
-                    <ComprehensionList
-                        item={item}
-                        setReload={setReload}
-                        reload={reload}
-                        testId={testId}
-                    />
-                ) : (
-                    <QuestionListItem
-                        item={item}
-                        setReload={setReload}
-                        reload={reload}
-                        testId={testId}
-                    />
-                )}
-            </Card>
-        ),
-    }));
+                        </div>
+                    }
+                >
+                    {item.questionType === 'comprehension' ? (
+                        <ComprehensionList
+                            item={item}
+                            setReload={setReload}
+                            reload={reload}
+                            testId={testId}
+                            index={index}
+                        />
+                    ) : (
+                        <QuestionListItem
+                            item={item}
+                            setReload={setReload}
+                            reload={reload}
+                            testId={testId}
+                        />
+                    )}
+                </Card>
+            ),
+        })
+    });
 
 
     const tableColumns = [
@@ -119,8 +132,7 @@ export default function ReorderQuestion({ testId }: ReorderProps) {
     const onFinish = async (orderIds: string[]) => {
         await axios.post(`/admin/test/${testId}/reorder`, { order: orderIds })
             .then(() => {
-                console.log('Reorder successful');
-                setReload(true);
+                setReload(!reload);
             })
             .catch((error) => {
                 console.error('Error reordering questions:', error);
@@ -139,15 +151,17 @@ export default function ReorderQuestion({ testId }: ReorderProps) {
             </Col>
             <Col span={24} className='mt-4'>
                 <Flex align='center' justify='space-between'>
-                    <Typography.Title level={5}>{questions.length} Questions</Typography.Title>
+                    <Typography.Title level={5}>{test?.totalAddedQuestion} Questions</Typography.Title>
                     <Typography.Text type='secondary'>Question Bank: {test?.questionCount} questions</Typography.Text>
                 </Flex>
                 {
                     tableData.length > 0 &&
                     <ReorderTable
+                        loading={loading}
                         data={tableData}
                         columns={tableColumns}
                         onChange={(value: any) => onChange(value)}
+                        reload={reload}
                     />
                 }
             </Col>

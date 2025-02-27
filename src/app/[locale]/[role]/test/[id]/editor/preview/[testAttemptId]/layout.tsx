@@ -3,9 +3,13 @@ import { Layout } from 'antd';
 import { DataProvider } from '@/contexts/DataContext';
 import QuestionAttemptLayout from '@/components/QuestionAttemptLayout';
 import { TestProvider } from '@/contexts/TestContext';
+import { cookies } from 'next/headers';
+import axios from 'axios';
+
 
 export default async function TestAttemptLayout({ children, params }: { children: React.ReactNode, params: Promise<{ testAttemptId: string }> }) {
     const testAttemptId = (await params).testAttemptId;
+    const response = await getData(testAttemptId);
     return (
         <div id='attempt-test-wrapper'>
             <DataProvider>
@@ -22,6 +26,7 @@ export default async function TestAttemptLayout({ children, params }: { children
                                     <QuestionAttemptLayout
                                         params={params}
                                         testAttemptId={testAttemptId}
+                                        response={response}
                                     >
                                         {children}
                                     </QuestionAttemptLayout>
@@ -33,4 +38,17 @@ export default async function TestAttemptLayout({ children, params }: { children
             </DataProvider>
         </div>
     );
+}
+
+async function getData(testAttemptId: string) {
+    const cookieStore = cookies();
+    const token = cookieStore.get('session_token')?.value;
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/student/testAttempt/${testAttemptId}`, {
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+
+    })
+    return res.data
 }

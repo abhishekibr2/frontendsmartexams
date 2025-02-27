@@ -17,7 +17,10 @@ export default function HomePage({ menuItemdata, allData, stateDataExam, homepag
 	const [startTime, setStartTime] = useState<number | null>(null);
 	const [showSaleSection, setShowSaleSection] = useState(false);
 	const [testimonialData, setTestimonialData]: any = useState([]);
-	const { ref, inView } = useInView({ triggerOnce: true });
+	const { ref, inView } = useInView({
+		triggerOnce: true,
+		threshold: 1,
+	});
 
 	const fetchTestimonials = async () => {
 		try {
@@ -393,7 +396,8 @@ export default function HomePage({ menuItemdata, allData, stateDataExam, homepag
 										<CountUp
 											start={0}
 											end={Number(homepageContent?.cardCountOne) || 1500}
-											duration={4}
+											duration={20}
+											delay={0.5}
 											separator=","
 										/>
 									</h3>
@@ -409,8 +413,9 @@ export default function HomePage({ menuItemdata, allData, stateDataExam, homepag
 										<CountUp
 											start={0}
 											end={Number(homepageContent?.cardCountTwo) || 30000}
-											duration={4}
+											duration={20}
 											separator=","
+											delay={0.5}
 										/>
 									</h3>
 									<p className="p-md fw-medium color-light">
@@ -425,8 +430,9 @@ export default function HomePage({ menuItemdata, allData, stateDataExam, homepag
 										<CountUp
 											start={0}
 											end={Number(homepageContent?.cardCountThree) || 50000}
-											duration={4}
+											duration={20}
 											separator=","
+											delay={0.5}
 										/>
 									</h3>
 									<p className="p-md fw-medium color-light">
@@ -441,8 +447,9 @@ export default function HomePage({ menuItemdata, allData, stateDataExam, homepag
 										<CountUp
 											start={0}
 											end={Number(homepageContent?.cardCountFour) || 60}
-											duration={4}
+											duration={20}
 											separator=","
+											delay={0.5}
 										/>
 									</h3>
 									<p className="p-md fw-medium color-light">

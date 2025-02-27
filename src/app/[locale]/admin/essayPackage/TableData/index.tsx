@@ -165,13 +165,13 @@ const TableData: React.FC<TableDataProps> = ({ packageEssay, fetchData, getPacka
 		<>
 			<div>
 				<Row gutter={[16, 16]}>
-					<Col span={12} sm={16} md={16} xl={16} xs={16}>
+					<Col span={12} sm={16} md={16} xl={16} xs={24} >
 						<Titles level={5} className="top-title">
 							Essays in Package
 						</Titles>
 					</Col>
-					<Col span={12} sm={8} md={8} xl={8} xs={8} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Space style={{ display: 'flex', alignItems: 'center' }}>
+					<Col span={12} sm={8} md={8} xl={8} xs={24} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }} className='select-mobile-100 '>
+						<Space style={{ display: 'flex', alignItems: 'center' }} >
 							{servicesId.length > 0 && (
 								<Popconfirm
 									style={{ height: '40px' }}
@@ -204,6 +204,7 @@ const TableData: React.FC<TableDataProps> = ({ packageEssay, fetchData, getPacka
 									{ label: 'Oldest First', value: 'oldest' },
 								]}
 								onChange={(value: 'oldest' | 'newest') => setOrderBy(value)}
+								className='mb-3'
 							/>
 						</Space>
 					</Col>

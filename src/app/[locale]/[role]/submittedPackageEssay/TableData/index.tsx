@@ -14,7 +14,7 @@ import AuthContext from '@/contexts/AuthContext';
 
 
 export default function AllEssaySubmitListing({ packages }: any) {
-    const { user } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
 
 	const roleName = user?.roleId?.roleName;
 
@@ -94,7 +94,7 @@ export default function AllEssaySubmitListing({ packages }: any) {
 							...col,
 							align: 'center',
 						}))}
-						dataSource={packages.map((item: PackageEssaySubmit, index: PackageEssaySubmit) => ({
+						dataSource={packages?.map((item: PackageEssaySubmit, index: PackageEssaySubmit) => ({
 							...item,
 							index,
 						}))}
@@ -103,4 +103,4 @@ export default function AllEssaySubmitListing({ packages }: any) {
 			</div>
 		</>
 	);
-};
+}

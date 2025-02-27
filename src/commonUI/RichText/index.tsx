@@ -23,7 +23,10 @@ const RichText: React.FC<RichTextProps> = ({
         if (typeof window.RichTextEditor === 'function') {
             // @ts-ignore
             const rte = new RichTextEditor(uniqueId);
-            rte.setHTMLCode(editorValue || "");
+            const formattedHTML = editorValue && editorValue?.includes("\n")
+                ? editorValue.replace(/\n/g, "<br>")
+                : editorValue || "";
+            rte.setHTMLCode(formattedHTML || "");
 
             rte.attachEvent('change', () => {
                 onChange && onChange(rte.getHTMLCode());

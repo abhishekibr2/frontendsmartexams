@@ -2,12 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios';
-import { Badge, Button, Col, Flex, Row, Spin, Typography } from 'antd';
+import { Badge, Button, Col, Flex, Modal, Row, Spin, Typography } from 'antd';
 import datetimeDifference from "datetime-difference";
 import DifficultyTestReportChart from '../DifficultyTestReportChart';
 import ReportByGroupChart from '../ReportByGroupChart';
-import GanttChart from '../GanttChart';
 import { usePDF } from 'react-to-pdf';
+import './style.css';
+import FeedbackForm from './FeedbackForm';
+import { FaCheck } from 'react-icons/fa';
+import { FaXmark } from 'react-icons/fa6';
 
 interface TestReportProps {
     testAttemptId: string;
@@ -18,9 +21,7 @@ export default function TestReport({
 }: TestReportProps) {
     const [loading, setLoading] = useState(true)
     const [testAttempt, setTestAttempt] = useState<any>()
-    const [questions, setQuestions] = useState<any[]>([])
-    const [questionAttempts, setQuestionAttempts] = useState<any[]>([])
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const [feedbackModal, setFeedBackModal] = useState(false)
     const [totalQuestion, setTotalQuestion] = useState(0)
     const [correctAnswer, setCorrectAnswer] = useState(0)
     const [incorrectAnswer, setIncorrectAnswer] = useState(0)
@@ -29,18 +30,20 @@ export default function TestReport({
     const [filterByDiffculty, setFilterByDiffculty] = useState<any>(null)
     const [groupedByTopic, setGroupedByTopic] = useState<any>([])
     const [timeTaken, setTimeTaken] = useState<any>(0);
-
     const [pdfLoading, setPdfLoading] = useState(false);
+    const [isFeedbackSubmit, setIsFeedbackSubmit] = useState(false);
     const { toPDF, targetRef } = usePDF({ filename: `Test Report.pdf` });
+    const [questionAttempt, setQuestionAttempt] = useState([])
 
     const fetchTestAttempt = async () => {
         setLoading(true)
         const response = await axios.get(`/student/testAttempt/${testAttemptId}`);
         const data = response.data.testAttempt;
         const answers = response.data.questionAttempts;
-        setQuestionAttempts(answers)
+        setQuestionAttempt(answers)
         let correctAnswerCount = 0;
         let incorrectAnswerCount = 0;
+        let skippedAnswerCount = 0;
         let initialDiffcultyData = {
             easy: {
                 total: 0,
@@ -74,14 +77,15 @@ export default function TestReport({
                 difficultyCategory = 'medium';
             }
             initialDiffcultyData[difficultyCategory].total += 1;
-            if (item.status === 'unanswered') {
-                initialDiffcultyData[difficultyCategory].unanswered += 1;
-            } else if (item.isCorrect) {
-                initialDiffcultyData[difficultyCategory].correctAnswer += 1;
-                correctAnswerCount += 1;
-            } else {
+            if (item.answerId && item.answerId.length > 0 && item.isCorrect === false) {
                 initialDiffcultyData[difficultyCategory].incorrectAnswer += 1;
                 incorrectAnswerCount += 1;
+            } else if (item.isCorrect) {
+                correctAnswerCount += 1;
+                initialDiffcultyData[difficultyCategory].correctAnswer += 1;
+            } else if (item.status === 'unanswered') {
+                skippedAnswerCount += 1;
+                initialDiffcultyData[difficultyCategory].unanswered += 1;
             }
         });
 
@@ -108,14 +112,12 @@ export default function TestReport({
         const result = datetimeDifference(startDate, endDate);
 
         setTimeTaken(result)
-        const allQuestions = [...data.test.questions, ...data.test.comprehensions]
+        const allQuestions = [...data.test.questions]
         setFilterByDiffculty(initialDiffcultyData)
-        setQuestions(allQuestions);
-        setScore(Math.round((correctAnswerCount / allQuestions.length) * 100))
+        setScore(((correctAnswerCount / allQuestions.length) * 100))
         setIncorrectAnswer(incorrectAnswerCount)
         setCorrectAnswer(correctAnswerCount)
-        setSkippedAnswer(allQuestions.length - answers.length)
-        setCurrentIndex(answers.length)
+        setSkippedAnswer(skippedAnswerCount)
         setTestAttempt(data);
         setTotalQuestion(allQuestions.length);
         setLoading(false);
@@ -131,8 +133,6 @@ export default function TestReport({
                     ]);
                 } catch (error) {
                     console.error("Error fetching data:", error);
-                } finally {
-                    setLoading(false);
                 }
             };
 
@@ -140,43 +140,6 @@ export default function TestReport({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [testAttemptId])
-
-    const config = {
-        data: [
-            { type: 'Correct', value: 3 },
-            { type: 'Incorrect', value: 2 },
-            { type: 'Unanswered', value: 1 },
-        ],
-        angleField: 'value',
-        colorField: 'type',
-        innerRadius: 0.6,
-        label: {
-            text: 'value',
-            style: {
-                fontWeight: 'bold',
-            },
-        },
-        legend: {
-            color: {
-                title: false,
-                position: 'right',
-                rowPadding: 5,
-            },
-        },
-        annotations: [
-            {
-                type: 'text',
-                style: {
-                    text: 'AntV\nCharts',
-                    x: '50%',
-                    y: '50%',
-                    textAlign: 'center',
-                    fontSize: 40,
-                    fontStyle: 'bold'
-                },
-            },
-        ],
-    };
 
     const handlePrintTest = () => {
         setPdfLoading(true);
@@ -192,6 +155,13 @@ export default function TestReport({
             });
     };
 
+    const getOrdinalSuffix = (num: any) => {
+        if (!num) return ""; // Handle undefined/null case
+        const suffixes = ["th", "st", "nd", "rd"];
+        const v = num % 100;
+        return num + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    };
+
     return (
         <>
             {
@@ -200,575 +170,392 @@ export default function TestReport({
                         <Spin spinning={loading} />
                     </Flex>
                     :
-                    <section style={{ fontFamily: 'Public Sans', }} ref={targetRef}>
-                        <div
-                            style={{
-                                margin: "10px auto",
-                                backgroundColor: "#fff",
-                                borderRadius: 8,
-                                padding: "4%",
-                                boxShadow: "1px 8px 20px 0px #2020200F",
-                                border: "solid 1px #eee"
-                            }}
-                        >
-                            <h1
+                    <Badge.Ribbon text={loading ? "Loading..." : getOrdinalSuffix(testAttempt.attempt) + " Attempt"}>
+                        <section style={{ fontFamily: 'Public Sans', }} ref={targetRef}>
+                            <div
                                 style={{
-                                    textAlign: "left",
-                                    color: "#202020",
-                                    fontWeight: 400,
-                                    lineHeight: "1.6rem",
-                                    fontSize: "1.8rem",
-                                    marginBottom: 25
+                                    margin: "10px auto",
+                                    backgroundColor: "#fff",
+                                    borderRadius: 8,
+                                    padding: "4%",
+                                    boxShadow: "1px 8px 20px 0px #2020200F",
+                                    border: "solid 1px #eee"
                                 }}
                             >
-                                <Badge.Ribbon text={testAttempt?.attempt + 'th Attempt'}>
-                                    <p className="top-title m-0">
-                                        {testAttempt?.test?.testDisplayName}
-                                    </p>
-                                </Badge.Ribbon>
-                                <span
-                                    style={{
-                                        fontSize: "1rem",
-                                        fontWeight: 600,
-                                        lineHeight: "24.51px",
-                                        color: "#2020209C",
-                                        marginLeft: '5px'
-                                    }}
-                                >
-                                    {/* 2<sup style={{ color: "#2020209C", fontSize: "0.7rem" }}>th</sup>
-                            <span style={{ color: "#202020CC", fontWeight: 600, marginLeft: '5px' }}>Attempt</span> */}
-                                </span>
-                            </h1>
-                            <div style={{ textAlign: "right" }}>
-                                <Button
-                                    onClick={handlePrintTest}
-                                    loading={pdfLoading}
-                                    // href="#"
-                                    style={{
-                                        textDecoration: "none",
-                                        background: "#5CB85C",
-                                        width: 278,
-                                        height: 59,
-                                        padding: 15,
-                                        borderRadius: 7,
-                                        fontSize: "0.7rem",
-                                        fontWeight: 700,
-                                        lineHeight: "29.3px",
-                                        color: "#fff",
-                                        textAlign: "center"
-                                    }}
-                                >
-                                    Download Scores PDF
-                                </Button>
-                            </div>
-                            <div style={{ marginTop: "3rem" }}>
-                                <h2
-                                    style={{
-                                        fontSize: "0.9rem",
-                                        fontWeight: 600,
-                                        lineHeight: "1.4",
-                                        textAlign: "left",
-                                        marginBottom: 10
-                                    }}
-                                >
-                                    Question Summary Report
-                                </h2>
-                                <div
-                                    style={{
-                                        border: "1px solid #20202033",
-                                        borderRadius: 8,
-                                        padding: "2%",
-                                        display: "flex",
-                                        overflowX: "auto",
-                                        whiteSpace: "nowrap",
-                                        flexWrap: "wrap",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#202020",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {totalQuestion}
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            Questions
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#66AB7B",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {correctAnswer}
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            Correct
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#F28D9A",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {incorrectAnswer}
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            Incorrect
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#202020",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {skippedAnswer}
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            Skipped
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#202020",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {score}
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            Score
-                                        </p>
-                                    </div>
-                                    <div
-                                        style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
-                                    >
-                                        <p
-                                            style={{
-                                                fontSize: "1.7rem",
-                                                fontWeight: 400,
-                                                textAlign: "center",
-                                                color: "#202020",
-                                                marginBottom: 5
-                                            }}
-                                        >
-                                            {timeTaken?.minutes}<small>m</small> {timeTaken?.seconds}<small>s</small>
-                                        </p>
-                                        <p
-                                            style={{
-                                                fontSize: "1rem",
-                                                fontWeight: 600,
-                                                lineHeight: "20.24px",
-                                                textAlign: "center",
-                                                color: "#20202066",
-                                                margin: 0
-                                            }}
-                                        >
-                                            TimeTaken
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style={{ display: "flex", flexWrap: "wrap", margin: "50px 0 50px 0" }}>
-                                <div style={{ width: "50%", textAlign: "left" }}>
-                                    <h2
+                                <Flex align='center' justify='space-between'>
+                                    <h1
                                         style={{
-                                            fontSize: "0.9rem",
-                                            fontWeight: 600,
-                                            lineHeight: "1.4",
                                             textAlign: "left",
-                                            marginBottom: 10
+                                            color: "#202020",
+                                            fontWeight: 400,
+                                            fontSize: "1.8rem",
                                         }}
+                                        className='p-0'
                                     >
-                                        How you did, by diffculty:
-                                    </h2>
-                                </div>
-                                <div style={{ width: "50%", textAlign: "right" }}>
-                                    <a
-                                        href="#"
-                                        style={{
-                                            textDecoration: "none",
-                                            background: "#3098A0",
-                                            width: 247,
-                                            height: 45,
-                                            padding: 15,
-                                            borderRadius: 7,
-                                            fontSize: "0.7rem",
-                                            fontWeight: 700,
-                                            lineHeight: "29.3px",
-                                            color: "#fff",
-                                            textAlign: "center"
-                                        }}
-                                    >
-                                        View Your Answers
-                                    </a>
-                                </div>
-                            </div>
-                            <Row>
-                                <Col span={9}>
-                                    <Typography.Title level={5}>
-                                        Easy
-                                    </Typography.Title>
-                                </Col>
-                                <Col span={9}>
-                                    <Typography.Title level={5}>
-                                        Medium
-                                    </Typography.Title>
-                                </Col>
-                                <Col span={5}>
-                                    <Typography.Title level={5}>
-                                        Hard
-                                    </Typography.Title>
-                                </Col>
-                            </Row>
-                            {filterByDiffculty &&
-                                <Flex style={{ margin: "20px 0 10px 0" }} justify='space-between' gap={'small'}>
-                                    <DifficultyTestReportChart
-                                        correctAnswer={filterByDiffculty.easy.correctAnswer}
-                                        incorrectAnswer={filterByDiffculty.easy.incorrectAnswer}
-                                        unanswered={filterByDiffculty.easy.unanswered}
-                                    />
-                                    <DifficultyTestReportChart
-                                        correctAnswer={filterByDiffculty.medium.correctAnswer}
-                                        incorrectAnswer={filterByDiffculty.medium.incorrectAnswer}
-                                        unanswered={filterByDiffculty.medium.unanswered}
-                                    />
-                                    <DifficultyTestReportChart
-                                        correctAnswer={filterByDiffculty.hard.correctAnswer}
-                                        incorrectAnswer={filterByDiffculty.hard.incorrectAnswer}
-                                        unanswered={filterByDiffculty.hard.unanswered}
-                                    />
+                                        <p className="top-title m-0">
+                                            {loading ? "Loading..." : testAttempt?.test?.testDisplayName}
+                                        </p>
+                                    </h1>
+                                    <div style={{ textAlign: "right" }}>
+                                        <Button
+                                            onClick={handlePrintTest}
+                                            loading={pdfLoading}
+                                            // href="#"
+                                            size='large'
+                                            style={{
+                                                textDecoration: "none",
+                                                background: "#5CB85C",
+                                                color: "#fff"
+                                            }}
+                                        >
+                                            Download Scores PDF
+                                        </Button>
+                                    </div>
                                 </Flex>
-                            }
-                            <br />
-                            <br />
-                            <h2
-                                style={{
-                                    fontSize: "0.9rem",
-                                    fontWeight: 600,
-                                    lineHeight: "1.4",
-                                    textAlign: "left",
-                                    marginBottom: 10
-                                }}
-                            >
-                                How your did, your Topic:
-                            </h2>
-                            {groupedByTopic
-                                &&
-                                <ReportByGroupChart groupedByTopic={groupedByTopic} />
-                            }
-                            <br />
-                            <br />
-                            <h2
-                                style={{
-                                    fontSize: "0.9rem",
-                                    fontWeight: 600,
-                                    lineHeight: "1.4",
-                                    textAlign: "left",
-                                    marginBottom: 10
-                                }}
-                            >
-                                How youal located your time:
-                            </h2>
-                            <p
-                                style={{
-                                    fontSize: 15,
-                                    fontWeight: 600,
-                                    lineHeight: "20.43px",
-                                    textAlign: "left",
-                                    color: "#202020"
-                                }}
-                            >
-                                Show detailed timing graph
-                            </p>
-                            <GanttChart />
-                            <br />
-                            <br />
-                            <h2
-                                style={{
-                                    fontSize: "0.7rem",
-                                    fontWeight: 600,
-                                    lineHeight: "1.4",
-                                    textAlign: "left",
-                                    marginBottom: 10
-                                }}
-                            >
-                                How did you do by Topic and Sub-Topic:
-                            </h2>
-                            <table
-                                style={{
-                                    width: "100%",
-                                    border: "1px solid #20202033",
-                                    background: "#FFFFFF",
-                                    overflowY: "scroll"
-                                }}
-                            >
-                                <tbody>
-                                    <tr
+                                <div style={{ marginTop: "3rem" }}>
+                                    <Typography.Title
+                                        level={4}
+                                    >
+                                        Question Summary Report
+                                    </Typography.Title>
+                                    <div
                                         style={{
-                                            fontSize: "0.7rem",
-                                            fontWeight: 600,
-                                            textAlign: "left",
-                                            background: "#057DB1B2",
-                                            padding: 10,
-                                            color: "#fff"
+                                            border: "1px solid #20202033",
+                                            borderRadius: 8,
+                                            padding: "2%",
+                                            display: "flex",
+                                            overflowX: "auto",
+                                            whiteSpace: "nowrap",
+                                            flexWrap: "wrap",
+                                            justifyContent: "space-between"
                                         }}
                                     >
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033",
-                                                textAlign: "center"
-                                            }}
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
                                         >
-                                            #
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033",
-                                                textAlign: "center"
-                                            }}
-                                        >
-                                            Correct
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033"
-                                            }}
-                                        >
-                                            Difficulty
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033"
-                                            }}
-                                        >
-                                            Topic
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033"
-                                            }}
-                                        >
-                                            Skill/Knowledge Testing Point
-                                        </th>
-                                    </tr>
-                                    {
-                                        groupedByTopic.map((item: any, index: number) => (
-                                            <tr
-                                                key={index}
+                                            <p
                                                 style={{
-                                                    fontSize: "0.7rem",
-                                                    fontWeight: 600,
-                                                    textAlign: "left",
-                                                    background: "#fff",
-                                                    padding: 10,
-                                                    color: "#000"
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#202020",
+                                                    marginBottom: 5
                                                 }}
                                             >
-                                                <td
-                                                    style={{
-                                                        fontWeight: 500,
-                                                        padding: 5,
-                                                        borderBottom: "1px solid #20202033",
-                                                        textAlign: "center"
-                                                    }}
-                                                >
-                                                    <b>{index + 1}</b>
-                                                </td>
-                                                <td
-                                                    style={{
-                                                        fontWeight: 500,
-                                                        padding: 5,
-                                                        borderBottom: "1px solid #20202033",
-                                                        textAlign: "center"
-                                                    }}
-                                                >
-                                                    <b>x</b>
-                                                </td>
-                                                <td
-                                                    style={{
-                                                        fontWeight: 500,
-                                                        padding: 5,
-                                                        borderBottom: "1px solid #20202033"
-                                                    }}
-                                                >
-                                                    Medium
-                                                </td>
-                                                <td
-                                                    style={{
-                                                        fontWeight: 500,
-                                                        padding: 5,
-                                                        borderBottom: "1px solid #20202033"
-                                                    }}
-                                                >
-                                                    {item.topic}
-                                                </td>
-                                                <td
-                                                    style={{
-                                                        fontWeight: 500,
-                                                        padding: 5,
-                                                        borderBottom: "1px solid #20202033"
-                                                    }}
-                                                >
-                                                    Words In Context
-                                                </td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-                            <br />
-                            <br />
-                            <table
-                                style={{
-                                    width: "100%",
-                                    border: "1px solid #20202033",
-                                    background: "#FFFFFF"
-                                }}
-                            >
-                                <tbody>
-                                    <tr
-                                        style={{
-                                            fontSize: "0.7rem",
-                                            fontWeight: 600,
-                                            textAlign: "left",
-                                            background: "#057DB1B2",
-                                            padding: 10,
-                                            color: "#fff"
-                                        }}
-                                    >
-                                        <th
+                                                {totalQuestion}
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Questions
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
+                                        >
+                                            <p
+                                                style={{
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#66AB7B",
+                                                    marginBottom: 5
+                                                }}
+                                            >
+                                                {correctAnswer}
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Correct
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
+                                        >
+                                            <p
+                                                style={{
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#F28D9A",
+                                                    marginBottom: 5
+                                                }}
+                                            >
+                                                {incorrectAnswer}
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Incorrect
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
+                                        >
+                                            <p
+                                                style={{
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#202020",
+                                                    marginBottom: 5
+                                                }}
+                                            >
+                                                {skippedAnswer}
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Skipped
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
+                                        >
+                                            <p
+                                                style={{
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#202020",
+                                                    marginBottom: 5
+                                                }}
+                                            >
+                                                {score?.toFixed(2)}%
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Score
+                                            </p>
+                                        </div>
+                                        <div
+                                            style={{ width: "140px", textAlign: "center", padding: "4px 10px" }}
+                                        >
+                                            <p
+                                                style={{
+                                                    fontSize: "1.7rem",
+                                                    fontWeight: 400,
+                                                    textAlign: "center",
+                                                    color: "#202020",
+                                                    marginBottom: 5
+                                                }}
+                                            >
+                                                {timeTaken?.minutes}<small>m</small> {timeTaken?.seconds}<small>s</small>
+                                            </p>
+                                            <p
+                                                style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: 600,
+                                                    lineHeight: "20.24px",
+                                                    textAlign: "center",
+                                                    color: "#20202066",
+                                                    margin: 0
+                                                }}
+                                            >
+                                                Time Taken
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", flexWrap: "wrap", margin: "50px 0 50px 0" }}>
+                                    <div style={{ width: "50%", textAlign: "left" }}>
+                                        <Typography.Title
+                                            level={4}
+                                        >
+                                            How you did, by diffculty:
+                                        </Typography.Title>
+                                    </div>
+                                    <div style={{ width: "50%", textAlign: "right" }}>
+                                        <Link href={`/student/test-report/${testAttempt._id}/answer`}>
+                                            <Button
+                                                size='large'
+                                                style={{
+                                                    background: "#3098A0",
+                                                    color: "#fff"
+                                                }}
+                                            >
+                                                View Your Answers
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                                <Row gutter={[16, 16]} justify="center">
+                                    <Col span={8} style={{ textAlign: 'center' }}>
+                                        <Typography.Title level={5} style={{ textAlign: 'center' }}>
+                                            Easy
+                                        </Typography.Title>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Typography.Title level={5} style={{ textAlign: 'center' }}>
+                                            Medium
+                                        </Typography.Title>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Typography.Title level={5} style={{ textAlign: 'center' }}>
+                                            Hard
+                                        </Typography.Title>
+                                    </Col>
+                                </Row>
+
+                                {filterByDiffculty && (
+                                    <Row gutter={[16, 16]} justify="center">
+                                        <Col span={8}>
+                                            <DifficultyTestReportChart
+                                                correctAnswer={filterByDiffculty.easy.correctAnswer}
+                                                incorrectAnswer={filterByDiffculty.easy.incorrectAnswer}
+                                                unanswered={filterByDiffculty.easy.unanswered}
+                                            />
+                                        </Col>
+                                        <Col span={8}>
+                                            <DifficultyTestReportChart
+                                                correctAnswer={filterByDiffculty.medium.correctAnswer}
+                                                incorrectAnswer={filterByDiffculty.medium.incorrectAnswer}
+                                                unanswered={filterByDiffculty.medium.unanswered}
+                                            />
+                                        </Col>
+                                        <Col span={8}>
+                                            <DifficultyTestReportChart
+                                                correctAnswer={filterByDiffculty.hard.correctAnswer}
+                                                incorrectAnswer={filterByDiffculty.hard.incorrectAnswer}
+                                                unanswered={filterByDiffculty.hard.unanswered}
+                                            />
+                                        </Col>
+                                    </Row>
+                                )}
+                                <br />
+                                <br />
+                                <Typography.Title
+                                    level={4}
+                                >
+                                    How your did, your Topic:
+                                </Typography.Title>
+                                {groupedByTopic
+                                    &&
+                                    <ReportByGroupChart groupedByTopic={groupedByTopic} />
+                                }
+                                {/* <GanttChart /> */}
+                                {/* <TimeTakenChart data={questionAttempt} /> */}
+                                {/* <TimingChart /> */}
+                                <br />
+                                <br />
+                                <Typography.Title
+                                    level={4}
+                                >
+                                    How did you do by Topic and Sub-Topic:
+                                </Typography.Title>
+                                <table
+                                    style={{
+                                        width: "100%",
+                                        border: "1px solid #20202033",
+                                        background: "#FFFFFF",
+                                        overflowY: "scroll"
+                                    }}
+                                >
+                                    <tbody>
+                                        <tr
                                             style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033",
-                                                textAlign: "center"
+                                                fontWeight: 600,
+                                                textAlign: "left",
+                                                background: "#057DB1B2",
+                                                padding: 10,
+                                                color: "#fff"
                                             }}
                                         >
-                                            S.NO
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033",
-                                                textAlign: "center"
-                                            }}
-                                        >
-                                            Key Topic
-                                        </th>
-                                        <th
-                                            style={{
-                                                fontWeight: 500,
-                                                padding: 5,
-                                                borderBottom: "1px solid #20202033"
-                                            }}
-                                        >
-                                            Sub-Topic
-                                        </th>
-                                    </tr>
-                                    {
-                                        groupedByTopic.map((item: any) => {
-                                            return (
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                #
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                Correct
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033"
+                                                }}
+                                            >
+                                                Difficulty
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033"
+                                                }}
+                                            >
+                                                Topic
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033"
+                                                }}
+                                            >
+                                                Skill/Knowledge Testing Point
+                                            </th>
+                                        </tr>
+                                        {
+                                            groupedByTopic.map((item: any, index: number) => (
                                                 <tr
-                                                    key={''}
+                                                    key={index}
                                                     style={{
-                                                        fontSize: "0.7rem",
                                                         fontWeight: 600,
                                                         textAlign: "left",
-                                                        background: "#D81B608A",
+                                                        background: "#fff",
                                                         padding: 10,
-                                                        color: "#fff"
+                                                        color: "#000"
                                                     }}
                                                 >
                                                     <td
@@ -779,7 +566,7 @@ export default function TestReport({
                                                             textAlign: "center"
                                                         }}
                                                     >
-                                                        1.
+                                                        <b>{index + 1}</b>
                                                     </td>
                                                     <td
                                                         style={{
@@ -787,6 +574,24 @@ export default function TestReport({
                                                             padding: 5,
                                                             borderBottom: "1px solid #20202033",
                                                             textAlign: "center"
+                                                        }}
+                                                    >
+                                                        <b>{item.incorrect == 0 ? <FaCheck color='#52C479' /> : <FaXmark color='#FB3311' />}</b>
+                                                    </td>
+                                                    <td
+                                                        style={{
+                                                            fontWeight: 500,
+                                                            padding: 5,
+                                                            borderBottom: "1px solid #20202033"
+                                                        }}
+                                                    >
+                                                        Medium
+                                                    </td>
+                                                    <td
+                                                        style={{
+                                                            fontWeight: 500,
+                                                            padding: 5,
+                                                            borderBottom: "1px solid #20202033"
                                                         }}
                                                     >
                                                         {item.topic}
@@ -798,36 +603,171 @@ export default function TestReport({
                                                             borderBottom: "1px solid #20202033"
                                                         }}
                                                     >
-                                                        {item.subTopic}
+                                                        Words In Context
                                                     </td>
                                                 </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                            </table>
-                            <div style={{ textAlign: "left", marginTop: "2rem" }}>
-                                <Link
-                                    href="/student/review"
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                                <br />
+                                <br />
+                                <Typography.Title
+                                    level={4}
+                                >
+                                    Areas of Improvement:
+                                </Typography.Title>
+                                <table
                                     style={{
-                                        textDecoration: "none",
-                                        background: "#09A6EB",
-                                        width: 278,
-                                        height: 59,
-                                        padding: 15,
-                                        borderRadius: 7,
-                                        fontSize: "0.7rem",
-                                        fontWeight: 700,
-                                        lineHeight: "29.3px",
-                                        color: "#fff",
-                                        textAlign: "center"
+                                        width: "100%",
+                                        border: "1px solid #20202033",
+                                        background: "#FFFFFF"
                                     }}
                                 >
-                                    Give Test Feedback
-                                </Link>
+                                    <tbody>
+                                        <tr
+                                            style={{
+                                                fontWeight: 600,
+                                                textAlign: "left",
+                                                background: "#50A4C8",
+                                                padding: 10,
+                                                color: "#fff"
+                                            }}
+                                        >
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                S.NO
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                Key Topic
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033"
+                                                }}
+                                            >
+                                                Sub-Topic
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 500,
+                                                    padding: 5,
+                                                    borderBottom: "1px solid #20202033"
+                                                }}
+                                            >
+                                                Action
+                                            </th>
+                                        </tr>
+                                        {
+                                            Array.from(
+                                                new Map(
+                                                    questionAttempt
+                                                        .filter((item: any) => item.isCorrect === false)
+                                                        .map((item: any) => [`${item.questionId.topic}-${item.questionId.subTopic}`, item])
+                                                ).values()
+                                            ).map((item: any, index: number) => {
+                                                return (
+                                                    <tr
+                                                        key={`${item.questionId.topic}-${item.questionId.subTopic}`}
+                                                        style={{
+                                                            fontWeight: 600,
+                                                            textAlign: "left",
+                                                            background: "#D81B608A",
+                                                            padding: 10,
+                                                            color: "#fff"
+                                                        }}
+                                                    >
+                                                        <td
+                                                            style={{
+                                                                fontWeight: 500,
+                                                                padding: 5,
+                                                                borderBottom: "1px solid #20202033",
+                                                                textAlign: "center"
+                                                            }}
+                                                        >
+                                                            {index + 1}.
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                fontWeight: 500,
+                                                                padding: 5,
+                                                                borderBottom: "1px solid #20202033",
+                                                                textAlign: "center"
+                                                            }}
+                                                        >
+                                                            {item.questionId.topic}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                fontWeight: 500,
+                                                                padding: 5,
+                                                                borderBottom: "1px solid #20202033"
+                                                            }}
+                                                        >
+                                                            {item.questionId.subTopic}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                fontWeight: 500,
+                                                                padding: 5,
+                                                                borderBottom: "1px solid #20202033"
+                                                            }}
+                                                        >
+                                                            <Link
+                                                                href={`/student/practice-area/filter?questionType=${item.questionId.questionType}&topic=${item.questionId.topicSlug}&subtopic=${item.questionId.subTopicSlug}`}
+                                                                style={{ textDecoration: 'underline', color: '#fff' }}
+                                                            >
+                                                                Go to Practice
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
+
+                                    </tbody>
+                                </table>
+                                <div style={{ textAlign: "left", marginTop: "2rem" }}>
+                                    <Button
+                                        size='large'
+                                        onClick={() => setFeedBackModal(true)}
+                                        className="btn"
+                                        disabled={isFeedbackSubmit}
+                                        style={{
+                                            background: "#09A6EB",
+                                            color: "#fff"
+                                        }}
+                                    >
+                                        Give Test Feedback
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                            <Modal
+                                title={<>Test Name: {testAttempt?.test?.testDisplayName} Feedback</>}
+                                centered
+                                open={feedbackModal}
+                                onCancel={() => setFeedBackModal(false)}
+                                footer={null}
+                            >
+                                <FeedbackForm testAttempt={testAttempt} testAttemptId={testAttemptId} onSuccess={() => { setFeedBackModal(false); setIsFeedbackSubmit(true) }} />
+                            </Modal>
+                        </section>
+                    </Badge.Ribbon>
             }
         </>
     )

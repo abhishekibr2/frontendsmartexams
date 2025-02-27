@@ -5,3 +5,18 @@
     }
 
 }
+
+.pagination-icon {
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pagination-icon:hover {
+    color: #1890ff;
+}
+
+.pagination-icon.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}

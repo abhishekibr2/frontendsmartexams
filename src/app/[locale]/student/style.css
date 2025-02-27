@@ -49,14 +49,6 @@ ul.admin-sidebar li li:nth-child(1) {
   margin-top: 0 !important;
 }
 
-.admin-sidebar .ant-menu-item-selected {
-  background: #e4f5fd !important;
-}
-
-.admin-sidebar .ant-menu-item-selected a span {
-  color: #04a9f5 !important;
-}
-
 .admin-sidebar li span {
   margin-left: 5px !important;
 }
@@ -276,4 +268,7 @@ td.ant-table-cell span.ant-tag.css-dev-only-do-not-override-19xw9e6 {
     font-size: 15px;
   }
 
+  .toggle-bar .menu-panel svg {
+    color: #181313 !important;
+  }
 }

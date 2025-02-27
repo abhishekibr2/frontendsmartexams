@@ -1,8 +1,8 @@
 'use client';
-import { Button, Col, Modal, Row } from 'antd';
+import { Modal } from 'antd';
 import TableData from './TableData';
 import FAQForm from './FormModal';
-import { useContext, useEffect, useState } from 'react';
+import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { getQuestions } from '@/lib/adminApi';
 import AuthContext from '@/contexts/AuthContext';
 
@@ -10,11 +10,7 @@ export default function FaqSection() {
 	const { user } = useContext(AuthContext);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [faqs, setFaqs] = useState([])
-	const userId = user?._id;
 
-	const showModal = () => {
-		setIsModalVisible(true);
-	};
 	const handleOk = () => {
 		setIsModalVisible(false);
 	};
@@ -49,10 +45,10 @@ export default function FaqSection() {
 				footer={null}
 				onOk={handleOk}
 				onCancel={handleCancel}
-
-
 			>
-				<FAQForm onClose={handleCancel} getFaqHandler={getFaqHandler} />
+				<FAQForm onClose={handleCancel} getFaqHandler={getFaqHandler} faqId={''} setFaqId={function (value: SetStateAction<string>): void {
+					throw new Error('Function not implemented.');
+				}} />
 			</Modal>
 
 		</>

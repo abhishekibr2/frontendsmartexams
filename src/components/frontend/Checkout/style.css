@@ -3,3 +3,15 @@
   overflow: auto !important;
   scrollbar-width: thin !important;
 }
+
+/* Hide spinner in Chrome, Safari, Edge, and Opera */
+.field-panel::-webkit-outer-spin-button,
+.field-panel::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide spinner in Firefox */
+.field-panel[type="number"] {
+  -moz-appearance: textfield;
+}

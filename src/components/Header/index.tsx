@@ -274,15 +274,15 @@ export default function Header() {
 								</Link>
 							</li>
 							<div className='user-and-logout'>
-								{/* {user?.roleId?.roleName === 'admin'  ? ( */}
 								{user ? (
-									user?.roleId?.roleName === "admin" ? (
-										<div className="nav-user">
-											<AdminHeaderDropdown />
-										</div>
-									) : user?.roleId?.roleName === "student" ? (
+									user?.roleId?.roleName === "student" ? (
 										<div className="nav-user">
 											<StudentHeaderDropdown />
+										</div>
+									) : user?.roleId?.roleName === "admin" || user?.roleId?.roleName === user?.roleId?.roleName ? (
+										<div className="nav-user">
+											<AdminHeaderDropdown />
+
 										</div>
 									) : null
 								) : (

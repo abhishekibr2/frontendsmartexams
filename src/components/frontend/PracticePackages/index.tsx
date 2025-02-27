@@ -64,7 +64,6 @@ const PracticePackages = () => {
             }
         }
     };
-
     return (
         <>
             <section className="section-gap ">
@@ -76,7 +75,7 @@ const PracticePackages = () => {
                         <span className="package">Practice Packages</span>
                     </h2>
                     <br />
-                    <div className="width-80 m-auto rounded-4">
+                    <div className="width-85 m-auto rounded-4">
                         <div className='row mt-5'>
 
                         </div>
@@ -91,27 +90,30 @@ const PracticePackages = () => {
                                         <Col xxl={8} xl={8} lg={8} md={8} key={index}>
                                             <div className='vic-price-table'>
                                                 <div className='main-card-price-name'>{record.tag}</div>
-                                                <h3>{record.state?.title} {record.examType?.examType}</h3>
+                                                <h3 style={{ fontWeight: '700' }}> {record.state?.title} {record.examType?.examType}</h3>
                                                 {
                                                     record.packageImage ?
                                                         <Image
                                                             preview={false}
                                                             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/packageImage/original/${record.packageImage}`}
                                                             alt="Package Image"
-                                                            className='icon-img-price'
+                                                            className='icon-img-price width-card-package'
                                                         />
                                                         :
                                                         <Image
                                                             preview={false}
                                                             src={"images/icon-img-price.png"}
                                                             alt="Package Image"
-                                                            className='icon-img-price'
+                                                            className='icon-img-price width-card-package'
                                                         />
                                                 }
-                                                <h2 className='mb-4'>{record.packageName}</h2>
-                                                <h4 className='price-value mt-5'>${record.packageDiscountPrice ? parseFloat(record.packageDiscountPrice).toFixed(2) : 0} <del className='price-del'>${parseFloat(record.packagePrice).toFixed(2)}</del></h4>
+                                                <h2 className='mb-2' style={{ fontSize: '22px' }}>{record.packageName}</h2>
+                                                <h4 className='price-value mt-4'>${record.packageDiscountPrice ? parseFloat(record.packageDiscountPrice).toFixed(2) : 0} {record.packagePrice > 0 && (
+                                                    <del className='price-del'>${parseFloat(record.packagePrice).toFixed(2)}</del>
+                                                )}
+                                                </h4>
                                                 <p className='valid-value'> Valid for {record.packageDuration.DurationTime} days</p>
-                                                <ul className='list-values mt-5'>
+                                                <ul className='list-values mt-4'>
                                                     {/* @ts-ignore  */}
                                                     {record.features?.map((feature, featureIndex) => (
                                                         <li key={featureIndex} className='check-icon'> {

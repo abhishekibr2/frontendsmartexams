@@ -498,6 +498,7 @@ export default function Questions({
                                                     testId={testId}
                                                     existingQuestionIds={existingQuestionIds || test?.questionOrder}
                                                     showAllAnswer={showAllAnswer}
+                                                    index={index}
                                                 />
                                             ) : (
                                                 <QuestionListItem

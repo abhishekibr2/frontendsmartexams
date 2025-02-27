@@ -69,8 +69,10 @@ export default function Dashboard() {
 		}
 	}, [user]);
 
+
 	return (
 		<>
+
 			<section>
 				<div className="d-flex">
 					<div className="spac-dash w-100">
@@ -379,7 +381,7 @@ export default function Dashboard() {
 						{/*  */}
 						<div className="row card-width-row">
 							<div className="col-lg-3 col-md-6 col-6">
-								<Link href="" className="card-link">
+								<Link href="/admin/package-order" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
 											<div className="col-sm-3 col-4 pr-0">
@@ -436,7 +438,7 @@ export default function Dashboard() {
 							</div> */}
 
 							<div className="col-lg-3 col-md-6 col-6">
-								<Link href="" className="card-link">
+								<Link href="/admin/ebook-order" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
 											<div className="col-sm-3 col-4 pr-0">
@@ -447,7 +449,7 @@ export default function Dashboard() {
 											<div className="col-sm-9 col-8">
 												<img src="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/widget/img-status-4.svg" alt="card-img" className="card-img-right" />
 												<p className="p-xs color-dark-gray opacity-7 mb-0">Ebooks Sold</p>
-												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">{count?.ebook[0].totalEbooks || 0} </h4>
+												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">${count?.ebook || 0} </h4>
 											</div>
 										</div>
 									</div>
@@ -696,7 +698,7 @@ export default function Dashboard() {
 								</Link>
 							</div> */}
 
-							<div className="col-lg-3 col-md-6 col-6">
+							{/* <div className="col-lg-3 col-md-6 col-6">
 								<Link href="/admin/testFeedback" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
@@ -714,9 +716,9 @@ export default function Dashboard() {
 
 									</div>
 								</Link>
-							</div>
+							</div> */}
 
-							<div className="col-lg-3 col-md-6 col-6">
+							{/* <div className="col-lg-3 col-md-6 col-6">
 								<Link href="/admin/packageFeedback" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
@@ -734,7 +736,7 @@ export default function Dashboard() {
 
 									</div>
 								</Link>
-							</div>
+							</div> */}
 
 							{/* <div className="col-lg-3 col-md-6 col-6">
 								<Link href="" className="card-link">
@@ -776,7 +778,7 @@ export default function Dashboard() {
 								</Link>
 							</div>
 							<div className="col-lg-3 col-md-6 col-6">
-								<Link href="" className="card-link">
+								<Link href="/admin/examType" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
 											<div className="col-sm-3 col-4 pr-0">
@@ -786,8 +788,8 @@ export default function Dashboard() {
 											</div>
 											<div className="col-sm-9 col-8">
 												<img src="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/widget/img-status-1.svg" alt="card-img" className="card-img-right" />
-												<p className="p-xs color-dark-gray opacity-7 mb-0">Topic</p>
-												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">{count?.questions || 0}</h4>
+												<p className="p-xs color-dark-gray opacity-7 mb-0">Exam Type</p>
+												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">{count?.examType || 0}</h4>
 											</div>
 										</div>
 
@@ -796,7 +798,7 @@ export default function Dashboard() {
 							</div>
 
 							<div className="col-lg-3 col-md-6 col-6">
-								<Link href="" className="card-link">
+								<Link href="/admin/subject" className="card-link">
 									<div className="card-dash bottom-ultra-space admin-card-box">
 										<div className="row align">
 											<div className="col-sm-3 col-4 pr-0">
@@ -808,6 +810,26 @@ export default function Dashboard() {
 												<img src="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/widget/img-status-2.svg" alt="card-img" className="card-img-right" />
 												<p className="p-xs color-dark-gray opacity-7 mb-0">Subjects</p>
 												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">{count?.subjectsCount || 0} </h4>
+											</div>
+										</div>
+
+									</div>
+								</Link>
+							</div>
+
+							<div className="col-lg-3 col-md-6 col-6">
+								<Link href="/admin/practice-area" className="card-link">
+									<div className="card-dash bottom-ultra-space admin-card-box">
+										<div className="row align">
+											<div className="col-sm-3 col-4 pr-0">
+												<div className="icon-card-dash dash-icon-g" style={{ background: 'linear-gradient(83.31deg, rgb(233, 172, 18) 21.22%, rgb(231, 117, 0) 88.54%)' }} >
+													<i className="fa-solid fa-server"></i>
+												</div>
+											</div>
+											<div className="col-sm-9 col-8">
+												<img src="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/widget/img-status-2.svg" alt="card-img" className="card-img-right" />
+												{/* <p className="p-xs color-dark-gray opacity-7 mb-0">Practice Area</p> */}
+												<h4 className="title-lg fw-semi-bold color-dark-gray mb-0">Practice Area</h4>
 											</div>
 										</div>
 

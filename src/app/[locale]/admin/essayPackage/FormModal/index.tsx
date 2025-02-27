@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { Form, Row, Col, Input, Select, Button, notification, Spin } from 'antd';
 import { Package, PackageEssay } from '@/lib/types';
-import { addUpdatePackageEssayDetails, GetAllPackages } from '@/lib/adminApi';
+import { addUpdatePackageEssayDetails, GetAllPackagesForEssay } from '@/lib/adminApi';
 import ErrorHandler from '@/lib/ErrorHandler';
 import AuthContext from '@/contexts/AuthContext';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const { Option } = Select;
 
@@ -15,7 +15,7 @@ interface ServiceModalProps {
 	packageName: any;
 	packageId: any;
 	packageEssay: PackageEssay[];
-
+	onSelectPackage: any
 }
 
 interface ServiceFormValues {
@@ -37,16 +37,18 @@ export default function FormModal(props: ServiceModalProps) {
 	const ids = id.get('packageId');
 	const [newPackages, setPackages] = useState<Package[]>([]);
 	const [selectedPackage, setSelectedPackage] = useState<string | undefined>(undefined);
-	const [totalEssay, setTotalEssay] = useState<number>(0);
+	const [totalEssay, setTotalEssay] = useState<number | undefined>(0);
+	const router = useRouter();
+
 	useEffect(() => {
 		packages();
-		if (props.packageEssay) {
-			setTotalEssay(props.packageEssay.length);
-		}
+		// if (props.packageEssay) {
+		// 	setTotalEssay(props.packageEssay.length);
+		// }
 	}, [props.packageEssay]);
 
 	const packages = async () => {
-		const response = await GetAllPackages();
+		const response = await GetAllPackagesForEssay();
 		if (response) {
 			setPackages(response.data);
 		}
@@ -101,12 +103,11 @@ export default function FormModal(props: ServiceModalProps) {
 		}
 	}, [props.packageName, form]);
 
-
-	const handleSelectChange = (value: any) => {
-		console.log(value, 'value')
-		props.setSelectedRecord(value)
-		setSelectedPackage(value);
-		form.setFieldsValue({ packageId: value });
+	const handlePackage = (value: string) => {
+		const selectedPackage = newPackages.find(pkg => pkg._id === value);
+		form.setFieldsValue({ packageId: value })
+		setTotalEssay(selectedPackage?.totalEssayCount);
+		props.onSelectPackage(value);
 	};
 
 	return (
@@ -128,15 +129,15 @@ export default function FormModal(props: ServiceModalProps) {
 						) :
 							(
 								<Select
+									allowClear
 									placeholder="Select a package"
-									// onChange={handleSelectChange}
-									onChange={(value) => form.setFieldsValue({ packageId: value })}
+									onChange={(value) => handlePackage(value)}
 									style={{ width: '100%', height: '40px' }}
 									value={form.getFieldValue('packageId') || props.selectedRecord}
 								>
 									{newPackages.length > 0 ? (
 										newPackages.map((pkg, index) => (
-											<Option key={index} value={pkg._id} >
+											<Option key={index} value={pkg._id}>
 												{pkg.packageName}
 											</Option>
 										))
