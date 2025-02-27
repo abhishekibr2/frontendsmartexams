@@ -10,6 +10,7 @@ interface ComprehensionListProps {
     testId?: string;
     existingQuestionIds?: string[];
     showAllAnswer?: boolean;
+    index?: number;
 }
 
 export default function ComprehensionList({
@@ -18,7 +19,8 @@ export default function ComprehensionList({
     setReload,
     testId,
     existingQuestionIds,
-    showAllAnswer = false
+    showAllAnswer = false,
+    index = 0
 }: ComprehensionListProps) {
     return (
         <React.Fragment>
@@ -38,39 +40,41 @@ export default function ComprehensionList({
                     <List
                         bordered
                         dataSource={item.questionId}
-                        renderItem={(question: Question, i) => (
-                            <List.Item style={{ width: '100%' }}>
-                                <Card
-                                    style={{
-                                        width: '100%',
-                                        boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
-                                    }}
-                                    title={
-                                        <Flex justify="space-between">
-                                            <span>{`Question ${i + 1}`}</span>
-                                            <Typography.Text type="secondary">
-                                                Question ID: {question._id.slice(18, 24)}
-                                            </Typography.Text>
-                                        </Flex>
-                                    }
-                                    className='question-list'
-                                >
-                                    <Typography.Text type="secondary" className="question-text">
-                                        <div dangerouslySetInnerHTML={{ __html: question.questionText }} />
-                                    </Typography.Text>
-                                    <Divider />
-                                    <ButtonGroup
-                                        item={question}
-                                        reload={reload}
-                                        setReload={setReload}
-                                        testId={testId}
-                                        existingQuestionIds={existingQuestionIds}
-                                        showAllAnswer={showAllAnswer}
-                                    />
-                                    <Divider />
-                                </Card>
-                            </List.Item>
-                        )}
+                        renderItem={(question: Question, i) => {
+                            return (
+                                <List.Item style={{ width: '100%' }}>
+                                    <Card
+                                        style={{
+                                            width: '100%',
+                                            boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
+                                        }}
+                                        title={
+                                            <Flex justify="space-between">
+                                                <span>{`Question ${i + index + 1}`}</span>
+                                                <Typography.Text type="secondary">
+                                                    Question ID: {question._id.slice(18, 24)}
+                                                </Typography.Text>
+                                            </Flex>
+                                        }
+                                        className='question-list'
+                                    >
+                                        <Typography.Text type="secondary" className="question-text">
+                                            <div dangerouslySetInnerHTML={{ __html: question.questionText }} />
+                                        </Typography.Text>
+                                        <Divider />
+                                        <ButtonGroup
+                                            item={question}
+                                            reload={reload}
+                                            setReload={setReload}
+                                            testId={testId}
+                                            existingQuestionIds={existingQuestionIds}
+                                            showAllAnswer={showAllAnswer}
+                                        />
+                                        <Divider />
+                                    </Card>
+                                </List.Item>
+                            )
+                        }}
                     />
                 </Collapse.Panel>
             </Collapse>

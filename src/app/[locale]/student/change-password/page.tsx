@@ -3,9 +3,10 @@ import React, { useContext, useState } from 'react'
 import AuthContext from '@/contexts/AuthContext';
 import ErrorHandler from '@/lib/ErrorHandler';
 import { updatePassword } from '@/lib/studentApi';
-import { Button, Form, message } from 'antd'
+import { Button, Form, message, Input } from 'antd'
 import validatePassword from '@/commonUI/PasswordValidator';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 export default function Page() {
     const { user } = useContext(AuthContext);
@@ -54,7 +55,7 @@ export default function Page() {
                         </div>
                         <div className="card-dash spac-mobile-sm mt-3">
                             <div className="row">
-                                <div className="col-sm-12 bottom-extra-space">
+                                <div className="col-sm-12">
                                     <label className="p-sm color-dark-gray w-100 bottom-small-space">
                                         Old Password
                                     </label>
@@ -69,9 +70,9 @@ export default function Page() {
                                         ]}
                                     >
                                         <div style={{ position: 'relative' }}>
-                                            <input
+                                            <Input
                                                 type={showPassword ? 'text' : 'password'}
-                                                className="field-panel"
+
                                                 maxLength={20}
                                                 placeholder="Enter your password"
                                                 style={{ paddingRight: '30px', width: '100%' }}
@@ -92,7 +93,7 @@ export default function Page() {
                                         </div>
                                     </Form.Item>
                                 </div>
-                                <div className="col-sm-12 bottom-extra-space">
+                                <div className="col-sm-12">
                                     <label className="p-sm color-dark-gray w-100 bottom-small-space">
                                         New Password
                                     </label>
@@ -105,9 +106,8 @@ export default function Page() {
                                         ]}
                                     >
                                         <div style={{ position: 'relative' }}>
-                                            <input
+                                            <Input
                                                 type={showNewPassword ? 'text' : 'password'}
-                                                className="field-panel"
                                                 maxLength={20}
                                                 placeholder="Enter your new password"
                                                 style={{ paddingRight: '30px', width: '100%' }}
@@ -128,7 +128,7 @@ export default function Page() {
                                         </div>
                                     </Form.Item>
                                 </div>
-                                <div className="col-sm-12 bottom-extra-space">
+                                <div className="col-sm-12">
                                     <label className="p-sm color-dark-gray w-100 bottom-small-space">
                                         Confirm Password
                                     </label>
@@ -148,9 +148,8 @@ export default function Page() {
                                         ]}
                                     >
                                         <div style={{ position: 'relative' }}>
-                                            <input
+                                            <Input
                                                 type={showConfirmPassword ? 'text' : 'password'}
-                                                className="field-panel"
                                                 maxLength={20}
                                                 placeholder="Confirm your new password"
                                                 style={{ paddingRight: '30px', width: '100%' }}
@@ -178,20 +177,20 @@ export default function Page() {
                     <div className="col-sm-7 text-end xs-text-center mt-4">
                         <span>
                             <Button htmlType='submit' className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md right-gap-15 text-white "
-                                style={{ height: "44px" }}
-                            >
+                                style={{ fontSize: '16px' }}>
                                 Submit
                             </Button>
                         </span>
                         <span>
-                            <button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md">
-                                Cancel
-                            </button>
+                            <Link href='/student/my-profile'>
+                                <Button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md" style={{ color: '#fff', fontSize: '16px' }}>
+                                    Cancel
+                                </Button>
+                            </Link>
                         </span>
                     </div>
                 </Form>
             </section>
-
         </>
     )
 }

@@ -11,7 +11,6 @@ import { useRouter } from 'nextjs-toploader/app';
 import ErrorHandler from '@/lib/ErrorHandler';
 import './style.css'
 import HeaderLogo from '../HeaderLogo';
-import Loading from '@/app/commonUl/Loading';
 
 interface login {
 	email: string;
@@ -41,6 +40,7 @@ const Login = () => {
 
 			await login(values.email, values.password, '');
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
 			setLoading(false);
 		}
@@ -57,8 +57,6 @@ const Login = () => {
 			focusInput.current.focus();
 		}
 	}, [session]);
-
-
 
 	const SocialData = (user: { name?: string | null; email?: string | null; image?: string | null; id?: string | null; } | undefined) => {
 		const data = {
@@ -110,7 +108,6 @@ const Login = () => {
 		try {
 			await signIn('google');
 			setIsLogin(true)
-
 		} catch (error) {
 			ErrorHandler.showNotification(error);
 			message.error('Google sign-in failed. Please try again.');

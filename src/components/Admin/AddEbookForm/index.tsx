@@ -382,7 +382,17 @@ const AddEbookForm: React.FC<{ ebook?: EBook, fetchData: () => void, closeForm: 
                                             form.validateFields()
                                             if (value === 'yes') {
                                                 setPriceDisabled(true)
-                                            } else if (value === 'no') { setPriceDisabled(false) }
+                                                form.setFieldsValue({
+                                                    price: '',
+                                                    discount: '',
+                                                });
+                                            } else if (value === 'no') {
+                                                setPriceDisabled(false)
+                                                form.setFieldsValue({
+                                                    price: 0 || ebook?.price === 0.00 ? '' : ebook?.price,
+                                                    discount: 0 || ebook?.discount,
+                                                });
+                                            }
                                         }}
                                     >
                                         <Option value="yes" key="yes">Yes</Option>
@@ -406,7 +416,7 @@ const AddEbookForm: React.FC<{ ebook?: EBook, fetchData: () => void, closeForm: 
                                     label="Price"
                                     name="price"
                                     rules={
-                                        priceDisabled === true || isFree
+                                        priceDisabled === true || ebook?.isFree == 'yes'
                                             ? []
                                             : [
                                                 { required: !priceDisabled, message: 'Please enter the product price!' },

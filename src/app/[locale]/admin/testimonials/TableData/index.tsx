@@ -225,12 +225,15 @@ const TableData = () => {
         key: item._id,
     })) || [];
 
+
     const filteredData = formattedData.filter((item: any) => {
-        const isPageMatch = pageFilter ? item.pages === pageFilter : true;
+        const isPageMatch = pageFilter ? item.pages.includes(pageFilter) : true;
         const isStateMatch = stateFilter ? item.state?._id === stateFilter : true;
         const isExamTypeMatch = examTypeFilter ? item.examType?._id === examTypeFilter : true;
+
         return isPageMatch && isStateMatch && isExamTypeMatch;
     });
+
 
     return (
         <>
@@ -269,7 +272,6 @@ const TableData = () => {
                             <Col xs={24} sm={24} md={5} lg={5} xxl={5} xl={5}>
 
                                 <Select placeholder="Select Page" onChange={handlePageChange}
-                                    //  value={pageFilter}
                                     value={pageFilter || undefined}
 
                                     style={{ width: '100%' }}
@@ -321,8 +323,6 @@ const TableData = () => {
                             </Col>
                             <Col xs={24} sm={24} md={5} lg={5} xxl={5} xl={5}>
                                 <Space >
-
-
                                     <PrimaryButton
                                         label="Add Testimonial"
                                         onClick={() => {

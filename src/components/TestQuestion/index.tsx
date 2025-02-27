@@ -5,7 +5,6 @@ import { Carousel, Col, Row } from 'antd';
 import { useTestContext } from '@/contexts/TestContext';
 import axios from 'axios';
 import TestQuestionItem from '../TestQuestionItem';
-import ComprehensionTestQuestionItem from '../ComprehensionTestQuestionItem';
 import ErrorHandler from '@/lib/ErrorHandler';
 
 interface TestQuestionProps {
@@ -14,13 +13,13 @@ interface TestQuestionProps {
 
 const contentStyle: React.CSSProperties = {
     height: '60vh',
-    overflowY: 'hidden',
+    overflowY: 'scroll',
     overflowX: 'hidden'
 };
 
 const paragraphStyle: React.CSSProperties = {
     height: '60vh',
-    overflowY: 'hidden',
+    overflowY: 'scroll',
     overflowX: 'hidden'
 };
 
@@ -37,7 +36,7 @@ export default function TestQuestion({
         currentIndex,
         setQuestionAttempts,
         isFlagged,
-        setIsFlagged
+        setIsFlagged,
     } = useTestContext()
 
     const getOptionLabel = (index: number) => {
@@ -48,8 +47,8 @@ export default function TestQuestion({
         if (questionAttempts[currentIndex]) {
             setIsFlagged(questionAttempts[currentIndex].isFlagged)
             form.setFieldsValue({
-                [questionAttempts[currentIndex]?.questionId]: {
-                    answerId: questionAttempts[currentIndex]?.answerId,
+                [questionAttempts[currentIndex]?.questionId._id]: {
+                    answerId: questionAttempts[currentIndex].answerId.length > 1 ? questionAttempts[currentIndex]?.answerId : questionAttempts[currentIndex]?.answerId[0],
                     isFlagged: questionAttempts[currentIndex]?.isFlagged,
                 }
             });
@@ -57,10 +56,10 @@ export default function TestQuestion({
     }, [questionAttempts, currentIndex, form, setIsFlagged]);
 
     const onFinish = async (values: any) => {
-        if (!testAttempt.test.questionOrder || !testAttempt.test.questionOrder[currentIndex]) {
+        if (!testAttempt.test.questionIds || !testAttempt.test.questionIds[currentIndex]) {
             return;
         }
-        const currentQuestion = testAttempt.test.questionOrder[currentIndex];
+        const currentQuestion = testAttempt.test.questionIds[currentIndex];
 
         let requestData: any = {};
         const selectedAnswer = values?.[currentQuestion];
@@ -71,6 +70,10 @@ export default function TestQuestion({
             requestData.status = 'unanswered'
         }
 
+        const prevQuestion: any = questionAttempts[currentIndex - 1]
+        if (prevQuestion) {
+            requestData.startTime = prevQuestion.endTime;
+        }
         requestData.testAttemptId = testAttemptId;
         requestData.isFlagged = isFlagged;
         requestData.questionId = currentQuestion || '';
@@ -88,12 +91,12 @@ export default function TestQuestion({
             } else {
                 newAttemptData = [...questionAttempts, data];
             }
-            setIsFlagged(false)
-            setQuestionAttempts(newAttemptData);
             if (currentIndex < questions.length - 1) {
                 carouselRef.current.next();
                 setCurrentIndex(currentIndex + 1);
             }
+            setIsFlagged(false)
+            setQuestionAttempts(newAttemptData);
         } catch (error) {
             ErrorHandler.showNotification(error)
         }
@@ -110,46 +113,45 @@ export default function TestQuestion({
                     afterChange={(current: number) => {
                         setCurrentIndex(current)
                     }}
-
+                    autoplaySpeed={100}
                 >
-                    {testAttempt && questions && testAttempt?.test?.questionOrder.map((questionId: string, index: number) => {
-                        const question: QuestionAndComprehension | undefined = questions.find(
-                            (item: any) => item._id === questionId
-                        );
-
+                    {testAttempt && questions && testAttempt?.test?.questions.map((question: QuestionAndComprehension, index: number) => {
                         if (!question) {
                             return null;
                         }
 
                         return (
                             <div key={question?._id}>
-                                <div style={contentStyle}>
-                                    {question?.questionType ? (
-                                        <TestQuestionItem
-                                            question={question}
-                                            index={index}
-                                            form={form}
-                                            onFinish={onFinish}
-                                            getOptionLabel={getOptionLabel}
-                                            testAttempt={testAttempt}
-                                        />
-                                    ) : (
-                                        <Row gutter={[24, 24]}>
-                                            <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                                                <div style={paragraphStyle} dangerouslySetInnerHTML={{ __html: question?.paragraph || '' }} />
-                                            </Col>
-                                            <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-                                                <ComprehensionTestQuestionItem
-                                                    question={question}
-                                                    index={index}
-                                                    form={form}
-                                                    onFinish={onFinish}
-                                                    getOptionLabel={getOptionLabel}
-                                                    testAttempt={testAttempt}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    )}
+                                <div style={contentStyle} id='option-scroll'>
+                                    {!question.comprehensionId ?
+                                        (
+                                            <TestQuestionItem
+                                                question={question}
+                                                index={index}
+                                                form={form}
+                                                onFinish={onFinish}
+                                                getOptionLabel={getOptionLabel}
+                                                testAttempt={testAttempt}
+                                            />
+                                        ) :
+                                        (
+                                            <Row gutter={[24, 24]}>
+                                                <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+                                                    {/* @ts-ignore  */}
+                                                    <div style={paragraphStyle} dangerouslySetInnerHTML={{ __html: question?.comprehensionId?.paragraph || '' }} />
+                                                </Col>
+                                                <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
+                                                    <TestQuestionItem
+                                                        question={question}
+                                                        index={index}
+                                                        form={form}
+                                                        onFinish={onFinish}
+                                                        getOptionLabel={getOptionLabel}
+                                                        testAttempt={testAttempt}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        )}
                                 </div>
                             </div>
 

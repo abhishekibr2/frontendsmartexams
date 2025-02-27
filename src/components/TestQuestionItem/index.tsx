@@ -1,3 +1,5 @@
+'use client'
+import { useTestContext } from '@/contexts/TestContext';
 import { Question } from '@/lib/types';
 import { Card, Checkbox, Col, Flex, Form, FormInstance, Radio, Row, Space, Typography } from 'antd';
 import React, { useState } from 'react';
@@ -17,12 +19,12 @@ export default function TestQuestionItem({
     form,
     onFinish,
     getOptionLabel,
-    testAttempt
+    testAttempt,
 }: TestQuestionItemProps) {
+    const { isReview } = useTestContext();
     const [selectedAnswer, setSelectedAnswer] = useState<string | string[]>([]);
     const [isAnswered, setIsAnswered] = useState(false);
-
-    const isExamMode = testAttempt.mode === 'exam'; // Check if exam mode
+    const isExamMode = testAttempt.mode === 'exam';
 
     const handleSelectionChange = (value: string | string[]) => {
         if (!isAnswered) {
@@ -41,8 +43,11 @@ export default function TestQuestionItem({
                     <Checkbox type="hidden" name="isCorrect" />
                 </Form.Item>
                 <Form.Item className='m-0' name={[question._id, 'answerId']}>
-                    {question?.questionType === 'multipleResponse' ? (
-                        <Radio.Group onChange={(e) => handleSelectionChange(e.target.value)} disabled={isAnswered}>
+                    {question?.questionType === 'multipleChoice' || question?.questionType === 'trueFalse' ? (
+                        <Radio.Group
+                            onChange={(e) => handleSelectionChange(e.target.value)}
+                            disabled={isReview}
+                        >
                             <Space direction="vertical">
                                 {question?.questionOptions.map((option, index) => {
                                     const isCorrect = option.isCorrect;
@@ -68,7 +73,10 @@ export default function TestQuestionItem({
                             </Space>
                         </Radio.Group>
                     ) : (
-                        <Checkbox.Group onChange={handleSelectionChange} disabled={isAnswered}>
+                        <Checkbox.Group
+                            onChange={handleSelectionChange}
+                            disabled={isReview}
+                        >
                             <Space direction="vertical">
                                 {question?.questionOptions.map((option, index) => {
                                     const isCorrect = option.isCorrect;

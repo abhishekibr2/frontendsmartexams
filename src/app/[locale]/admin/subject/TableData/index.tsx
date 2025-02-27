@@ -136,7 +136,7 @@ const TableData: React.FC<TableDataProps> = ({ subjects, fetchData }) => {
 				return (
 					<div>
 						<Row align='middle'>
-							<span style={{ textTransform: 'capitalize' }}>
+							<span>
 								{record?.subjectName
 									? record.subjectName.split(' ').slice(0, 10).join(' ') +
 									(record.subjectName.split(' ').length > 10 ? '...' : '')

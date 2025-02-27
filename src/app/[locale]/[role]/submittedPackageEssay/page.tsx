@@ -13,7 +13,7 @@ export default function Page() {
 	const fetchSubmitPackageData = async () => {
 		const response = await GetSubmitPackageEssay();
 		if (response) {
-			setPackages(response.data);
+			setPackages(response.data.getEssay);
 		}
 	};
 

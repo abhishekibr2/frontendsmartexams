@@ -173,17 +173,17 @@ const PackageOrderTable: React.FC = () => {
         <>
             <div className='p-3'>
                 <Row gutter={[14, 14]}>
-                    <Col md={18} sm={24}>
+                    <Col md={16} sm={24} xs={24}>
                         <h2 className='top-title mb-3'>Packages Order</h2>
                     </Col>
-                    <Col md={3} sm={24}>
+                    <Col md={4} sm={24} xs={24}>
                         <Input
                             placeholder="Search..."
                             onChange={(e) => dispatch(setPackageOrderSearch(e.target.value))}
                             suffix={<SearchOutlined />}
                         />
                     </Col>
-                    <Col md={3} sm={24}>
+                    <Col md={4} sm={24} xs={24} className='mb-3'>
                         <Select
                             placeholder="Select Package"
                             options={allPackages.map((pkg: { _id: string, packageName: string }) => ({

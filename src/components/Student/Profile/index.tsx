@@ -11,7 +11,7 @@ import { updateProfileDetails } from '@/lib/studentApi';
 import { setLoading } from '@/redux/reducers/profileReducer';
 import { handleFileCompression } from '@/lib/commonServices';
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form, message, UploadFile, DatePicker } from 'antd';
+import { Button, Form, message, UploadFile, DatePicker, Input } from 'antd';
 
 export default function StudentProfile() {
     const [form] = Form.useForm();
@@ -112,29 +112,29 @@ export default function StudentProfile() {
                                 My Profile
                             </h2>
                         </div>
-                        <div className="col-sm-7 text-end xs-text-center ">
+                        <div className="col-sm-7 text-end xs-text-center mb-3">
                             <span>
                                 <Link href='/student/change-password'>
-                                    <button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md right-gap-15">
+                                    <button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md right-gap-15" style={{ fontSize: '16px' }}>
                                         Change Password
                                     </button>
                                 </Link>
                             </span>
-                            <span>
-                                <button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md">
+                            {/* <span>
+                                <button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md" style={{ fontSize: '16px' }}>
                                     Edit
                                 </button>
-                            </span>
+                            </span> */}
                         </div>
                     </div>
-                    <br />
+                    {/* <br /> */}
                     <div className="card-dash ">
                         <Form layout="vertical" form={form} size="large" onFinish={onfinish} initialValues={{
                             id: user?._id,
                         }}>
                             <div className="row">
-                                <div className="col-sm-6 mb-3   ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                <div className="col-sm-6">
+                                    <label >
                                         First Name
                                     </label>
                                     <Form.Item
@@ -146,19 +146,19 @@ export default function StudentProfile() {
                                             },
                                             { pattern: /^[A-Za-z\s]+$/, message: 'Please enter only alphabets!' }
                                         ]}
-                                        className="p-sm color-dark-gray w-100 bottom-small-space"
+
                                     >
-                                        <input
+                                        <Input
                                             placeholder="Enter name"
                                             type="text"
                                             maxLength={50}
                                             style={{ textTransform: 'capitalize' }}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Mobile No
                                     </label>
                                     <Form.Item
@@ -170,29 +170,29 @@ export default function StudentProfile() {
                                             }
                                         ]}
                                     >
-                                        <input
+                                        <Input
                                             placeholder='+91899221182'
                                             type="number"
                                             maxLength={12}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Father Name
                                     </label>
                                     <Form.Item name={'fatherName'}
                                     >
-                                        <input
+                                        <Input
                                             placeholder='Father Name'
                                             type='text' maxLength={50}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Birth Date
                                     </label>
                                     <Form.Item
@@ -203,91 +203,91 @@ export default function StudentProfile() {
                                             format="DD/MM/YYYY"
                                             placeholder="Select Date of Birth"
                                             style={{ width: '100%' }}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         User ID
                                     </label>
                                     <Form.Item
                                         name={'id'}
                                     >
-                                        <input
+                                        <Input
                                             type="text"
-                                            className="field-panel"
+
                                             disabled
 
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Course
                                     </label>
                                     <Form.Item
                                         name={'course'}
                                     >
-                                        <input
+                                        <Input
                                             type="text"
-                                            className="field-panel"
+
                                             placeholder="Selective Online Trial"
                                         />
                                     </Form.Item>
 
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Email
                                     </label>
                                     <Form.Item
                                         name={'email'}
                                     >
-                                        <input
+                                        <Input
                                             placeholder="Enter email"
                                             type="email"
                                             maxLength={50}
                                             disabled
                                             defaultValue={'cunaraly@mailinator.com'}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
 
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         State
                                     </label>
                                     <Form.Item name={'state'}
                                     >
-                                        <input
+                                        <Input
                                             placeholder='State'
                                             type='text' maxLength={50}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         City
                                     </label>
                                     <Form.Item name={'city'}
                                     >
-                                        <input
+                                        <Input
                                             placeholder='City'
                                             type='text' maxLength={50}
-                                            className="field-panel"
+
                                         />
                                     </Form.Item>
                                 </div>
                                 <div className="col-sm-6 ">
-                                    <label className="p-sm color-dark-gray w-100 bottom-small-space">
+                                    <label >
                                         Refer Code
                                     </label>
                                     <Form.Item name={'referCode'}
                                     >
-                                        <input type="text" className="field-panel" placeholder="Refer Code" />
+                                        <Input type="text" placeholder="Refer Code" />
                                     </Form.Item>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@ export default function StudentProfile() {
                                 </Upload>
                             </Form.Item>
                             <Button className="btn-primary fix-content-width btn-spac-lg bg-fresh-green opacity p-md text-white text-end"
-                                onClick={() => form.submit()}>
+                                onClick={() => form.submit()} style={{ fontSize: '16px' }}>
                                 Submit
                             </Button>
                         </Form>

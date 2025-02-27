@@ -8,6 +8,7 @@ import AuthContext from '@/contexts/AuthContext';
 import { CartData, PracticePackage } from '@/lib/types';
 import ErrorHandler from '@/lib/ErrorHandler';
 import { useRouter } from 'next/navigation';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 export default function BuyPackageListing({ getPackage }: any) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,12 +152,12 @@ export default function BuyPackageListing({ getPackage }: any) {
                     </h6>
                     <div style={{ textAlign: 'center' }}>
                         <Image
-                            src={getPackage.packageImage ? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/packageImage/original/${selectedPackage?.packageImage}` : '/images/smart/prise-1.png'}
+                            src={getPackage.packageImage ? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/packageImage/original/${selectedPackage?.packageImage}` : '/images/icon-img-price.png'}
 
                             alt="package-1"
                             className="m-auto mb-2 rounded"
-                            width={100}
-                            height={100}
+                            width={60}
+                            height={60}
                             preview={false}
                         />
                     </div>
@@ -193,11 +194,33 @@ export default function BuyPackageListing({ getPackage }: any) {
                             scrollbarWidth: 'thin',
                         }}
                     >
-                        <p
+                        {/* <p
                             className="p-xs fw-regular set-content"
                             dangerouslySetInnerHTML={{ __html: selectedPackage?.packageDescription || '' }}
-                        ></p>
-                    </div>
+                        ></p> */}
+
+
+                        <ul className='list-values mt-4'>
+                            {/* @ts-ignore  */}
+                            {selectedPackage?.features?.map((feature, featureIndex) => (
+                                <li key={featureIndex} className='check-icon'> {
+                                    feature.availability === 'unavailable' ? (
+                                        <CloseOutlined
+                                            style={{
+                                                color: 'red'
+                                            }}
+                                        />
+                                    ) : (
+                                        <CheckOutlined
+                                            style={{
+                                                color: 'green'
+                                            }}
+                                        />
+                                    )
+                                } {feature.featureName}</li>
+                            ))}
+                        </ul>
+                    </div >
                     {Number(selectedPackage?.packagePrice) < 0
                         ?
                         <p className="p-xs fw-regular color-purple text-center fw-medium top-max-space">
@@ -207,17 +230,18 @@ export default function BuyPackageListing({ getPackage }: any) {
                         ''
                     }
 
-                    {Number(selectedPackage?.packagePrice) > 0
-                        ?
-                        <button className='bg-success btn rounded-pill fix-content-width m-auto p-xxs fw-bold text-center w-100 text-light' onClick={() => handleAddToCart(selectedPackage)}>
-                            Buy Scholar
-                        </button>
-                        :
-                        <button className='bg-success btn rounded-pill fix-content-width m-auto p-xxs fw-bold text-center w-100 text-light' onClick={() => handleAddToCart(selectedPackage)}>
-                            GET STARTED
-                        </button>
+                    {
+                        Number(selectedPackage?.packagePrice) > 0
+                            ?
+                            <button className='bg-success btn rounded-pill fix-content-width m-auto p-xxs fw-bold text-center w-100 text-light' onClick={() => handleAddToCart(selectedPackage)}>
+                                Buy Scholar
+                            </button>
+                            :
+                            <button className='bg-success btn rounded-pill fix-content-width m-auto p-xxs fw-bold text-center w-100 text-light' onClick={() => handleAddToCart(selectedPackage)}>
+                                GET STARTED
+                            </button>
                     }
-                </div>
+                </div >
             </Modal >
         </>
     )

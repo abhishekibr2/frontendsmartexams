@@ -473,6 +473,7 @@ export interface SubCategoryId {
 }
 
 export interface Count {
+	examType: number,
 	users: number;
 	blogs?: number;
 	tickets?: number;
@@ -768,7 +769,8 @@ export interface Package {
 		tests: any,
 		_id: string,
 		packageName: string,
-
+		numTests: number,
+		essayTypes: number,
 	};
 	packageName: string;
 	packageDescription: string;
@@ -797,6 +799,7 @@ export interface Package {
 	testType: string;
 	qualityChecked: string;
 	numTests: number;
+	totalEssayCount: number;
 	isFree: string;
 	isPublished: string;
 	numUniqueSubjects: number;
@@ -959,6 +962,7 @@ export interface Test {
 	state: { title: string },
 	qualityChecked: boolean;
 	isPublished: boolean;
+	totalAddedQuestion?: number;
 }
 
 export interface TestPacksProps {
@@ -1263,4 +1267,50 @@ export interface ContactUs {
 			createdAt: Date;
 		}
 	]
+}
+
+
+export interface AboutFormValues {
+	_id?: any;
+	image: any;
+	heading: string;
+	description: string;
+	secondHeading: string;
+
+	headingOne: string;
+	descriptionOne: string;
+	imageOne: string;
+	buttonOne: string;
+
+	headingTwo: string;
+	subHeadingTwo: string;
+	sectionTwoTitleOne: string;
+	sectionTwoTitleTwo: string;
+	sectionTwoTitleThree: string;
+	sectionTwoTitleFour: string;
+	sectionTwoTitleFive: string;
+	sectionTwoTitleSix: string;
+	sectionTwoImageOne: any;
+	sectionTwoImageTwo: any;
+	sectionTwoImageThree: any;
+	sectionTwoImageFour: any;
+	sectionTwoImageFive: any;
+	sectionTwoImageSix: any;
+
+	headingThree: string;
+	subHeadingThree: string;
+	descriptionThree: string;
+	stateHeading: string;
+
+	headingFour: string;
+	descriptionFour: string;
+	cardTextOne: string;
+	cardTextTwo: string;
+	cardTextThree: string;
+	cardTextFour: string;
+	cardCountOne: string;
+	cardCountTwo: string;
+	cardCountThree: string;
+	cardCountFour: string;
+	[key: string]: any;
 }

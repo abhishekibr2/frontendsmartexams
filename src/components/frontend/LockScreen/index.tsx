@@ -1,15 +1,13 @@
 'use client';
 import React, { useContext, useEffect, useState } from 'react';
-import { Form, Input, Button, Space, Avatar, Card, Col, Row, Image } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input } from 'antd';
+import { LockOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import AuthContext from '@/contexts/AuthContext';
 import { getUserById } from '@/lib/ApiAdapter';
 import { useSearchParams } from 'next/navigation';
-import ParaText from '@/app/commonUl/ParaText';
 import ErrorHandler from '@/lib/ErrorHandler';
 import './style.css'
-import Titles from '@/app/commonUl/Titles';
 import HeaderLogo from '../HeaderLogo';
 
 
@@ -31,7 +29,6 @@ const LockScreen = () => {
 		try {
 			if (userData?.email) {
 				await login(userData?.email, values.password, '');
-
 			}
 		} catch (error) {
 			setLoading(false);
@@ -47,70 +44,53 @@ const LockScreen = () => {
 				try {
 					const response = await getUserById(userId);
 					setUserData(response.data);
-
+					form.setFieldsValue({ email: response.data.email });
 				} catch (error) {
 					ErrorHandler.showNotification(error);
 				}
 			}
 		}
-
 		fetchData();
 	}, [searchParams]);
 
 	return (
 		<>
-			<Row gutter={[16, 16]} className='heightVh'>
-				<Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
-					<div className="loginSection"></div >
-				</Col>
-				<Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
-					<div className="loginFormLogin">
-						<div className="textCenter">
+			<HeaderLogo />
+			<section className="form-body align-v-center">
+				<div className="container">
+					<h2 className="text-center title-medium fw-semi-bold top-ultra-space bottom-ultra-space ">
+						Lock Screen
+					</h2>
+					<div className="gapMarginTop"></div>
+					<Form
+						name="normal_login"
+						className="form-fields"
+						initialValues={{ remember: true }}
+						onFinish={onFinish}
+						form={form}
+						layout="vertical"
+					>
+						<div className="form-auto">
+							<label>Email Id :</label>
+							<div className='icon-field right-icon'>
 
-							<Link href="/">
-								{/* <Image src="/images/smart/logo.png" alt="logo" width={300} height={100} preview={false} /> */}
-								<HeaderLogo />
-							</Link>
-						</div>
-						<Titles level={5} color="black" className="textUppercase textCenter">
-							Lock Screen
-						</Titles>
-						<div className="gapMarginTop"></div>
-						<Form
-							name="normal_login"
-							className="login-form"
-							initialValues={{ remember: true }}
-							onFinish={onFinish}
-							form={form}
-							style={{ paddingTop: '20px' }}
-						>
-							<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-								<Space>
+								<Form.Item
+									name="email"
+									className='icon-field right-icon'
+								>
+									<Input
+										className="field-panel"
+										placeholder="Email"
+										maxLength={60}
+										type='email'
+										disabled
+										value={userData?.email}
+									/>
 
-									{userData?.image ? (
-										<Image
-											src={
-												userData?.image
-													? `${process.env['NEXT_PUBLIC_IMAGE_URL']}/userImage/original/${userData?.image}`
-													: `/images/avatar.png`
-											}
-											alt="Avatar"
-											width="40px"
-											height="40px"
-											style={{ borderRadius: '50px' }}
-											preview={false}
-										/>
-									) : (
-										<UserOutlined style={{ fontSize: 40 }} />
-									)}
-								</Space>
-
-								<ParaText size="small" fontWeightBold={400} color="black">
-									{userData?.email}
-								</ParaText>
+								</Form.Item>
+								<i className="fa-regular fa-envelope"></i>
 							</div>
 
-							<div className="gapMarginTopOne"></div>
 							<Form.Item
 								name="password"
 								label="Password"
@@ -123,27 +103,32 @@ const LockScreen = () => {
 									type="password"
 									placeholder="Password"
 									maxLength={20}
+									className="field-panel"
+
 								/>
 							</Form.Item>
 
 							<Form.Item>
-								<Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
+								<button
+									type="submit"
+									className="w-100  btn-accent-form  hover-effects opacity">
 									{loading ? 'Please wait...' : 'Unlock'}
-								</Button>
+								</button>
 							</Form.Item>
-						</Form>
-						<div style={{ textAlign: 'center', marginTop: '20px' }}>
-							<span>
-								Not You?{' '}
-								<Link href={`${locale !== 'en' ? `/${locale}` : ''}/login`} >
-									Login here
-								</Link>
-							</span>
 						</div>
-
+					</Form>
+					<div style={{ textAlign: 'center', marginTop: '20px' }}>
+						<span>
+							Not You?{' '}
+							<Link href={`${locale !== 'en' ? `/${locale}` : ''}/login`} className="p-sm fw-bold color-accent">
+								Login here
+							</Link>
+						</span>
 					</div>
-				</Col>
-			</Row >
+
+				</div>
+
+			</section >
 		</>
 	);
 };

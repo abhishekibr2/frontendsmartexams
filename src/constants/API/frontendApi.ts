@@ -47,7 +47,9 @@ export const FRONTEND = {
 		getFooterTests: `/services/getAllFooterTests`,
 
 	},
-
+	aboutpageContent: {
+		getAboutPageContent: '/getAboutPageContent'
+	},
 
 	addUpdateHeaderData: '/services/updateMenus',
 	ebook: {

@@ -5,8 +5,8 @@ import AuthContext from '@/contexts/AuthContext';
 import { handleFileCompression } from '@/lib/commonServices';
 import { RcFile, UploadFile } from 'antd/es/upload/interface';
 import React, { useContext, useEffect, useState } from 'react';
-import { addHomePageContent, getHomepageContent } from '@/lib/adminApi';
-import { Button, Col, DatePicker, Form, Input, message, Modal, Row, Upload } from 'antd';
+import { addHomePageContent, getHomepageContent, deleteHomeBannerSaleImage } from '@/lib/adminApi';
+import { Button, Col, DatePicker, Flex, Form, Input, message, Modal, Row, Upload } from 'antd';
 import Titles from '@/app/commonUl/Titles';
 import { HomeFormValues } from '@/lib/types';
 import AllUsers from '../../AllUsers';
@@ -108,8 +108,28 @@ export default function HomePageBannerSetting() {
         }
     };
 
-    const handleRemove = () => {
-        setFileList([]);
+    // const handleRemove = () => {
+    //     setFileList([]);
+    // };
+
+    const handleRemove = async () => {
+        try {
+            const data = {
+                editId: editId,
+                userId: user?._id,
+            }
+            const res = await deleteHomeBannerSaleImage(data);
+            if (res.status === true) {
+                setFileList([]);
+
+                message.success('Sale Image deleted successfully');
+
+            } else {
+                message.error('Failed to delete the saleimage');
+            }
+        } catch (error) {
+            ErrorHandler.showNotification(error);
+        }
     };
 
     const handlePreview = async (file: UploadFile) => {
@@ -150,7 +170,7 @@ export default function HomePageBannerSetting() {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={[16, 16]}>
+                    {/* <Row gutter={[16, 16]}>
                         <Col span={24}>
                             <Form.Item
                                 label="Second Heading"
@@ -159,7 +179,7 @@ export default function HomePageBannerSetting() {
                                 <Input placeholder="Enter Second Heading" maxLength={100} />
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row gutter={[16, 16]}>
                         <Col span={12}>
                             <Form.Item
@@ -174,23 +194,45 @@ export default function HomePageBannerSetting() {
 
                         <Col span={12}>
                             <Form.Item
-                                label="Discount"
+                                label="Discount (%)"
                                 name="discount"
-                                rules={[{ required: true, message: 'Discount is required' },
-                                {
-                                    type: 'number',
-                                    min: 0,
-                                    max: 100,
-                                    message: 'Discount must be between 0 and 100',
-                                },
-                                ]}
+                                rules={[
+                                    { required: true, message: 'Discount is required' },
+                                    {
+                                        validator: (_, value) => {
+                                            if (value === undefined || value === "") {
+                                                // Allow empty value (no required validation)
+                                                return Promise.resolve();
+                                            }
 
+                                            const discount = Number(value);
+
+                                            if (isNaN(discount)) {
+                                                return Promise.reject(new Error('Discount must be a valid number'));
+                                            }
+
+                                            if (discount < 0 || discount > 100) {
+                                                return Promise.reject(
+                                                    new Error('Discount must be between 0 and 100')
+                                                );
+                                            }
+
+                                            return Promise.resolve();
+                                        },
+                                        message: 'Discount must be between 0 and 100%',
+                                    }
+                                ]}
                             >
-                                <Input placeholder="Enter Discount" type='number' onChange={(e) => {
-                                    const value = Number(e.target.value);
-                                    form.setFieldsValue({ discount: value });
-                                }} />
+                                <Input placeholder="Enter Discount"
+                                    type="number"
+                                    onChange={(e) => {
+                                        const value = Number(e.target.value);
+                                        form.setFieldsValue({ discount: value });
+                                    }}
+                                />
                             </Form.Item>
+
+
                         </Col>
                         <Col span={24}>
                             <Form.Item
@@ -235,7 +277,7 @@ export default function HomePageBannerSetting() {
 
                     <Row gutter={[16, 16]}>
                         <Col span={24}>
-                            <Form.Item label="Banner Image" name="image">
+                            <Form.Item label="Image" name="image">
                                 <Upload
                                     listType="picture-card"
                                     fileList={fileList}
@@ -247,23 +289,24 @@ export default function HomePageBannerSetting() {
                                 </Upload>
                             </Form.Item>
                         </Col>
+
                     </Row>
-                    <Row justify="space-between" align="middle">
-                        <Col>
+                    <Flex gap={4} justify={'end'}>
+                        <Form.Item>
                             <Button type="primary" htmlType="submit" style={{ height: 40 }}>
                                 Save
                             </Button>
-                        </Col>
-                        <Col>
+                        </Form.Item>
+                        <Form.Item>
                             <Button
                                 type="primary"
                                 style={{ height: 40 }}
                                 onClick={handleSendEmail}
                             >
-                                Send Email
+                                Send Sale Email
                             </Button>
-                        </Col>
-                    </Row>
+                        </Form.Item>
+                    </Flex>
                 </Form>
 
                 <Modal

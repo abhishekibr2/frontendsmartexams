@@ -82,7 +82,7 @@ export default function DetailExamtype({ statedata, resdata, testimonial }: Prop
 				</Row>
 			</section>
 
-			<section className="bg-pastel-blue pb-5">
+			<section className="bg-pastel-blue pb-5" style={{ backgroundColor: '#d9f5ff' }}>
 				<h2 className="title-lg title-font-bg  fw-regular">
 					Preparing for the {statedata?.examType}
 				</h2>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Image, Row, Card } from 'antd';
-import { GetTutorial, getTutorialTestimonials } from '@/lib/frontendApi';
+import { Button, Col, Image, Row, Card, Modal } from 'antd';
+import { getBrandDetails, GetTutorial, getTutorialTestimonials } from '@/lib/frontendApi';
 import './style.css'
 import { FaArrowRight, FaCalendarCheck } from "react-icons/fa";
 import { FaUserLarge } from 'react-icons/fa6';
@@ -10,10 +10,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { LiaLaptopSolid } from "react-icons/lia";
 import { PiStudent } from "react-icons/pi";
 import { AiOutlineYoutube } from "react-icons/ai";
-
+import { IoChevronDownCircleOutline } from 'react-icons/io5';
+import { ClockCircleOutlined, EnvironmentOutlined, GlobalOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
+import { AiOutlineWhatsApp } from "react-icons/ai";
 export default function page() {
     const [data, setData] = useState<any>([])
     const [testimonialData, setTestimonialData]: any = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [contactUsData, setContactUsData] = useState<any>()
+
     // fetchData
     const getTutorialDataHandler = async () => {
         try {
@@ -26,7 +31,19 @@ export default function page() {
     useEffect(() => {
         getTutorialDataHandler();
         fetchTestimonials();
+        fetchBrandMenuItems();
     }, [])
+
+    const fetchBrandMenuItems = async () => {
+        try {
+            const response = await getBrandDetails();
+            setContactUsData(response.data);
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error fetching header menus:', error);
+        }
+    };
+    console.log(contactUsData?.whatsApp, 'contactUsData')
 
     const fetchTestimonials = async () => {
         try {
@@ -55,7 +72,7 @@ export default function page() {
                                     src={
                                         data[0]?.image
                                             ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/tutorialsImage/original/${data[0].image}`
-                                            : '/images/smart/teen-boy-headphones-on-laptop.jpg'
+                                            : '/images/smart/teenBoy.jpg'
                                     }
                                     alt='digital-img-1' className='banner-img vert-move digital-img'
                                     preview={false}
@@ -68,18 +85,28 @@ export default function page() {
                 </div>
             </section>
 
+            <a href='#' className='link-btn-classes'>Essentials Classes <IoChevronDownCircleOutline />
+            </a>
+
+            <div className='container-fluid  mt-5 mb-0'>
+                <div className='line-gradient'></div>
+            </div>
+
             <section className='classes-part'>
-                <div className='container'>
-                    {data.map((data: any) => (
-                        <>
-                            <h2 className='title-secondary text-center fw-regular color-neutral mt-3 mb-4'>{data.mainHeading || 'English and Maths Classes'}
+
+                {data.map((data: any) => (
+                    <>
+                        <div className='container-fluid'>
+                            <h2 className='title-secondary- title-bg text-center fw-regular color-neutral  mb-4' style={{ background: '#4472c4' }}>{data.mainHeading || 'English and Maths Classes'}
                             </h2>
+                        </div>
+                        <div className='container'>
                             <div className='row'>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#englishClass1">
-                                        <div className="card-classes bg-7ddaff">
+                                        <div className="card-classes bg-7ddaff ">
                                             <p className="p-sm color-dark">{data.englishOne || 'English Classes'} </p>
-                                            <p className="p-sm color-dark">(Prep-Yr1)</p>
+                                            {/* <p className="p-sm color-dark">(Prep-Yr1)</p> */}
                                         </div>
                                     </a>
                                 </div>
@@ -87,7 +114,7 @@ export default function page() {
                                     <a href="#englishClass2">
                                         <div className="card-classes bg-7ddaff">
                                             <p className="p-sm color-dark">{data.englishTwo || 'English Classes'}</p>
-                                            <p className="p-sm color-dark">(Yr2-Yr3)</p>
+                                            {/* <p className="p-sm color-dark">(Yr2-Yr3)</p> */}
                                         </div>
                                     </a>
                                 </div>
@@ -95,7 +122,7 @@ export default function page() {
                                     <a href="#englishClass3">
                                         <div className="card-classes bg-7ddaff">
                                             <p className="p-sm color-dark">{data.englishThree || 'English Classes'}</p>
-                                            <p className="p-sm color-dark">(Yr3-Yr4)</p>
+                                            {/* <p className="p-sm color-dark">(Yr3-Yr4)</p> */}
                                         </div>
                                     </a>
                                 </div>
@@ -103,7 +130,7 @@ export default function page() {
                                     <a href="#englishClass4">
                                         <div className="card-classes bg-7ddaff">
                                             <p className="p-sm color-dark">{data.englishFour || 'English Classes'}</p>
-                                            <p className="p-sm color-dark">(Yr5-Yr6)</p>
+                                            {/* <p className="p-sm color-dark">(Yr5-Yr6)</p> */}
                                         </div>
                                     </a>
                                 </div>
@@ -111,7 +138,7 @@ export default function page() {
                                     <a href="#englishClass5">
                                         <div className="card-classes bg-7ddaff">
                                             <p className="p-sm color-dark">{data.englishFive || 'English Classes'}</p>
-                                            <p className="p-sm color-dark">(Yr5-Yr6)</p>
+                                            {/* <p className="p-sm color-dark">(Yr5-Yr6)</p> */}
                                         </div>
                                     </a>
                                 </div>
@@ -119,73 +146,78 @@ export default function page() {
                                     <a href="#englishClass6">
                                         <div className="card-classes bg-7ddaff">
                                             <p className="p-sm color-dark">{data.englishSix || 'English Classes'}</p>
-                                            <p className="p-sm color-dark">(Yr6-Yr7)</p>
+                                            {/* <p className="p-sm color-dark">(Yr6-Yr7)</p> */}
                                         </div>
                                     </a>
                                 </div>
                             </div>
-
-
+                        </div>
+                        <div className='container'>
                             <div className='row'>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass1">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathOne || 'Math Classes'} </p>
-                                            <p className="p-sm color-light">(Prep-Yr1)</p>
+                                            {/* <p className="p-sm color-light">(Prep-Yr1)</p> */}
                                         </div>
                                     </a>
                                 </div>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass2">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathTwo || 'Math Classes'}</p>
-                                            <p className="p-sm color-light">(Yr2-Yr3)</p>
+                                            {/* <p className="p-sm color-light">(Yr2-Yr3)</p> */}
                                         </div>
                                     </a>
                                 </div>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass3">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathThree || 'Math Classes'}</p>
-                                            <p className="p-sm color-light">(Yr3-Yr4)</p>
+                                            {/* <p className="p-sm color-light">(Yr3-Yr4)</p> */}
                                         </div>
                                     </a>
                                 </div>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass4">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathFour || 'Math Classes'}</p>
-                                            <p className="p-sm color-light">(Yr4-Yr5)</p>
+                                            {/* <p className="p-sm color-light">(Yr4-Yr5)</p> */}
                                         </div>
                                     </a>
                                 </div>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass5">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathFive || 'Math Classes'}</p>
-                                            <p className="p-sm color-light">(Yr5-Yr6)</p>
+                                            {/* <p className="p-sm color-light">(Yr5-Yr6)</p> */}
                                         </div>
                                     </a>
                                 </div>
                                 <div className='col-lg-2 col-md-4'>
                                     <a href="#mathsClass6">
-                                        <div className="card-classes bg-8C52FF">
+                                        <div className="card-classes bg-009ede">
                                             <p className="p-sm color-light">{data.MathSix || 'Math Classes'}</p>
-                                            <p className="p-sm color-light">(Yr6-Yr7)</p>
+                                            {/* <p className="p-sm color-light">(Yr6-Yr7)</p> */}
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                        </>
-                    ))}
-                </div>
+                        </div>
+                    </>
+                ))}
+
             </section>
-            <div className='line-gradient'></div>
+
+            <div className='container-fluid  mt-5 mb-0'>
+                <div className='line-gradient'></div>
+            </div>
+
             <section className='syllabus-part'>
-                <div className='container'>
-                    <h2 className='title-secondary text-center fw-regular color-neutral mt-3 mb-4 title-bg' id='englishClass1'> ENGLISH CLASSES </h2>
+                <div className='container-fluid'>
+                    <h2 className='title-secondary text-center fw-regular color-neutral mt-3 mb-4 title-bg' id='englishClass1' style={{ background: '#ffcc00' }}> ENGLISH CLASSES </h2>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3'>{data.englishOne || 'English Classes'}(Prep-Yr1)</h3>
+                        <h3 key={index} className='top-title text-center mt-3'>{data.englishOne || 'English Classes'}</h3>
                     ))}
                     <div className='choose-your mt-3'>
                         {data.map((data: any, index: any) => (
@@ -199,15 +231,15 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='englishClass2'>{data.englishTwo || 'English Classes'}(Yr2-Yr3)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='englishClass2'>{data.englishTwo || 'English Classes'}</h3>
                     ))}
                     <div className='choose-your mt-3' >
                         {data.map((data: any, index: any) => (
@@ -221,16 +253,16 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
 
                     </div>
 
-                    <hr className='line-part mt-5 mb-5' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='englishClass3'>{data.englishThree || 'English Classes'} (Yr3-Yr4)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='englishClass3'>{data.englishThree || 'English Classes'}</h3>
                     ))}
                     <div className='choose-your mt-3' >
                         {data.map((data: any, index: any) => (
@@ -244,16 +276,16 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
 
                     </div>
 
-                    <hr className='line-part mt-5 mb-5' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='englishClass4'>{data.englishFour || 'English Classes'} (Yr4-Yr5)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='englishClass4'>{data.englishFour || 'English Classes'} </h3>
                     ))}
                     <div className='choose-your mt-3' >
                         {data.map((data: any, index: any) => (
@@ -267,15 +299,15 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='englishClass5'>{data.englishFive || 'English Classes'} (Yr5-Yr6)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='englishClass5'>{data.englishFive || 'English Classes'} </h3>
                     ))}
                     <div className='choose-your mt-3' >
                         {data.map((data: any, index: any) => (
@@ -289,15 +321,16 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
+
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='englishClass6'>{data.englishSix || 'English Classes'} (Yr6-Yr7)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='englishClass6'>{data.englishSix || 'English Classes'} </h3>
                     ))}
                     <div className='choose-your mt-3' >
                         {data.map((data: any, index: any) => (
@@ -311,7 +344,7 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
@@ -320,11 +353,11 @@ export default function page() {
                     <br />
                     <br />
 
-                    <h2 className='title-secondary text-center fw-regular color-neutral mt-3 mb-4 title-bg-8C52FF'> MATHS CLASSES </h2>
+                    <h2 className='title-secondary text-center fw-regular color-neutral mt-3 mb-4 title-bg-009ede'> MATHS CLASSES </h2>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass1'>{data.MathOne || 'Maths Classes'} (Prep-Yr1)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass1'>{data.MathOne || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
                             <div className='row align' key={index}>
                                 <div className='col-sm-9'>
@@ -336,17 +369,17 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5 line-8c52ff' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass2'>{data.MathTwo || 'Maths Classes'} (Yr2-Yr3)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass2'>{data.MathTwo || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
                             <div className='row align' key={index}>
                                 <div className='col-sm-9'>
@@ -358,17 +391,18 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
+
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5 line-8c52ff' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass3'>{data.MathTwo || 'Maths Classes'} (Yr3-Yr4)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass3'>{data.MathTwo || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
                             <div className='row align' key={index}>
                                 <div className='col-sm-9'>
@@ -380,17 +414,17 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5 line-8c52ff' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass4'>{data.MathTwo || 'Maths Classes'} (Yr4-Yr5)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass4'>{data.MathTwo || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
 
                             <div className='row align' key={index}>
@@ -403,17 +437,17 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5 line-8c52ff' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass5'>{data.MathFive || 'Maths Classes'} (Yr5-Yr6)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass5'>{data.MathFive || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
 
                             <div className='row align' key={index}>
@@ -426,17 +460,17 @@ export default function page() {
                                     </ul>
                                 </div>
                                 <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                    <a className="link-btn bg-secondary bg-16bcc0" href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className='line-part mt-5 mb-5 line-8c52ff' />
+                    <div className='container-fluid line-gradient mt-5 mb-5'></div>
                     {data.map((data: any, index: any) => (
-                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass6'>{data.MathSix || 'Maths Classes'} (Yr6-Yr7)</h3>
+                        <h3 key={index} className='top-title text-center mt-3' id='mathsClass6'>{data.MathSix || 'Maths Classes'} </h3>
                     ))}
-                    <div className='choose-your theam-8C52FF mt-3' >
+                    <div className='choose-your theam-009ede mt-3' >
                         {data.map((data: any, index: any) => (
 
                             <div className='row align' key={index}>
@@ -448,8 +482,26 @@ export default function page() {
                                         <li><i className="fa-solid fa-calendar-days"></i> {data.subHeadingMathTwoYrSixSeven || 'Voluptates consectet'}</li>
                                     </ul>
                                 </div>
-                                <div className='col-sm-3'>
-                                    <a className="link-btn bg-secondary " href="/register"> <i className="fa-solid fa-question"></i>  Contact Us</a>
+                                <div className="col-sm-3">
+                                    {/* <button className="link-btn bg-secondary bg-16bcc0" > */}
+                                    <a className="link-btn bg-secondary bg-16bcc0" onClick={() => setIsModalOpen(true)}> <i className="fa-solid fa-question"></i> Contact Us</a>
+                                    {/* </button> */}
+
+                                    <Modal
+                                        title="Contact Us"
+                                        open={isModalOpen}
+                                        onCancel={() => setIsModalOpen(false)}
+                                        footer={null}
+                                        className="contact-modal"
+                                    >
+                                        <div className="contact-details">
+                                            <p><PhoneOutlined /> <strong>Phone:</strong> {contactUsData?.phone}</p>
+                                            <p><MailOutlined /> <strong>Email:</strong> {contactUsData?.email}</p>
+                                            <p><AiOutlineWhatsApp color="#25D366" /> <strong>WhatsApp:</strong> {contactUsData?.whatsApp}</p>
+                                            <p><EnvironmentOutlined /> <strong>Address:</strong> {contactUsData?.address}</p>
+                                            <p><ClockCircleOutlined /> <strong>Hours:</strong> {contactUsData?.time}</p>
+                                        </div>
+                                    </Modal>
                                 </div>
                             </div>
                         ))}
@@ -457,7 +509,7 @@ export default function page() {
 
                 </div>
             </section>
-            <div className='line-gradient'></div>
+            <div className='container-fluid line-gradient'></div>
 
             <section className="testimonial-classes">
                 <div className="container">

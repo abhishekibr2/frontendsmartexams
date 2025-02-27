@@ -93,12 +93,13 @@ export default function Brands({ activeKey }: Props) {
 
 			const res = await updateProfileDetails(formData);
 			if (res.status == true) {
-				// sendNotification(`Profile updated `);
-				setUser(res.brand);
-				message.success(res.message);
-				dispatch(setLoading(false));
+				{
+					user?.roleId?.roleName !== 'admin' ?
+						setUser(res.brand) : ''
+				}
 
-				setUser(res.brand);
+				message.success(res.message);
+				// dispatch(setLoading(false));
 			}
 		} catch (error) {
 			dispatch(setLoading(false));
@@ -135,9 +136,9 @@ export default function Brands({ activeKey }: Props) {
 	);
 	return (
 		<>
-			<ParaText size="large" fontWeightBold={600} color="PrimaryColor">
-				Profile Details
-			</ParaText>
+			{/* <ParaText size="large" fontWeightBold={600} color="PrimaryColor">
+			</ParaText> */}
+
 			<div className="smallTopMargin"></div>
 			<Form layout="vertical" form={form} size="large" onFinish={onfinish}>
 				<Row>

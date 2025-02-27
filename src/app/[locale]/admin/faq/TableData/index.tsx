@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AuthContext from '@/contexts/AuthContext'
-import { Button, Col, Modal, Popconfirm, Row, Select, Tooltip, message, Space } from 'antd'
+import { Button, Col, Modal, Popconfirm, Row, Select, Tooltip, message, Space, Form } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import FAQForm from '../FormModal'
 import { deleteFaq } from '@/lib/adminApi'
@@ -29,6 +29,7 @@ interface RecordType {
 		examType: 'string'
 	};
 	pages: string;
+	orderBy: string;
 }
 
 const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
@@ -38,11 +39,12 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 	const [edit, setEdit] = useState<RecordType | null>(null)
 	const [selectedAuthorIds, setSelectedAuthorIds] = useState<string[]>([]);
 	const [stateFilter, setStateFilter] = useState<string>('');
-
+	const [form] = Form.useForm();
 	const [state, setState] = useState<any[]>([]);
 	const [examTypeFilter, setExamTypeFilter] = useState<string>('');
 	const [pageFilter, setPageFilter] = useState<string>('');
 	const { Option } = Select;
+	const [faqId, setFaqId] = useState<string>('');
 
 	const [filteredExamTypes, setFilteredExamTypes] = useState<any[]>([]);
 
@@ -51,6 +53,8 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 	}, [user]);
 
 	const handleEdit = async (record: RecordType) => {
+		console.log(edit, 'editdata')
+
 		setEdit(record);
 		setIsModalVisible(true);
 		getFaqHandler();
@@ -78,7 +82,6 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 		}
 	};
 
-
 	const handleExamTypeChange = (value: string) => {
 		setExamTypeFilter(value);
 	};
@@ -104,7 +107,14 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 		}
 	}
 	const columns = [
-
+		{
+			title: 'Order',
+			dataIndex: 'order',
+			key: 'order',
+			render: (text: any, record: any) => record?.orderBy,
+			sorter: (a: any, b: any) => a.orderBy - b.orderBy,
+			defaultSortOrder: 'ascend',
+		},
 		{
 			title: 'Pages',
 			dataIndex: 'pages',
@@ -185,9 +195,21 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 	]
 
 	const showModal = () => {
-		setIsModalVisible(true);
+		console.log(edit, 'editdata')
 		setEdit(null);
+		setFaqId('');
+		form.resetFields();
+		setIsModalVisible(true);
 	};
+
+	useEffect(() => {
+		if (!handleEdit) {
+			form.resetFields();  // Agar edit ka data na ho toh form reset karo
+		} else {
+			form.setFieldsValue(handleEdit); // Agar edit me data hai toh usko set karo
+		}
+	}, [handleEdit]);
+
 
 	const handleOk = () => {
 		setIsModalVisible(false);
@@ -308,7 +330,8 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 							</Col>
 							<Col xs={24} sm={24} md={5} lg={5} xxl={5} xl={5}>
 
-								<PrimaryButton label="Add Question" onClick={showModal} />
+								<PrimaryButton label="Add Question" onClick={showModal}
+								/>
 
 							</Col>
 						</Row>
@@ -336,7 +359,7 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 			/>
 
 			<Modal
-				title={edit && edit ? 'Edit Question' : 'Add Question'}
+				title={edit ? 'Edit Question' : 'Add Question'}
 				visible={isModalVisible}
 				footer={null}
 				onOk={handleOk}
@@ -345,7 +368,10 @@ const TableData = ({ getFaqHandler, faqs }: FAQProps) => {
 				width={900}
 
 			>
-				<FAQForm handleEdit={edit} onClose={handleCancel} getFaqHandler={getFaqHandler} />
+				<FAQForm handleEdit={edit} onClose={handleCancel} getFaqHandler={getFaqHandler}
+					faqId={faqId}
+					setFaqId={setFaqId}
+				/>
 			</Modal>
 		</>
 	)
